@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
+import Image from "next/image";
 import { useCartStore } from "@/store/useCartStore";
 import { useUIStore } from "@/store/useUIStore";
 
@@ -70,10 +71,22 @@ export default function Navbar() {
 
         {/* Brand Logo */}
         <a
-          className="font-display text-xl md:text-2xl font-bold text-[#26170c] tracking-tight transition-all duration-300"
+          className="flex items-center gap-2.5 font-display text-lg md:text-2xl font-bold text-[#26170c] tracking-tight transition-all duration-300 group"
           href="/"
         >
-          Bambil Shoes By Dario
+          <div className="relative w-9 h-9 md:w-11 md:h-11 shrink-0">
+            <Image
+              src="/Logo.png"
+              alt="Logo Bambil Shoes"
+              fill
+              sizes="(max-width: 768px) 36px, 44px"
+              className="object-contain"
+              priority
+            />
+          </div>
+          <span className="group-hover:text-[#5a4030] transition-colors">
+            Bambil Shoes By Dario
+          </span>
         </a>
 
         {/* Right Links & Icons */}

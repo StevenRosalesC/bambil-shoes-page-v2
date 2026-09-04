@@ -16,9 +16,55 @@ const montserrat = Montserrat({
 });
 
 export const metadata: Metadata = {
-  title: "Bambil Shoes By Dario - Inicio",
-  description: "Descubre la fusión perfecta entre la robustez del cuero natural y la elegancia del diseño a medida. Cada par cuenta una historia de dedicación y maestría.",
-  keywords: ["zapatos", "bambil shoes", "calzado artesanal", "cuero natural", "hecho a mano"],
+  metadataBase: new URL(
+    process.env.NEXT_PUBLIC_SITE_URL || "https://bambilshoes.com"
+  ),
+  title: {
+    default: "Bambil Shoes By Dario - Calzado Artesanal",
+    template: "%s | Bambil Shoes By Dario",
+  },
+  description:
+    "Descubre la fusión perfecta entre la robustez del cuero natural y la elegancia del diseño a medida. Calzado para mujeres de excelente calidad, elaborado artesanalmente en Santa Elena.",
+  keywords: [
+    "zapatos",
+    "bambil shoes",
+    "calzado artesanal",
+    "cuero natural",
+    "hecho a mano",
+    "Santa Elena",
+    "calzado para mujer",
+  ],
+  icons: {
+    icon: [
+      { url: "/Logo.png" },
+      { url: "/favicon.ico", sizes: "any" },
+    ],
+    shortcut: "/Logo.png",
+    apple: "/Logo.png",
+  },
+  openGraph: {
+    title: "Bambil Shoes By Dario - Calzado Artesanal",
+    description:
+      "Descubre la fusión perfecta entre la robustez del cuero natural y la elegancia del diseño a medida. Calzado artesanal en Santa Elena.",
+    siteName: "Bambil Shoes By Dario",
+    images: [
+      {
+        url: "/Logo.png",
+        width: 1280,
+        height: 1280,
+        alt: "Logo Bambil Shoes By Dario",
+      },
+    ],
+    locale: "es_EC",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Bambil Shoes By Dario - Calzado Artesanal",
+    description:
+      "Descubre la fusión perfecta entre la robustez del cuero natural y la elegancia del diseño a medida.",
+    images: ["/Logo.png"],
+  },
 };
 
 export default function RootLayout({

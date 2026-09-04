@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
+import Image from "next/image";
 import { useCartStore } from "@/store/useCartStore";
 import { useUIStore } from "@/store/useUIStore";
 
@@ -34,7 +35,18 @@ export default function CartDrawer() {
         <div className="flex flex-col h-full">
           {/* Header */}
           <div className="flex justify-between items-center p-6 border-b border-[#d2c4bc]">
-            <h3 className="font-display text-2xl font-semibold text-[#26170c]">Tu Carrito</h3>
+            <div className="flex items-center gap-2.5">
+              <div className="relative w-7 h-7 shrink-0">
+                <Image
+                  src="/Logo.png"
+                  alt="Logo Bambil Shoes"
+                  width={28}
+                  height={28}
+                  className="object-contain"
+                />
+              </div>
+              <h3 className="font-display text-2xl font-semibold text-[#26170c]">Tu Carrito</h3>
+            </div>
             <button
               onClick={() => setCartOpen(false)}
               className="p-2 hover:bg-[#f0eee7] rounded-full transition-colors"
@@ -47,7 +59,14 @@ export default function CartDrawer() {
           <div className="flex-1 overflow-y-auto p-6 space-y-4">
             {items.length === 0 ? (
               <div className="flex flex-col items-center justify-center h-full text-center text-[#4f453f]">
-                <span className="material-symbols-outlined text-5xl mb-4 text-[#81756e]">shopping_bag</span>
+                <div className="relative w-16 h-16 mb-4 opacity-40">
+                  <Image
+                    src="/Logo.png"
+                    alt="Logo Bambil Shoes"
+                    fill
+                    className="object-contain grayscale"
+                  />
+                </div>
                 <p className="font-sans text-base">Tu carrito está vacío.</p>
                 <button
                   onClick={() => setCartOpen(false)}

@@ -1,14 +1,28 @@
 import React from "react";
+import Image from "next/image";
 
 export default function Footer() {
   return (
     <footer className="bg-[#3d2b1f] text-white w-full">
       <div className="grid grid-cols-1 md:grid-cols-4 gap-8 px-6 md:px-10 py-16 max-w-7xl mx-auto">
-        {/* Brand & Copyright */}
+        {/* Brand & Description */}
         <div className="col-span-1 md:col-span-2">
-          <h4 className="font-display text-2xl font-bold text-white mb-4">Bambil Shoes By Dario</h4>
+          <div className="flex items-center gap-3 mb-4">
+            <div className="relative w-11 h-11 shrink-0 bg-white/10 rounded-xl p-1 backdrop-blur-xs flex items-center justify-center border border-white/10">
+              <Image
+                src="/Logo.png"
+                alt="Logo Bambil Shoes"
+                width={44}
+                height={44}
+                className="object-contain w-full h-full"
+              />
+            </div>
+            <h4 className="font-display text-2xl font-bold text-white">
+              Bambil Shoes By Dario
+            </h4>
+          </div>
           <p className="font-sans text-sm text-[#e5e2db] opacity-80 mb-6 max-w-md leading-relaxed">
-            © 2026 Bambil Shoes By Dario. Handmade Excellence. Elevando la artesanía tradicional a través de de diseños contemporáneos.
+            © 2026 Bambil Shoes By Dario. Handmade Excellence. Elevando la artesanía tradicional a través de diseños contemporáneos.
           </p>
         </div>
         
