@@ -32,6 +32,37 @@ export default function AboutPage() {
     },
   ];
 
+  const corporateValues = [
+    {
+      title: "Honestidad",
+      description: "Ser recto y veraz en todo acto.",
+      icon: "verified",
+    },
+    {
+      title: "Compromiso asociativo y empresarial",
+      description:
+        "Sincronizar objetivos personales con las metas organizacionales.",
+      icon: "handshake",
+    },
+    {
+      title: "Lealtad",
+      description:
+        "Actitud de profundo compromiso de una persona a una organización.",
+      icon: "loyalty",
+    },
+    {
+      title: "Responsabilidad social y empresarial",
+      description: "Asumir y aceptar las consecuencias.",
+      icon: "volunteer_activism",
+    },
+    {
+      title: "Trabajo en equipo",
+      description:
+        "Mantener los objetivos comunes, tareas definidas, procesos claros y una buena relación que lleven a un alto grado de cooperación y buenos resultados a la organización.",
+      icon: "groups",
+    },
+  ];
+
   return (
     <div className="flex flex-col min-h-screen bg-[#fcf9f2] antialiased">
       {/* Navigation */}
@@ -60,47 +91,98 @@ export default function AboutPage() {
           </div>
         </section>
 
-        {/* Founder Story Section */}
+        {/* Mission, Vision & Values Section */}
         <section
-          className="max-w-7xl mx-auto px-4 md:px-10 py-24"
+          className="max-w-7xl mx-auto px-4 md:px-10 py-20 md:py-28"
           id="historia"
         >
-          <div className="grid grid-cols-1 md:grid-cols-12 gap-12 items-center">
-            <div className="md:col-span-5 order-2 md:order-1 relative">
-              <div className="absolute -inset-4 bg-[#ebe8e1] rounded-xl -z-10 shadow-[0_10px_30px_-5px_rgba(61,43,31,0.06)] translate-x-4 translate-y-4"></div>
-              <Image
-                width={600}
-                height={750}
-                className="w-full h-auto rounded-lg shadow-[0_10px_30px_rgba(61,43,31,0.12)] object-cover aspect-[4/5]"
-                alt="Darío, Maestro Artesano"
-                src="https://lh3.googleusercontent.com/aida-public/AB6AXuCUj4m7Gkml2P8zhHBYhTtKBEcCQiN3ZoJr6bP8TsNe46L6X15vW37C_Q7m4F4U4tQmZE-HKJn8sfD1XqCIGt3rtGUgQnPXp36m-jSy6Bd5BWopNXYTF3HyHIBEgwmTtwjt7UAZs7FnYesy5f6vBay_j27ECveL8Lr8QzEL7D_1-6JwQxppmHvB4VXUjF50SD5LdzImGiEwO6h90oc0tnCsld2-9Kuc375hbFCiaSdz_wrf-mT5v87EnZM8873d160CeHFCS755AkyT"
-              />
-            </div>
-            <div className="md:col-span-6 md:col-start-7 order-1 md:order-2">
-              <h2 className="font-display text-3xl md:text-4xl text-[#26170c] mb-6 font-semibold">
-                La Historia de Darío
-              </h2>
-              <p className="font-sans text-sm md:text-base text-[#4f453f] mb-6 leading-relaxed">
-                Todo comenzó en un pequeño taller iluminado por la luz de la
-                tarde, donde el aroma a cuero curtido y madera marcaba el inicio
-                de una vocación. Darío aprendió el oficio observando la
-                paciencia y precisión que requiere transformar materiales crudos
-                en piezas de arte caminante.
-              </p>
-              <p className="font-sans text-sm md:text-base text-[#4f453f] mb-8 leading-relaxed">
-                Hoy, Bambil Shoes no es solo una marca, es la continuación de
-                ese legado. Cada corte, cada costura, lleva impregnada la
-                dedicación de años de perfeccionamiento. Creemos firmemente que
-                el calzado verdadero debe abrazar el pie y elevar el espíritu de
-                quien lo lleva, combinando técnicas ancestrales con una visión
-                moderna del diseño.
-              </p>
-              <div className="flex items-center space-x-4">
-                <div className="w-12 h-[1px] bg-[#D2B48C]"></div>
-                <span className="font-sans text-xs font-bold text-[#26170c] tracking-widest uppercase">
-                  Fundador &amp; Maestro Artesano
+          {/* Section Header */}
+          <div className="text-center max-w-3xl mx-auto mb-16">
+            <span className="inline-block bg-[#D2B48C]/30 text-[#26170c] font-sans text-xs font-bold px-4 py-1.5 rounded mb-4 tracking-widest uppercase shadow-xs">
+              Nuestra Identidad
+            </span>
+            <h2 className="font-display text-3xl md:text-5xl font-bold text-[#26170c] mb-4">
+              Misión, Visión y Valores
+            </h2>
+            <div className="w-16 h-[2px] bg-[#D2B48C] mx-auto mt-4"></div>
+          </div>
+
+          {/* Mission & Vision Cards */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-20">
+            {/* Mission */}
+            <div className="bg-white rounded-2xl p-8 md:p-10 shadow-[0_10px_30px_-5px_rgba(61,43,31,0.06)] border border-[#d2c4bc]/30 relative overflow-hidden group hover:shadow-[0_15px_35px_-5px_rgba(61,43,31,0.1)] transition-all duration-300">
+              <div className="absolute top-0 right-0 w-32 h-32 bg-[#D2B48C]/10 rounded-bl-full -mr-6 -mt-6 pointer-events-none transition-transform group-hover:scale-110"></div>
+              <div className="w-12 h-12 rounded-xl bg-[#f6f3ec] flex items-center justify-center mb-6 text-[#D2B48C]">
+                <span
+                  className="material-symbols-outlined text-2xl"
+                  style={{ fontVariationSettings: "'FILL' 1" }}
+                >
+                  flag
                 </span>
               </div>
+              <h3 className="font-display text-2xl md:text-3xl text-[#26170c] mb-4 font-semibold">
+                Misión
+              </h3>
+              <p className="font-sans text-sm md:text-base text-[#4f453f] leading-relaxed">
+                Comercializar calzado para mujeres de excelente calidad, sus artesanos realizan los productos con responsabilidad, compromiso, trabajo en equipo, honestidad y respeto generando así oportunidades para su entorno.
+              </p>
+            </div>
+
+            {/* Vision */}
+            <div className="bg-white rounded-2xl p-8 md:p-10 shadow-[0_10px_30px_-5px_rgba(61,43,31,0.06)] border border-[#d2c4bc]/30 relative overflow-hidden group hover:shadow-[0_15px_35px_-5px_rgba(61,43,31,0.1)] transition-all duration-300">
+              <div className="absolute top-0 right-0 w-32 h-32 bg-[#D2B48C]/10 rounded-bl-full -mr-6 -mt-6 pointer-events-none transition-transform group-hover:scale-110"></div>
+              <div className="w-12 h-12 rounded-xl bg-[#f6f3ec] flex items-center justify-center mb-6 text-[#D2B48C]">
+                <span
+                  className="material-symbols-outlined text-2xl"
+                  style={{ fontVariationSettings: "'FILL' 1" }}
+                >
+                  visibility
+                </span>
+              </div>
+              <h3 className="font-display text-2xl md:text-3xl text-[#26170c] mb-4 font-semibold">
+                Visión
+              </h3>
+              <p className="font-sans text-sm md:text-base text-[#4f453f] leading-relaxed">
+                Ser una de las organizaciones asociativas con mayor volumen de comercialización de calzado para mujeres en la provincia de Santa Elena, y mejorar sus condiciones de vida.
+              </p>
+            </div>
+          </div>
+
+          {/* Corporate Values */}
+          <div>
+            <div className="text-center mb-12">
+              <span className="inline-block bg-[#D2B48C]/30 text-[#26170c] font-sans text-xs font-bold px-4 py-1.5 rounded mb-3 tracking-widest uppercase">
+                Pilares Fundamentales
+              </span>
+              <h3 className="font-display text-2xl md:text-4xl font-semibold text-[#26170c]">
+                Valores Corporativos
+              </h3>
+            </div>
+
+            <div className="flex flex-wrap justify-center gap-6">
+              {corporateValues.map((val, idx) => (
+                <div
+                  key={idx}
+                  className="w-full md:w-[calc(50%-12px)] lg:w-[calc(33.333%-16px)] bg-white p-7 rounded-xl border border-[#d2c4bc]/30 shadow-[0_10px_30px_-5px_rgba(61,43,31,0.04)] hover:shadow-md transition-all duration-300 flex flex-col justify-between"
+                >
+                  <div>
+                    <div className="w-10 h-10 rounded-lg bg-[#f6f3ec] flex items-center justify-center mb-4 text-[#D2B48C]">
+                      <span
+                        className="material-symbols-outlined text-xl"
+                        style={{ fontVariationSettings: "'FILL' 1" }}
+                      >
+                        {val.icon}
+                      </span>
+                    </div>
+                    <h4 className="font-display text-lg font-semibold text-[#26170c] mb-2">
+                      {val.title}
+                    </h4>
+                    <p className="font-sans text-xs md:text-sm text-[#4f453f] leading-relaxed">
+                      {val.description}
+                    </p>
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
         </section>
