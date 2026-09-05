@@ -1,8 +1,37 @@
+import { Suspense } from "react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import WhatsAppFAB from "@/components/WhatsAppFAB";
 import CartDrawer from "@/components/CartDrawer";
 import CatalogGrid from "@/components/CatalogGrid";
+
+function CatalogSkeleton() {
+  return (
+    <div className="flex flex-col lg:flex-row gap-8 lg:gap-12 animate-pulse">
+      <div className="hidden lg:block w-64 shrink-0 space-y-8">
+        <div className="h-10 bg-[#f6f3ec] rounded w-full"></div>
+        <div className="h-32 bg-[#f6f3ec] rounded w-full"></div>
+        <div className="h-32 bg-[#f6f3ec] rounded w-full"></div>
+        <div className="h-20 bg-[#f6f3ec] rounded w-full"></div>
+      </div>
+      <div className="flex-grow grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+        {[1, 2, 3, 4, 5, 6].map((i) => (
+          <div
+            key={i}
+            className="bg-[#f6f3ec] rounded-lg overflow-hidden h-[420px] flex flex-col justify-between p-4"
+          >
+            <div className="h-[250px] bg-[#e5e2db] rounded w-full mb-4"></div>
+            <div className="space-y-2">
+              <div className="h-5 bg-[#e5e2db] rounded w-3/4"></div>
+              <div className="h-4 bg-[#e5e2db] rounded w-1/2"></div>
+            </div>
+            <div className="h-10 bg-[#e5e2db] rounded w-full mt-4"></div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
 
 export default function CatalogPage() {
   return (
@@ -23,7 +52,9 @@ export default function CatalogPage() {
         </header>
 
         {/* Catalog Filtering Grid */}
-        <CatalogGrid />
+        <Suspense fallback={<CatalogSkeleton />}>
+          <CatalogGrid />
+        </Suspense>
       </main>
 
       {/* Footer */}

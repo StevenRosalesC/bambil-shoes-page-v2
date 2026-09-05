@@ -1,7 +1,8 @@
 "use client";
 
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect, useRef, useCallback } from "react";
 import Image from "next/image";
+import { useSearchParams, usePathname } from "next/navigation";
 import { useProducts } from "@/hooks/useProducts";
 import { useCategories } from "@/hooks/useCategories";
 import { useCartStore } from "@/store/useCartStore";
@@ -9,21 +10,130 @@ import { useUIStore } from "@/store/useUIStore";
 import { Product } from "@/types";
 
 export default function CatalogGrid() {
+  const searchParams = useSearchParams();
+  const pathname = usePathname();
+
   const { data: categoriesResponse } = useCategories();
   const { data: productsResponse, isLoading } = useProducts({ limit: 100 }); // Get all products for local filtering
   
   const { addItem } = useCartStore();
   const { setCartOpen } = useUIStore();
+
+  // Helper to parse search params safely
+  const parseParams = useCallback((params: URLSearchParams) => {
+    const search = params.get("search") || "";
+    const rawCategories = params.get("categories");
+    const categories = rawCategories
+      ? rawCategories.split(",").filter(Boolean)
+      : params.get("category")
+      ? [params.get("category")!]
+      : [];
+    const rawMaterials = params.get("materials");
+    const materials = rawMaterials
+      ? rawMaterials.split(",").filter(Boolean)
+      : params.get("material")
+      ? [params.get("material")!]
+      : [];
+    const price = params.get("price") ? Number(params.get("price")) : 300;
+    const sort = params.get("sort") || "recommended";
+    return { search, categories, materials, price, sort };
+  }, []);
+
+  const initialValues = useMemo(() => parseParams(searchParams), [searchParams, parseParams]);
   
-  const [searchTerm, setSearchTerm] = useState("");
-  const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
-  const [selectedMaterials, setSelectedMaterials] = useState<string[]>([]);
-  const [priceRange, setPriceRange] = useState<number>(300);
-  const [sortBy, setSortBy] = useState("recommended");
+  const [searchTerm, setSearchTerm] = useState(initialValues.search);
+  const [selectedCategories, setSelectedCategories] = useState<string[]>(initialValues.categories);
+  const [selectedMaterials, setSelectedMaterials] = useState<string[]>(initialValues.materials);
+  const [priceRange, setPriceRange] = useState<number>(initialValues.price);
+  const [sortBy, setSortBy] = useState(initialValues.sort);
   const [isMobileFilterOpen, setMobileFilterOpen] = useState(false);
+  const [showAllMaterials, setShowAllMaterials] = useState(false);
   
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [selectedSize, setSelectedSize] = useState<string>("");
+
+  const isInitializedRef = useRef(false);
+
+  // Restore from sessionStorage if URL has no search params on mount
+  useEffect(() => {
+    if (isInitializedRef.current) return;
+    isInitializedRef.current = true;
+
+    if (searchParams.toString() === "" && typeof window !== "undefined") {
+      try {
+        const stored = sessionStorage.getItem("bambil_catalog_filters");
+        if (stored) {
+          const parsed = JSON.parse(stored);
+          queueMicrotask(() => {
+            if (parsed.searchTerm) setSearchTerm(parsed.searchTerm);
+            if (Array.isArray(parsed.selectedCategories) && parsed.selectedCategories.length > 0) {
+              setSelectedCategories(parsed.selectedCategories);
+            }
+            if (Array.isArray(parsed.selectedMaterials) && parsed.selectedMaterials.length > 0) {
+              setSelectedMaterials(parsed.selectedMaterials);
+            }
+            if (typeof parsed.priceRange === "number") setPriceRange(parsed.priceRange);
+            if (parsed.sortBy) setSortBy(parsed.sortBy);
+          });
+        }
+      } catch {
+        // Ignore JSON parse error
+      }
+    }
+  }, [searchParams]);
+
+  // Sync state changes with URL query string and sessionStorage
+  useEffect(() => {
+    if (!isInitializedRef.current) return;
+
+    const params = new URLSearchParams();
+    if (searchTerm.trim()) params.set("search", searchTerm.trim());
+    if (selectedCategories.length > 0) params.set("categories", selectedCategories.join(","));
+    if (selectedMaterials.length > 0) params.set("materials", selectedMaterials.join(","));
+    if (priceRange < 300) params.set("price", priceRange.toString());
+    if (sortBy !== "recommended") params.set("sort", sortBy);
+
+    const queryString = params.toString();
+    const newUrl = queryString ? `${pathname}?${queryString}` : pathname;
+
+    if (typeof window !== "undefined") {
+      window.history.replaceState(null, "", newUrl);
+      try {
+        if (queryString) {
+          sessionStorage.setItem(
+            "bambil_catalog_filters",
+            JSON.stringify({
+              searchTerm,
+              selectedCategories,
+              selectedMaterials,
+              priceRange,
+              sortBy,
+            })
+          );
+        } else {
+          sessionStorage.removeItem("bambil_catalog_filters");
+        }
+      } catch {
+        // Ignore storage errors
+      }
+    }
+  }, [searchTerm, selectedCategories, selectedMaterials, priceRange, sortBy, pathname]);
+
+  // Listen for browser back/forward navigation
+  useEffect(() => {
+    const handlePopState = () => {
+      const currentParams = new URLSearchParams(window.location.search);
+      const parsed = parseParams(currentParams);
+      setSearchTerm(parsed.search);
+      setSelectedCategories(parsed.categories);
+      setSelectedMaterials(parsed.materials);
+      setPriceRange(parsed.price);
+      setSortBy(parsed.sort);
+    };
+
+    window.addEventListener("popstate", handlePopState);
+    return () => window.removeEventListener("popstate", handlePopState);
+  }, [parseParams]);
   
   const categories = useMemo(() => categoriesResponse?.data || [], [categoriesResponse?.data]);
   const rawProducts = useMemo(() => productsResponse?.data || [], [productsResponse?.data]);
@@ -38,6 +148,18 @@ export default function CatalogGrid() {
     });
     return Array.from(materialsSet);
   }, [rawProducts]);
+
+  // Limit materials to 4 initially with "Ver más" expansion
+  const visibleMaterials = useMemo(() => {
+    if (showAllMaterials || allMaterials.length <= 4) {
+      return allMaterials;
+    }
+    const firstFour = allMaterials.slice(0, 4);
+    const extraSelected = allMaterials.filter(
+      (m, idx) => idx >= 4 && selectedMaterials.includes(m)
+    );
+    return Array.from(new Set([...firstFour, ...extraSelected]));
+  }, [allMaterials, showAllMaterials, selectedMaterials]);
 
   // Handle category checkbox change
   const handleCategoryChange = (categoryId: string) => {
@@ -63,6 +185,15 @@ export default function CatalogGrid() {
     setSelectedMaterials([]);
     setPriceRange(300);
     setSearchTerm("");
+    setSortBy("recommended");
+    if (typeof window !== "undefined") {
+      try {
+        sessionStorage.removeItem("bambil_catalog_filters");
+      } catch {
+        // Ignore storage errors
+      }
+      window.history.replaceState(null, "", pathname);
+    }
   };
 
   // Remove single category filter chip
@@ -178,7 +309,7 @@ export default function CatalogGrid() {
       <div>
         <h3 className="font-sans text-xs font-bold text-[#26170c] uppercase tracking-wider mb-4 pb-2 border-b border-[#d2c4bc]/40">Materiales</h3>
         <ul className="space-y-3.5">
-          {allMaterials.map((material) => (
+          {visibleMaterials.map((material) => (
             <li key={material}>
               <label className="flex items-center space-x-3 cursor-pointer group">
                 <input
@@ -198,6 +329,23 @@ export default function CatalogGrid() {
             </li>
           ))}
         </ul>
+
+        {allMaterials.length > 4 && (
+          <button
+            type="button"
+            onClick={() => setShowAllMaterials((prev) => !prev)}
+            className="mt-3.5 text-xs font-sans font-semibold text-[#725a39] hover:text-[#26170c] inline-flex items-center gap-1 transition-colors cursor-pointer"
+          >
+            <span>
+              {showAllMaterials
+                ? "Ver menos"
+                : `Ver más (${allMaterials.length - 4})`}
+            </span>
+            <span className="material-symbols-outlined text-base">
+              {showAllMaterials ? "expand_less" : "expand_more"}
+            </span>
+          </button>
+        )}
       </div>
 
       {/* Price Slider */}
