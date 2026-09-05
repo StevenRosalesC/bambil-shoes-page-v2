@@ -1,7 +1,8 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useSyncExternalStore } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { useCartStore } from "@/store/useCartStore";
 import { useUIStore } from "@/store/useUIStore";
 
@@ -9,10 +10,13 @@ export default function Navbar() {
   const { setCartOpen, isMenuOpen, setMenuOpen } = useUIStore();
   const { getTotalItems } = useCartStore();
   const [scrolled, setScrolled] = useState(false);
-  const [mounted, setMounted] = useState(false);
+  const mounted = useSyncExternalStore(
+    () => () => {},
+    () => true,
+    () => false
+  );
 
   useEffect(() => {
-    setMounted(true);
     const handleScroll = () => {
       if (window.scrollY > 50) {
         setScrolled(true);
@@ -35,63 +39,63 @@ export default function Navbar() {
       }`}
     >
       <div className="flex justify-between items-center px-4 md:px-10 py-1 max-w-7xl mx-auto">
-        {/* Navigation Links (Hidden on Mobile) */}
-        <div className="hidden md:flex items-center space-x-6">
-          <a
+        {/* Navigation Links (Hidden on Mobile and Tablets) */}
+        <div className="hidden lg:flex items-center space-x-6">
+          <Link
             className="font-sans text-sm font-semibold text-[#4f453f] hover:text-[#26170c] transition-colors"
             href="/#colecciones"
           >
             Colecciones
-          </a>
-          <a
+          </Link>
+          <Link
             className="font-sans text-sm font-semibold text-[#4f453f] hover:text-[#26170c] transition-colors"
             href="/catalog"
           >
             Productos
-          </a>
-          <a
+          </Link>
+          <Link
             className="font-sans text-sm font-semibold text-[#4f453f] hover:text-[#26170c] transition-colors"
             href="/#materiales"
           >
             Materiales
-          </a>
-          <a
+          </Link>
+          <Link
             className="font-sans text-sm font-semibold text-[#4f453f] hover:text-[#26170c] transition-colors"
             href="/about"
           >
             Nosotros
-          </a>
-          <a
+          </Link>
+          <Link
             className="font-sans text-sm font-semibold text-[#4f453f] hover:text-[#26170c] transition-colors"
             href="/contact"
           >
             Contacto
-          </a>
+          </Link>
         </div>
 
         {/* Brand Logo */}
-        <a
-          className="flex items-center gap-2.5 font-display text-lg md:text-2xl font-bold text-[#26170c] tracking-tight transition-all duration-300 group"
+        <Link
+          className="flex items-center gap-2 font-display text-base sm:text-lg lg:text-2xl font-bold text-[#26170c] tracking-tight transition-all duration-300 group"
           href="/"
         >
-          <div className="relative w-9 h-9 md:w-11 md:h-11 shrink-0">
+          <div className="relative w-8 h-8 sm:w-9 sm:h-9 lg:w-11 lg:h-11 shrink-0">
             <Image
               src="/Logo.png"
               alt="Logo Bambil Shoes"
               fill
-              sizes="(max-width: 768px) 36px, 44px"
+              sizes="(max-width: 1024px) 36px, 44px"
               className="object-contain"
               priority
             />
           </div>
-          <span className="group-hover:text-[#5a4030] transition-colors">
+          <span className="group-hover:text-[#5a4030] transition-colors whitespace-nowrap">
             Bambil Shoes By Dario
           </span>
-        </a>
+        </Link>
 
         {/* Right Links & Icons */}
-        <div className="flex items-center space-x-4">
-          <div className="flex items-center space-x-2 text-[#26170c]">
+        <div className="flex items-center space-x-3 sm:space-x-4">
+          <div className="flex items-center space-x-1 sm:space-x-2 text-[#26170c]">
             {/* Cart Button */}
             <button
               onClick={() => setCartOpen(true)}
@@ -108,10 +112,10 @@ export default function Navbar() {
               )}
             </button>
 
-            {/* Mobile Menu Toggle */}
+            {/* Mobile / Tablet Menu Toggle */}
             <button
               onClick={() => setMenuOpen(!isMenuOpen)}
-              className="md:hidden p-2 hover:bg-[#e5e2db] rounded-full transition-colors"
+              className="lg:hidden p-2 hover:bg-[#e5e2db] rounded-full transition-colors"
               aria-label="Abrir menú"
             >
               <span className="material-symbols-outlined text-[#26170c]">
@@ -122,44 +126,44 @@ export default function Navbar() {
         </div>
       </div>
 
-      {/* Mobile Menu Dropdown */}
+      {/* Mobile / Tablet Menu Dropdown */}
       {isMenuOpen && (
-        <div className="md:hidden bg-[#fcf9f2] border-t border-[#d2c4bc] px-4 py-4 space-y-3 shadow-lg">
-          <a
+        <div className="lg:hidden bg-[#fcf9f2] border-t border-[#d2c4bc] px-4 py-4 space-y-3 shadow-lg">
+          <Link
             onClick={() => setMenuOpen(false)}
             className="block font-sans text-base font-semibold text-[#4f453f] hover:text-[#26170c] py-2 border-b border-[#d2c4bc]/30"
             href="/#colecciones"
           >
             Colecciones
-          </a>
-          <a
+          </Link>
+          <Link
             onClick={() => setMenuOpen(false)}
             className="block font-sans text-base font-semibold text-[#4f453f] hover:text-[#26170c] py-2 border-b border-[#d2c4bc]/30"
             href="/catalog"
           >
             Productos
-          </a>
-          <a
+          </Link>
+          <Link
             onClick={() => setMenuOpen(false)}
             className="block font-sans text-base font-semibold text-[#4f453f] hover:text-[#26170c] py-2 border-b border-[#d2c4bc]/30"
             href="/#materiales"
           >
             Materiales
-          </a>
-          <a
+          </Link>
+          <Link
             onClick={() => setMenuOpen(false)}
             className="block font-sans text-base font-semibold text-[#4f453f] hover:text-[#26170c] py-2 border-b border-[#d2c4bc]/30"
             href="/about"
           >
             Nosotros
-          </a>
-          <a
+          </Link>
+          <Link
             onClick={() => setMenuOpen(false)}
             className="block font-sans text-base font-semibold text-[#4f453f] hover:text-[#26170c] py-2"
             href="/contact"
           >
             Contacto
-          </a>
+          </Link>
         </div>
       )}
     </nav>
