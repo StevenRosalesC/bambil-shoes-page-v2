@@ -107,44 +107,87 @@ export default function AboutPage() {
             <div className="w-16 h-[2px] bg-[#D2B48C] mx-auto mt-4"></div>
           </div>
 
-          {/* Mission & Vision Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-20">
-            {/* Mission */}
-            <div className="bg-white rounded-2xl p-8 md:p-10 shadow-[0_10px_30px_-5px_rgba(61,43,31,0.06)] border border-[#d2c4bc]/30 relative overflow-hidden group hover:shadow-[0_15px_35px_-5px_rgba(61,43,31,0.1)] transition-all duration-300">
-              <div className="absolute top-0 right-0 w-32 h-32 bg-[#D2B48C]/10 rounded-bl-full -mr-6 -mt-6 pointer-events-none transition-transform group-hover:scale-110"></div>
-              <div className="w-12 h-12 rounded-xl bg-[#f6f3ec] flex items-center justify-center mb-6 text-[#D2B48C]">
-                <span
-                  className="material-symbols-outlined text-2xl"
-                  style={{ fontVariationSettings: "'FILL' 1" }}
-                >
-                  flag
-                </span>
+          {/* Mission & Vision with Owner Image */}
+          <div className="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-8 lg:gap-12 items-center mb-16 md:mb-24">
+            {/* Owner Image */}
+            <div className="md:col-span-5 relative w-full max-w-sm md:max-w-none mx-auto">
+              <div className="absolute -inset-3 sm:-inset-4 bg-[#ebe8e1] rounded-2xl -z-10 shadow-[0_10px_30px_-5px_rgba(61,43,31,0.06)] translate-x-3 translate-y-3 sm:translate-x-4 sm:translate-y-4"></div>
+              <div className="relative rounded-xl overflow-hidden shadow-[0_10px_30px_rgba(61,43,31,0.12)] border border-[#d2c4bc]/40 aspect-[3/4] bg-[#ebe8e1]">
+                <Image
+                  src="/images/owner.jpg"
+                  alt="Darío Catuto, fundador y maestro artesano de Bambil Shoes"
+                  fill
+                  sizes="(max-width: 768px) 90vw, (max-width: 1024px) 42vw, 480px"
+                  className="object-cover object-center"
+                  priority
+                />
+                <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-[#26170c]/85 via-[#26170c]/40 to-transparent p-4 sm:p-6 pt-10 text-white">
+                  <span className="inline-block bg-[#D2B48C] text-primary font-sans text-[10px] font-bold px-2.5 py-0.5 rounded tracking-wider uppercase mb-1 shadow-xs">
+                    Hecho en Ecuador
+                  </span>
+                  <p className="font-display text-base sm:text-lg font-semibold leading-snug">
+                    Darío Catuto
+                  </p>
+                  <p className="font-sans text-xs text-[#e5e2db]/90">
+                    Maestro Artesano &amp; Fundador
+                  </p>
+                </div>
               </div>
-              <h3 className="font-display text-2xl md:text-3xl text-[#26170c] mb-4 font-semibold">
-                Misión
-              </h3>
-              <p className="font-sans text-sm md:text-base text-[#4f453f] leading-relaxed">
-                Comercializar calzado para mujeres de excelente calidad, sus artesanos realizan los productos con responsabilidad, compromiso, trabajo en equipo, honestidad y respeto generando así oportunidades para su entorno.
-              </p>
             </div>
 
-            {/* Vision */}
-            <div className="bg-white rounded-2xl p-8 md:p-10 shadow-[0_10px_30px_-5px_rgba(61,43,31,0.06)] border border-[#d2c4bc]/30 relative overflow-hidden group hover:shadow-[0_15px_35px_-5px_rgba(61,43,31,0.1)] transition-all duration-300">
-              <div className="absolute top-0 right-0 w-32 h-32 bg-[#D2B48C]/10 rounded-bl-full -mr-6 -mt-6 pointer-events-none transition-transform group-hover:scale-110"></div>
-              <div className="w-12 h-12 rounded-xl bg-[#f6f3ec] flex items-center justify-center mb-6 text-[#D2B48C]">
-                <span
-                  className="material-symbols-outlined text-2xl"
-                  style={{ fontVariationSettings: "'FILL' 1" }}
-                >
-                  visibility
-                </span>
+            {/* Mission & Vision Cards */}
+            <div className="md:col-span-7 space-y-6">
+              {/* Mission */}
+              <div className="bg-white rounded-2xl p-6 md:p-7 lg:p-9 shadow-[0_10px_30px_-5px_rgba(61,43,31,0.06)] border border-[#d2c4bc]/30 relative overflow-hidden group hover:shadow-[0_15px_35px_-5px_rgba(61,43,31,0.1)] transition-all duration-300">
+                <div className="absolute top-0 right-0 w-32 h-32 bg-[#D2B48C]/10 rounded-bl-full -mr-6 -mt-6 pointer-events-none transition-transform group-hover:scale-110"></div>
+                <div className="flex items-center gap-3 md:gap-4 mb-3 md:mb-4">
+                  <div className="w-11 h-11 md:w-12 md:h-12 rounded-xl bg-[#f6f3ec] flex items-center justify-center text-[#D2B48C] shrink-0">
+                    <span
+                      className="material-symbols-outlined text-2xl"
+                      style={{ fontVariationSettings: "'FILL' 1" }}
+                    >
+                      flag
+                    </span>
+                  </div>
+                  <div>
+                    <span className="text-xs font-sans font-bold text-[#D2B48C] uppercase tracking-widest block">
+                      Nuestro Propósito
+                    </span>
+                    <h3 className="font-display text-xl md:text-2xl lg:text-3xl text-[#26170c] font-semibold">
+                      Misión
+                    </h3>
+                  </div>
+                </div>
+                <p className="font-sans text-xs sm:text-sm md:text-base text-[#4f453f] leading-relaxed">
+                  Comercializar calzado para mujeres de excelente calidad, sus artesanos realizan los productos con responsabilidad, compromiso, trabajo en equipo, honestidad y respeto generando así oportunidades para su entorno.
+                </p>
               </div>
-              <h3 className="font-display text-2xl md:text-3xl text-[#26170c] mb-4 font-semibold">
-                Visión
-              </h3>
-              <p className="font-sans text-sm md:text-base text-[#4f453f] leading-relaxed">
-                Ser una de las organizaciones asociativas con mayor volumen de comercialización de calzado para mujeres en la provincia de Santa Elena, y mejorar sus condiciones de vida.
-              </p>
+
+              {/* Vision */}
+              <div className="bg-white rounded-2xl p-6 md:p-7 lg:p-9 shadow-[0_10px_30px_-5px_rgba(61,43,31,0.06)] border border-[#d2c4bc]/30 relative overflow-hidden group hover:shadow-[0_15px_35px_-5px_rgba(61,43,31,0.1)] transition-all duration-300">
+                <div className="absolute top-0 right-0 w-32 h-32 bg-[#D2B48C]/10 rounded-bl-full -mr-6 -mt-6 pointer-events-none transition-transform group-hover:scale-110"></div>
+                <div className="flex items-center gap-3 md:gap-4 mb-3 md:mb-4">
+                  <div className="w-11 h-11 md:w-12 md:h-12 rounded-xl bg-[#f6f3ec] flex items-center justify-center text-[#D2B48C] shrink-0">
+                    <span
+                      className="material-symbols-outlined text-2xl"
+                      style={{ fontVariationSettings: "'FILL' 1" }}
+                    >
+                      visibility
+                    </span>
+                  </div>
+                  <div>
+                    <span className="text-xs font-sans font-bold text-[#D2B48C] uppercase tracking-widest block">
+                      Nuestra Meta
+                    </span>
+                    <h3 className="font-display text-xl md:text-2xl lg:text-3xl text-[#26170c] font-semibold">
+                      Visión
+                    </h3>
+                  </div>
+                </div>
+                <p className="font-sans text-xs sm:text-sm md:text-base text-[#4f453f] leading-relaxed">
+                  Ser una de las organizaciones asociativas con mayor volumen de comercialización de calzado para mujeres en la provincia de Santa Elena, y mejorar sus condiciones de vida.
+                </p>
+              </div>
             </div>
           </div>
 
