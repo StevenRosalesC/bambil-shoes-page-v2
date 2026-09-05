@@ -1,5 +1,6 @@
 import React from "react";
 import Image from "next/image";
+import Link from "next/link";
 
 export default function Footer() {
   return (
@@ -25,34 +26,46 @@ export default function Footer() {
             © 2026 Bambil Shoes By Dario. Handmade Excellence. Elevando la artesanía tradicional a través de diseños contemporáneos.
           </p>
         </div>
-        
+
         {/* Contact Links */}
         <div className="col-span-1">
           <h5 className="font-sans text-xs font-bold text-[#ac9181] mb-4 uppercase tracking-widest">Contacto</h5>
           <ul className="space-y-3 font-sans text-sm text-[#e5e2db]/90">
-            <li>Calle Taller Artesanal 123</li>
+            <li>Santa Elena, Parroquia Colonche - Comuna Bambil Collao</li>
             <li>Lunes a Sábado: 9am - 7pm</li>
             <li>
-              <a href="#" className="hover:text-white transition-opacity flex items-center gap-1.5 underline">
+              <Link
+                href="https://maps.app.goo.gl/euKWMGExSx19FbjD6"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hover:text-white transition-opacity flex items-center gap-1.5 underline">
                 <span className="material-symbols-outlined text-sm">map</span> Ver Mapa
-              </a>
+              </Link>
             </li>
           </ul>
         </div>
-        
+
         {/* Social Links */}
         <div className="col-span-1">
           <h5 className="font-sans text-xs font-bold text-[#ac9181] mb-4 uppercase tracking-widest">Social</h5>
           <ul className="space-y-3 font-sans text-sm text-[#e5e2db]/90">
             <li>
-              <a href="#" className="hover:text-white hover:underline transition-opacity">
+              <Link
+                href={process.env.NEXT_PUBLIC_ENTERPRISE_FACEBOOK || "#"}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hover:text-white hover:underline transition-opacity">
                 Facebook
-              </a>
+              </Link>
             </li>
             <li>
-              <a href="#" className="hover:text-white hover:underline transition-opacity">
+              <Link
+                href={process.env.NEXT_PUBLIC_ENTERPRISE_INSTAGRAM || "#"}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hover:text-white hover:underline transition-opacity">
                 Instagram
-              </a>
+              </Link>
             </li>
           </ul>
         </div>
