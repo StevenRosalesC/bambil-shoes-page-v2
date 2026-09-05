@@ -2,23 +2,31 @@
 
 import React, { useState } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { useProducts } from "@/hooks/useProducts";
+import { useCategories } from "@/hooks/useCategories";
 import { useCartStore } from "@/store/useCartStore";
 import { useUIStore } from "@/store/useUIStore";
 import { Product } from "@/types";
 
 export default function FeaturedProducts() {
   const [selectedCategory, setSelectedCategory] = useState<string | undefined>(undefined);
+  const { data: categoriesResponse } = useCategories();
   const { data: response, isLoading } = useProducts({
     filterBy: selectedCategory ? "categoryId" : undefined,
     filterValue: selectedCategory,
+    limit: 20,
   });
   const { addItem } = useCartStore();
   const { setCartOpen } = useUIStore();
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [selectedSize, setSelectedSize] = useState<string>("");
 
+  const categories = categoriesResponse?.data || [];
   const products = response?.data || [];
+  const total = response?.total ?? products.length;
+  const displayedProducts = products.slice(0, 6);
+  const hasMore = total > 6 || products.length > 6;
 
   const handleAddToCart = (product: Product, size: string) => {
     if (!size) return;
@@ -40,10 +48,10 @@ export default function FeaturedProducts() {
           </div>
           
           {/* Category Tabs */}
-          <div className="flex bg-[#f6f3ec] p-1.5 rounded-lg border border-[#d2c4bc]/40">
+          <div className="flex flex-wrap bg-[#f6f3ec] p-1.5 rounded-lg border border-[#d2c4bc]/40 gap-1">
             <button
               onClick={() => setSelectedCategory(undefined)}
-              className={`px-5 py-2 font-sans text-xs md:text-sm font-semibold rounded-md transition-all ${
+              className={`px-5 py-2 font-sans text-xs md:text-sm font-semibold rounded-md transition-all cursor-pointer ${
                 selectedCategory === undefined
                   ? "bg-[#26170c] text-white shadow-sm"
                   : "text-[#4f453f] hover:text-[#26170c]"
@@ -51,33 +59,26 @@ export default function FeaturedProducts() {
             >
               Todos
             </button>
-            <button
-              onClick={() => setSelectedCategory("cat-dama")}
-              className={`px-5 py-2 font-sans text-xs md:text-sm font-semibold rounded-md transition-all ${
-                selectedCategory === "cat-dama"
-                  ? "bg-[#26170c] text-white shadow-sm"
-                  : "text-[#4f453f] hover:text-[#26170c]"
-              }`}
-            >
-              Dama
-            </button>
-            <button
-              onClick={() => setSelectedCategory("cat-caballeros")}
-              className={`px-5 py-2 font-sans text-xs md:text-sm font-semibold rounded-md transition-all ${
-                selectedCategory === "cat-caballeros"
-                  ? "bg-[#26170c] text-white shadow-sm"
-                  : "text-[#4f453f] hover:text-[#26170c]"
-              }`}
-            >
-              Caballeros
-            </button>
+            {categories.map((category) => (
+              <button
+                key={category.id}
+                onClick={() => setSelectedCategory(category.id)}
+                className={`px-5 py-2 font-sans text-xs md:text-sm font-semibold rounded-md transition-all cursor-pointer ${
+                  selectedCategory === category.id
+                    ? "bg-[#26170c] text-white shadow-sm"
+                    : "text-[#4f453f] hover:text-[#26170c]"
+                }`}
+              >
+                {category.name.trim()}
+              </button>
+            ))}
           </div>
         </div>
 
         {/* Loading Skeletons */}
         {isLoading ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-            {[1, 2, 3, 4].map((i) => (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+            {[1, 2, 3, 4, 5, 6].map((i) => (
               <div
                 key={i}
                 className="animate-pulse bg-[#f6f3ec] rounded-lg overflow-hidden h-[420px] flex flex-col justify-between p-4"
@@ -91,93 +92,109 @@ export default function FeaturedProducts() {
               </div>
             ))}
           </div>
-        ) : products.length === 0 ? (
+        ) : displayedProducts.length === 0 ? (
           <div className="text-center py-12 text-[#4f453f] font-sans text-base">
             No se encontraron productos en esta categoría.
           </div>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-            {products.map((product) => {
-              const defaultSize = product.variants?.[0]?.size || "";
-              return (
-                <div
-                  key={product.id}
-                  className="bg-[#f6f3ec] rounded-lg overflow-hidden shadow-[0_8px_30px_rgba(112,90,76,0.04)] hover:shadow-[0_8px_30px_rgba(112,90,76,0.12)] border border-transparent hover:border-[#d2c4bc]/40 transition-all duration-300 flex flex-col group"
-                >
-                  {/* Product Image */}
+          <>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+              {displayedProducts.map((product) => {
+                const defaultSize = product.variants?.[0]?.size || "";
+                return (
                   <div
-                    className="relative aspect-[4/5] w-full overflow-hidden bg-[#e5e2db] cursor-pointer"
-                    onClick={() => {
-                      setSelectedProduct(product);
-                      setSelectedSize(defaultSize);
-                    }}
+                    key={product.id}
+                    className="bg-[#f6f3ec] rounded-lg overflow-hidden shadow-[0_8px_30px_rgba(112,90,76,0.04)] hover:shadow-[0_8px_30px_rgba(112,90,76,0.12)] border border-transparent hover:border-[#d2c4bc]/40 transition-all duration-300 flex flex-col group"
                   >
-                    <Image
-                      src={product.images[0]}
-                      alt={product.name}
-                      fill
-                      sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                      className="object-cover object-center group-hover:scale-105 transition-transform duration-500"
-                    />
-                    <span className="absolute top-4 left-4 bg-[#26170c] text-white font-sans text-[10px] tracking-wider font-semibold uppercase px-3 py-1 rounded-sm shadow-sm z-10">
-                      {product.material}
-                    </span>
-                  </div>
+                    {/* Product Image */}
+                    <div
+                      className="relative aspect-[4/5] w-full overflow-hidden bg-[#e5e2db] cursor-pointer"
+                      onClick={() => {
+                        setSelectedProduct(product);
+                        setSelectedSize(defaultSize);
+                      }}
+                    >
+                      <Image
+                        src={product.images[0]}
+                        alt={product.name}
+                        fill
+                        sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                        className="object-cover object-center group-hover:scale-105 transition-transform duration-500"
+                      />
+                      <span className="absolute top-4 left-4 bg-[#26170c] text-white font-sans text-[10px] tracking-wider font-semibold uppercase px-3 py-1 rounded-sm shadow-sm z-10">
+                        {product.material}
+                      </span>
+                    </div>
 
-                  {/* Details */}
-                  <div className="p-5 flex-1 flex flex-col justify-between">
-                    <div>
-                      <div className="flex justify-between items-start mb-2">
-                        <h3
-                          className="font-display text-lg font-semibold text-[#26170c] hover:text-[#725a39] transition-colors cursor-pointer"
+                    {/* Details */}
+                    <div className="p-5 flex-1 flex flex-col justify-between">
+                      <div>
+                        <div className="flex justify-between items-start mb-2">
+                          <h3
+                            className="font-display text-lg font-semibold text-[#26170c] hover:text-[#725a39] transition-colors cursor-pointer"
+                            onClick={() => {
+                              setSelectedProduct(product);
+                              setSelectedSize(defaultSize);
+                            }}
+                          >
+                            {product.name}
+                          </h3>
+                          <span className="font-sans text-base font-bold text-[#26170c]">
+                            ${product.price.toFixed(2)}
+                          </span>
+                        </div>
+                        <p className="font-sans text-xs text-[#4f453f] line-clamp-2 leading-relaxed mb-4">
+                          {product.description}
+                        </p>
+                      </div>
+
+                      <div>
+                        {/* Add to Cart button */}
+                        <button
+                          onClick={() => {
+                            if (defaultSize) {
+                              handleAddToCart(product, defaultSize);
+                            } else {
+                              setSelectedProduct(product);
+                              setSelectedSize("");
+                            }
+                          }}
+                          className="w-full bg-[#26170c] hover:bg-[#3d2b1f] text-white font-sans text-xs font-semibold py-3 rounded transition-all flex items-center justify-center gap-2 shadow-sm"
+                        >
+                          <span className="material-symbols-outlined text-base">shopping_cart</span>
+                          {defaultSize ? `Añadir Talla ${defaultSize}` : "Añadir al Carrito"}
+                        </button>
+                        
+                        <button
                           onClick={() => {
                             setSelectedProduct(product);
                             setSelectedSize(defaultSize);
                           }}
+                          className="w-full text-center text-xs font-sans font-semibold text-[#725a39] mt-3 hover:underline"
                         >
-                          {product.name}
-                        </h3>
-                        <span className="font-sans text-base font-bold text-[#26170c]">
-                          ${product.price.toFixed(2)}
-                        </span>
+                          Ver Detalles y Tallas
+                        </button>
                       </div>
-                      <p className="font-sans text-xs text-[#4f453f] line-clamp-2 leading-relaxed mb-4">
-                        {product.description}
-                      </p>
-                    </div>
-
-                    <div>
-                      {/* Add to Cart button */}
-                      <button
-                        onClick={() => {
-                          if (defaultSize) {
-                            handleAddToCart(product, defaultSize);
-                          } else {
-                            setSelectedProduct(product);
-                            setSelectedSize("");
-                          }
-                        }}
-                        className="w-full bg-[#26170c] hover:bg-[#3d2b1f] text-white font-sans text-xs font-semibold py-3 rounded transition-all flex items-center justify-center gap-2 shadow-sm"
-                      >
-                        <span className="material-symbols-outlined text-base">shopping_cart</span>
-                        {defaultSize ? `Añadir Talla ${defaultSize}` : "Añadir al Carrito"}
-                      </button>
-                      
-                      <button
-                        onClick={() => {
-                          setSelectedProduct(product);
-                          setSelectedSize(defaultSize);
-                        }}
-                        className="w-full text-center text-xs font-sans font-semibold text-[#725a39] mt-3 hover:underline"
-                      >
-                        Ver Detalles y Tallas
-                      </button>
                     </div>
                   </div>
-                </div>
-              );
-            })}
-          </div>
+                );
+              })}
+            </div>
+
+            {hasMore && (
+              <div className="mt-14 text-center">
+                <Link
+                  href={selectedCategory ? `/catalog?categories=${selectedCategory}` : "/catalog"}
+                  className="inline-flex items-center justify-center gap-2.5 bg-[#26170c] hover:bg-[#3d2b1f] text-white font-sans text-sm font-semibold px-8 py-4 rounded shadow-md hover:shadow-lg transition-all duration-300 group"
+                >
+                  <span>Ver Toda la Colección</span>
+                  <span className="material-symbols-outlined text-base transition-transform group-hover:translate-x-1">
+                    arrow_forward
+                  </span>
+                </Link>
+              </div>
+            )}
+          </>
         )}
 
         {/* Product Details Modal */}
