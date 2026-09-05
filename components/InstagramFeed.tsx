@@ -1,27 +1,36 @@
 import React from "react";
 import Image from "next/image";
+import Link from "next/link";
 
 export default function InstagramFeed() {
   const feedItems = [
     {
       id: 1,
-      image: "https://lh3.googleusercontent.com/aida-public/AB6AXuD_dNoiXnJaWGkaO5zFoLW99yActG5gx032RgLySpxypzs3oiMQiOFy4j6EPfnhz-BOp7prPWR3rYM5px5zQuLjxOMP-3ZZ00wQTdlHLSkM83oDo1GQ3YL5sPOtrbOMCSKIgQV0N_I7EIwyYnVlMkURM6f26knM89Yp_h1dIwHpCulSoWVgBFTgEBma9FCwdTsnBylUDsa4UiDtflyhe_kySFb7iIDmoJ6Ca8BWvO4z6jEm8be0JrLhmroyjW0Y5cD_onFUquGih9pm",
+      image: "/images/instagramImages/01.jpg",
       offset: false,
+      alt: " Una noche llena de elegancia, belleza y grandes momentos en el Miss Ecuador 2026",
+      url: "https://www.instagram.com/p/DcrZSz5G5O6",
     },
     {
       id: 2,
-      image: "https://lh3.googleusercontent.com/aida-public/AB6AXuBS30fVcJGwUbFki4QB1AXWCFjCD2TGi0NOFloTdw2wTyE2fDAU0absEORbg2Kkx85JQDhia1kqn7x86EXrKaHw0X6RjYYdpaS77-FfqLaMFqN0hpahblxhL0fJNMLbYQaOZ5j0-_KKxu1wrFDk5NXKanFHCbrnckRd4svWVd1nOh_5ffIFqJDiT4MjaH5wGuZ2PD8WfCar8-p_4QgFUsQVvCl7CC_jCKoNz3Fc4HJZeIcrNHOj91jLQFucMlIegqYHRjuZTsKocUFg",
+      image: "/images/instagramImages/02.jpg",
       offset: true,
+      alt: "Una noche para recordar",
+      url: "https://www.instagram.com/p/DcrYf3hm5bH",
     },
     {
       id: 3,
-      image: "https://lh3.googleusercontent.com/aida-public/AB6AXuBZOAPmfcKFNh_YzHcjZaGNfPxBAhT-jE8SYJaIyYrBhGOuVnjPLeir0jkTam6pon8ov_pDA1MsUjmi6gcLhlHLz28PBUKmVmrm3ca2dEVOPVn4REHwmUWdjp6Ul5RnEgoAi_y_oey-hzhmqiaGK98A584uBVLgoEFLVPV_F9TOpbrxH6wHhtUfHOCQTHwajnAyjcxkWkj2tzb_YBhtZZaUucFntx0OW2i7rtm44ogIdeuqRuuvqMbSEAIVVWcf7gmmrLmDhZVttjTP",
+      image: "/images/instagramImages/03.jpg",
       offset: false,
+      alt: "Los mejores diseños solo en Bambil Shoes",
+      url: "https://www.instagram.com/p/DZwD8c1NynY",
     },
     {
       id: 4,
-      image: "https://lh3.googleusercontent.com/aida-public/AB6AXuDld1nZmZMeLJoEMfC-E4ZNnnpZZBzoU6_2uuLt4SLGV5tjsqqJbzSZtXM6uhyqDT63V-nHEF5L67CtlPBnPxpQzV1TUFcED2laNZTvmUMBXXxA1d07ddouL311cqqE_835yX-kkhz85mMrG37V5PDgT1TKYvulyZcqI2IBK088uOBZQ4u3XqRfbSloiEvPl1H7x8r6oA_lRxlPcWpQO-9_w_z4xzDJhIXm9fw3jRatVjoB6V6VNfOgYzAl0BRL2qtQYHQeefNCm2JD",
+      image: "/images/instagramImages/04.jpg",
       offset: true,
+      alt: "Dali Model y Asesora de Reina 👸 y Bambil Shoes",
+      url: "https://www.instagram.com/p/DZaQWL2yVTo",
     },
   ];
 
@@ -35,7 +44,7 @@ export default function InstagramFeed() {
             Nuestros diseños, tu estilo de vida. Etiquétanos para aparecer en nuestra galería.
           </p>
         </div>
-        
+
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-8">
           {feedItems.map((item) => (
             <div
@@ -52,20 +61,23 @@ export default function InstagramFeed() {
                 className="object-cover group-hover:scale-110 transition-transform duration-500"
               />
               <div className="absolute inset-0 bg-[#26170c]/45 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-                <span className="material-symbols-outlined text-white text-3xl">favorite</span>
+                <Link href={item.url || "#"} target="_blank" rel="noopener noreferrer">
+                  <span className="material-symbols-outlined text-white text-3xl">favorite</span>
+                </Link>
               </div>
             </div>
           ))}
         </div>
 
         <div className="text-center mt-12">
-          <a
+          <Link
             className="inline-flex items-center gap-2 font-sans text-xs md:text-sm font-semibold text-[#26170c] border-b border-[#26170c] pb-1 hover:text-[#725a39] hover:border-[#725a39] transition-colors"
-            href="#"
+            href={process.env.NEXT_PUBLIC_ENTERPRISE_INSTAGRAM || "#"}
+            target="_blank"
           >
             Síguenos en @BambilShoes{" "}
             <span className="material-symbols-outlined text-sm font-bold">open_in_new</span>
-          </a>
+          </Link>
         </div>
       </div>
     </section>
