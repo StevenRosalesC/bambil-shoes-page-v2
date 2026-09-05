@@ -13,21 +13,21 @@ export default function Home() {
     <div className="flex flex-col min-h-screen bg-[#fcf9f2] antialiased">
       {/* Navigation Bar */}
       <Navbar />
-      
+
       {/* Main Sections */}
-      <main className="flex-grow pt-[72px]">
+      <main className="grow pt-18">
         {/* Hero Section */}
         <Hero />
-        
+
         {/* Categories Vertical Slices */}
         <CategoriesList />
-        
+
         {/* Materials Showcase */}
         <Materials />
-        
+
         {/* Featured Products Showcase */}
         <FeaturedProducts />
-        
+
         {/* Instagram/Social Proof */}
         <InstagramFeed />
       </main>
