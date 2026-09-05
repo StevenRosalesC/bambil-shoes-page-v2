@@ -4,6 +4,11 @@ import React, { useState } from "react";
 
 export default function WhatsAppFAB() {
   const [showBubble, setShowBubble] = useState(true);
+  const rawPhoneNumber =
+    process.env.NEXT_PUBLIC_ENTERPRISE_PHONE_NUMBER ||
+    process.env.NEXT_PUBLIC_ENTERPRICE_PHONE_NUMBER ||
+    "573009998877";
+  const phoneNumber = rawPhoneNumber.replace(/\D/g, "");
 
   return (
     <div className="fixed bottom-8 right-8 z-50 flex flex-col items-end">
@@ -24,7 +29,7 @@ export default function WhatsAppFAB() {
 
       {/* Button */}
       <a
-        href="https://wa.me/573009998877"
+        href={`https://wa.me/${phoneNumber}`}
         target="_blank"
         rel="noopener noreferrer"
         className="bg-[#25D366] text-white rounded-full p-4 flex items-center justify-center shadow-lg hover:shadow-xl hover:scale-105 active:scale-95 transition-all duration-300 group"
