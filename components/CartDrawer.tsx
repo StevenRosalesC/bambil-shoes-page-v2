@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useSyncExternalStore } from "react";
 import Image from "next/image";
 import { useCartStore } from "@/store/useCartStore";
 import { useUIStore } from "@/store/useUIStore";
@@ -8,11 +8,11 @@ import { useUIStore } from "@/store/useUIStore";
 export default function CartDrawer() {
   const { isCartOpen, setCartOpen } = useUIStore();
   const { items, removeItem, updateQuantity, getTotalPrice, clearCart } = useCartStore();
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
+  const mounted = useSyncExternalStore(
+    () => () => {},
+    () => true,
+    () => false
+  );
 
   if (!mounted) return null;
 
@@ -81,11 +81,15 @@ export default function CartDrawer() {
                   key={`${item.product.id}-${item.variant.size}`}
                   className="flex gap-4 p-4 bg-[#f6f3ec] rounded-lg shadow-sm border border-[#d2c4bc]/30"
                 >
-                  <img
-                    src={item.product.images[0]}
-                    alt={item.product.name}
-                    className="w-20 h-20 object-cover rounded bg-[#e5e2db]"
-                  />
+                  <div className="relative w-20 h-20 shrink-0 rounded overflow-hidden bg-[#e5e2db]">
+                    <Image
+                      src={item.product.images[0]}
+                      alt={item.product.name}
+                      fill
+                      sizes="80px"
+                      className="object-cover"
+                    />
+                  </div>
                   <div className="flex-1 flex flex-col justify-between">
                     <div>
                       <h4 className="font-display text-base font-semibold text-[#26170c]">

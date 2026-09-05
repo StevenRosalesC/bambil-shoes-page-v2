@@ -1,4 +1,5 @@
 import React from "react";
+import Image from "next/image";
 
 export default function Materials() {
   return (
@@ -15,10 +16,12 @@ export default function Materials() {
           {/* Natural Leather Card */}
           <div className="bg-[#f6f3ec] rounded-xl p-6 md:p-8 flex flex-col md:flex-row gap-6 md:gap-8 items-center shadow-[0_8px_30px_rgba(112,90,76,0.08)] border border-transparent hover:border-[#d2c4bc] transition-all duration-300 group">
             <div className="w-full md:w-1/2 h-60 rounded overflow-hidden relative">
-              <img
+              <Image
                 alt="Textura de Cuero Natural"
-                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                className="object-cover group-hover:scale-105 transition-transform duration-500"
                 src="https://lh3.googleusercontent.com/aida-public/AB6AXuAG50EtqMj6Op2bKTOf6FDZ51JEboFi8YjD1xiTVf113FGapmgkUg3eAPB0OCWxpmgfimSYJABI3u07rvbBrMSOMTGoPZM5z4Ie8O6pQafoD1zgHoyTSZNCUny-Z4huNBDodL0g4b1w7R3S2WfNYN0WT7COy9ct_nYdw-K9QUtk8GmcSYQ1yCmmH3OpiWtz9Cp-fE0FsjJhfGO6pWJZEsetCzZIy6p63iS-aDX6X3PZt1XOBuL6LJFiQ6d7zK3393rfXFGlsRJE5vHj"
+                fill
+                sizes="(max-width: 768px) 100vw, 50vw"
               />
             </div>
             <div className="w-full md:w-1/2">
@@ -43,10 +46,12 @@ export default function Materials() {
           {/* Premium Synthetic Card */}
           <div className="bg-[#f6f3ec] rounded-xl p-6 md:p-8 flex flex-col md:flex-row gap-6 md:gap-8 items-center shadow-[0_8px_30px_rgba(112,90,76,0.08)] border border-transparent hover:border-[#d2c4bc] transition-all duration-300 group">
             <div className="w-full md:w-1/2 h-60 rounded overflow-hidden relative order-first md:order-last">
-              <img
+              <Image
                 alt="Textura Sintética Premium"
-                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                className="object-cover group-hover:scale-105 transition-transform duration-500"
                 src="https://lh3.googleusercontent.com/aida-public/AB6AXuCgrhfEpVASo6ALK6_GZLr4qQsaW222zmPs6feQ_mS5sb0Sqva-PCmN79iifgrkZx8bPvD2rCIdIxfJM31XCV9VmIXSjLD2cI4dyUpQZH6op8YMcuL8tyeuvnRgYoJABZSvf4Kal6oWSxtYChsztzGnaTT5vDt2IQ66l5iWEE8MyvkOIscX5FYECI_WOROjfzS_CIBJgibHLsT2UB6RpYaGlKLdXCWjJzWaZcFNgy2EqlNz6-AjocyT3iWOc82e0TA_3JfH2yE4GU1l"
+                fill
+                sizes="(max-width: 768px) 100vw, 50vw"
               />
             </div>
             <div className="w-full md:w-1/2">

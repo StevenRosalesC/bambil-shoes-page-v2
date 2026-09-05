@@ -1,4 +1,5 @@
 import React from "react";
+import Image from "next/image";
 
 export default function InstagramFeed() {
   const feedItems = [
@@ -43,10 +44,12 @@ export default function InstagramFeed() {
                 item.offset ? "mt-0 md:mt-8" : ""
               }`}
             >
-              <img
+              <Image
                 src={item.image}
                 alt={`Instagram feed ${item.id}`}
-                className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                fill
+                sizes="(max-width: 768px) 50vw, 25vw"
+                className="object-cover group-hover:scale-110 transition-transform duration-500"
               />
               <div className="absolute inset-0 bg-[#26170c]/45 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
                 <span className="material-symbols-outlined text-white text-3xl">favorite</span>

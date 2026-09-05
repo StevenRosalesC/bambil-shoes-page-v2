@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import Image from "next/image";
 
 export default function ContactGrid() {
   const [name, setName] = useState("");
@@ -167,10 +168,12 @@ export default function ContactGrid() {
 
         {/* Stylized Map Swatch Widget */}
         <div className="bg-white rounded-xl border border-[#d2c4bc]/50 shadow-[0_10px_30px_-5px_rgba(61,43,31,0.06)] overflow-hidden h-[300px] relative group cursor-pointer">
-          <img
+          <Image
             alt="Ubicación taller Santa Elena"
-            className="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity duration-500 sepia-[.3]"
+            className="object-cover opacity-80 group-hover:opacity-100 transition-opacity duration-500 sepia-[.3]"
             src="https://lh3.googleusercontent.com/aida-public/AB6AXuCo-mZX5jfRlPlqQNWLg2rHXkxZSGt2eBnUVcYtGpLeE64FCsIhWAqqDVoM2kN9W54mobaxse-63odio_UFyTfczll2_q27bAJSBu7UpYLjNhtu9hn_K26RI24BS-ygi1TjdUiJNBtpQBdnxOr6abnaS7NwkhFgh9CePaDo1Grp4UPAEQPuvRRMfEm6CL3v-6XVo_D5R42tPhPPU1-ZMPp4YZr606EbbyBU2XX1LBFj_pO17PVyAdhLvb-KNqTNX0Y28t6cK8r-B3pm"
+            fill
+            sizes="(max-width: 768px) 100vw, 50vw"
           />
           <div className="absolute inset-0 bg-[#3d2b1f]/10 group-hover:bg-transparent transition-colors duration-500"></div>
           <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">

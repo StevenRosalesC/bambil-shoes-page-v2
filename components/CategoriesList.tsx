@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import Image from "next/image";
 import { useCategories } from "@/hooks/useCategories";
 
 export default function CategoriesList() {
@@ -8,16 +9,15 @@ export default function CategoriesList() {
 
   if (isLoading) {
     return (
-      <section className="w-full h-[650px] flex bg-[#26170c]" id="colecciones">
-        {[1, 2, 3].map((i) => (
+      <section className="w-full h-auto md:h-[650px] min-h-[500px] flex flex-col md:flex-row bg-[#26170c]" id="colecciones">
+        {[1, 2, 3].map((n) => (
           <div
-            key={i}
-            className="w-full md:w-1/3 h-full animate-pulse border-r border-[#3d2b1f]/30 bg-[#3d2b1f]/40 flex items-end p-12"
+            key={n}
+            className="w-full md:w-1/3 h-[350px] md:h-full animate-pulse bg-[#3d2b1f]/40 flex flex-col justify-end p-8 md:p-12 border-b md:border-b-0 md:border-r border-[#3d2b1f]/30"
           >
-            <div className="space-y-4 w-full">
-              <div className="h-10 bg-[#fcf9f2]/20 rounded w-1/3"></div>
-              <div className="h-4 bg-[#fcf9f2]/10 rounded w-1/2"></div>
-            </div>
+            <div className="h-10 bg-white/10 rounded w-2/3 mb-4"></div>
+            <div className="h-4 bg-white/10 rounded w-full mb-2"></div>
+            <div className="h-4 bg-white/10 rounded w-1/3"></div>
           </div>
         ))}
       </section>
@@ -38,10 +38,12 @@ export default function CategoriesList() {
           href={`#productos`}
         >
           {category.image && (
-            <img
+            <Image
               alt={`Colección ${category.name}`}
-              className="absolute inset-0 w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-1000 ease-out opacity-70 group-hover:opacity-90"
+              className="object-cover object-center group-hover:scale-105 transition-transform duration-1000 ease-out opacity-70 group-hover:opacity-90"
               src={category.image}
+              fill
+              sizes="(max-width: 768px) 100vw, 33vw"
             />
           )}
           <div className="absolute inset-0 bg-gradient-to-t from-[#26170c]/90 via-[#26170c]/20 to-transparent flex flex-col justify-end p-8 md:p-12 z-10">

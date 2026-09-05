@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useMemo } from "react";
+import Image from "next/image";
 import { useProducts } from "@/hooks/useProducts";
 import { useCategories } from "@/hooks/useCategories";
 import { useCartStore } from "@/store/useCartStore";
@@ -24,8 +25,8 @@ export default function CatalogGrid() {
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [selectedSize, setSelectedSize] = useState<string>("");
   
-  const categories = categoriesResponse?.data || [];
-  const rawProducts = productsResponse?.data || [];
+  const categories = useMemo(() => categoriesResponse?.data || [], [categoriesResponse?.data]);
+  const rawProducts = useMemo(() => productsResponse?.data || [], [productsResponse?.data]);
 
   // Extract all unique materials from products for checkboxes
   const allMaterials = useMemo(() => {
@@ -396,12 +397,14 @@ export default function CatalogGrid() {
                       setSelectedSize(defaultSize);
                     }}
                   >
-                    <img
+                    <Image
                       src={product.images[0]}
                       alt={product.name}
-                      className="h-full w-full object-cover object-center group-hover:scale-105 transition-transform duration-700"
+                      fill
+                      sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                      className="object-cover object-center group-hover:scale-105 transition-transform duration-700"
                     />
-                    <span className="absolute top-4 left-4 bg-[#26170c] text-white font-sans text-[10px] tracking-wider font-semibold uppercase px-3 py-1 rounded-sm shadow-sm">
+                    <span className="absolute top-4 left-4 bg-[#26170c] text-white font-sans text-[10px] tracking-wider font-semibold uppercase px-3 py-1 rounded-sm shadow-sm z-10">
                       {product.material}
                     </span>
                   </div>
@@ -430,11 +433,18 @@ export default function CatalogGrid() {
 
                     <div>
                       <button
-                        onClick={() => handleAddToCart(product, defaultSize)}
+                        onClick={() => {
+                          if (defaultSize) {
+                            handleAddToCart(product, defaultSize);
+                          } else {
+                            setSelectedProduct(product);
+                            setSelectedSize("");
+                          }
+                        }}
                         className="w-full bg-[#26170c] hover:bg-[#3d2b1f] text-white font-sans text-xs font-semibold py-3 rounded transition-all flex items-center justify-center gap-2 shadow-sm"
                       >
                         <span className="material-symbols-outlined text-base">shopping_cart</span>
-                        Añadir Talla {defaultSize}
+                        {defaultSize ? `Añadir Talla ${defaultSize}` : "Añadir al Carrito"}
                       </button>
                       
                       <button
@@ -468,11 +478,13 @@ export default function CatalogGrid() {
               <span className="material-symbols-outlined text-[#26170c]">close</span>
             </button>
             
-            <div className="w-full md:w-1/2 bg-[#e5e2db]">
-              <img
+            <div className="w-full md:w-1/2 bg-[#e5e2db] relative aspect-square md:aspect-[4/5] min-h-[300px]">
+              <Image
                 src={selectedProduct.images[0]}
                 alt={selectedProduct.name}
-                className="w-full h-full object-cover aspect-square md:aspect-[4/5]"
+                fill
+                sizes="(max-width: 768px) 100vw, 50vw"
+                className="object-cover"
               />
             </div>
 

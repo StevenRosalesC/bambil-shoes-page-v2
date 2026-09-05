@@ -253,10 +253,12 @@ export default function AboutPage() {
                   }`}
                 >
                   <div className="h-60 md:h-64 overflow-hidden relative">
-                    <img
-                      className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                      alt={step.title}
+                    <Image
                       src={step.image}
+                      alt={step.title}
+                      fill
+                      sizes="(max-width: 768px) 100vw, 33vw"
+                      className="object-cover transition-transform duration-700 group-hover:scale-105"
                     />
                   </div>
                   <div className="p-6 md:p-8">
@@ -329,11 +331,15 @@ export default function AboutPage() {
             <div className="w-full lg:w-1/2">
               <div className="relative">
                 <div className="absolute -inset-4 bg-[#f6f3ec] rounded-xl -z-10 shadow-[0_10px_30px_-5px_rgba(61,43,31,0.04)]"></div>
-                <img
-                  className="w-full h-auto rounded-xl shadow-[0_10px_30px_rgba(61,43,31,0.08)] object-cover aspect-[4/3] lg:aspect-square"
-                  alt="Muestrario de materiales premium"
-                  src="https://lh3.googleusercontent.com/aida-public/AB6AXuAFL-3rE2zyLi_S3v4pIBlOZhWe3lFiA2LSlqCzQaBPwHSdGStaOpb72AIn2vWYtKT2X5qa7hyN8idMurHrsVubMKn49bYFIiH6l2L6rPB0al26XrfxEOXjKABAKqeRiPwSCvxPV84Wz89uDToI9jY9_itdhVuyfhNcl5A5A_yMXRDXSVU5QKFSTqeLO51DxkgVQU_3KRXRGmvdt3Tw_s31uxhWy22aKnX8kiqw8QfvZgcqhRRe7RVDy8lCUL3ZkFG0jApakj7aoExx"
-                />
+                <div className="relative w-full aspect-[4/3] lg:aspect-square rounded-xl overflow-hidden shadow-[0_10px_30px_rgba(61,43,31,0.08)]">
+                  <Image
+                    className="object-cover"
+                    alt="Muestrario de materiales premium"
+                    src="https://lh3.googleusercontent.com/aida-public/AB6AXuAFL-3rE2zyLi_S3v4pIBlOZhWe3lFiA2LSlqCzQaBPwHSdGStaOpb72AIn2vWYtKT2X5qa7hyN8idMurHrsVubMKn49bYFIiH6l2L6rPB0al26XrfxEOXjKABAKqeRiPwSCvxPV84Wz89uDToI9jY9_itdhVuyfhNcl5A5A_yMXRDXSVU5QKFSTqeLO51DxkgVQU_3KRXRGmvdt3Tw_s31uxhWy22aKnX8kiqw8QfvZgcqhRRe7RVDy8lCUL3ZkFG0jApakj7aoExx"
+                    fill
+                    sizes="(max-width: 1024px) 100vw, 50vw"
+                  />
+                </div>
               </div>
             </div>
           </div>

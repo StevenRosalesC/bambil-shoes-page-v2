@@ -1,14 +1,17 @@
 import React from "react";
+import Image from "next/image";
 
 export default function Hero() {
   return (
     <section className="relative w-full h-[85vh] min-h-[600px] flex items-center justify-center bg-[#e5e2db] overflow-hidden">
       {/* Background Image with Overlay */}
       <div className="absolute inset-0 z-0">
-        <img
+        <Image
           alt="Artesano trabajando cuero"
           className="w-full h-full object-cover object-center scale-102 transform origin-center animate-subtle-zoom"
           src="https://lh3.googleusercontent.com/aida-public/AB6AXuDx5u850eIDqxOrqlU72d95E4dsq_DJAbNV42WkGFgaIL0LFrTEmR1wm45PpTydPfZxWVt4ff1Ih7vozdlHD7q8NFvDLaybl5xcU490Oe-5VzoUe0QsjSP4FBNuIXtFtbWOQBe1V3sYrwGW2umjAdTxICizCA7G65FfB3AxL_8HZb9ZFZwZ34w6kvSwOu98hugQpiaPyUkX7qSBjNWEqXfc-Mvw4dWvcmebBao-DcMUTHDZQAuoMr5uU8Ghwa657d4P4atm1kZFmTzy"
+          fill
+          priority
         />
         <div className="absolute inset-0 bg-gradient-to-t from-[#26170c]/95 via-[#26170c]/45 to-transparent"></div>
       </div>

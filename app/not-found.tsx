@@ -1,6 +1,8 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import Link from "next/link";
+import Image from "next/image";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import WhatsAppFAB from "@/components/WhatsAppFAB";
@@ -33,11 +35,13 @@ export default function NotFound() {
             transform: `translate(${coords.x}px, ${coords.y}px)`,
           }}
         >
-          <div className="w-full h-full max-w-7xl mx-auto">
-            <img
+          <div className="w-full h-full max-w-7xl mx-auto relative">
+            <Image
               alt="Mesa de herramientas de artesano"
-              className="w-full h-full object-cover rounded-lg"
+              className="object-cover rounded-lg"
               src="https://lh3.googleusercontent.com/aida-public/AB6AXuBLGRaDh4Wj-j-Gttvwukv_88d5jQRpMeIJfHiz5tc0USnnaqP3yLFISuQ2V5fNIv0jRiKW2s-FwF6ZIzaNGTYxrDn_EjmWJYKwNueIhZ-paljhds8Z9PpvLUlKIYJkFe9BUxRgxjD18mg3ztLtqnJCRhf01MIZg6SYCPb-K9Muc1hhnc694I9uCMPgKFzzhr9o4DnTiwd-gZ8PrABvjYq_HO74z0MhE2pUA3SZJ_5WR6GeuMWc9aEDUIFNOQJxuDPQoRB8BFOu7978"
+              fill
+              sizes="100vw"
             />
           </div>
         </div>
@@ -57,18 +61,18 @@ export default function NotFound() {
           </div>
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4">
-            <a
+            <Link
               className="w-full sm:w-auto px-8 py-4 bg-[#3d2b1f] hover:bg-[#26170c] text-white font-sans text-sm font-semibold rounded hover:shadow-lg transition-all active:scale-95 text-center"
               href="/"
             >
               Volver al Inicio
-            </a>
-            <a
+            </Link>
+            <Link
               className="w-full sm:w-auto px-8 py-4 border border-[#81756e] text-[#26170c] font-sans text-sm font-semibold rounded hover:bg-[#f6f3ec] transition-all active:scale-95 text-center"
               href="/catalog"
             >
               Explorar Catálogo
-            </a>
+            </Link>
           </div>
 
           {/* Micro-interaction hand tool decoration */}

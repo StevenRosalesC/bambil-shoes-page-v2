@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import Image from "next/image";
 import { useProducts } from "@/hooks/useProducts";
 import { useCartStore } from "@/store/useCartStore";
 import { useUIStore } from "@/store/useUIStore";
@@ -111,12 +112,14 @@ export default function FeaturedProducts() {
                       setSelectedSize(defaultSize);
                     }}
                   >
-                    <img
+                    <Image
                       src={product.images[0]}
                       alt={product.name}
-                      className="h-full w-full object-cover object-center group-hover:scale-105 transition-transform duration-500"
+                      fill
+                      sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                      className="object-cover object-center group-hover:scale-105 transition-transform duration-500"
                     />
-                    <span className="absolute top-4 left-4 bg-[#26170c] text-white font-sans text-[10px] tracking-wider font-semibold uppercase px-3 py-1 rounded-sm shadow-sm">
+                    <span className="absolute top-4 left-4 bg-[#26170c] text-white font-sans text-[10px] tracking-wider font-semibold uppercase px-3 py-1 rounded-sm shadow-sm z-10">
                       {product.material}
                     </span>
                   </div>
@@ -146,11 +149,18 @@ export default function FeaturedProducts() {
                     <div>
                       {/* Add to Cart button */}
                       <button
-                        onClick={() => handleAddToCart(product, defaultSize)}
+                        onClick={() => {
+                          if (defaultSize) {
+                            handleAddToCart(product, defaultSize);
+                          } else {
+                            setSelectedProduct(product);
+                            setSelectedSize("");
+                          }
+                        }}
                         className="w-full bg-[#26170c] hover:bg-[#3d2b1f] text-white font-sans text-xs font-semibold py-3 rounded transition-all flex items-center justify-center gap-2 shadow-sm"
                       >
                         <span className="material-symbols-outlined text-base">shopping_cart</span>
-                        Añadir Talla {defaultSize}
+                        {defaultSize ? `Añadir Talla ${defaultSize}` : "Añadir al Carrito"}
                       </button>
                       
                       <button
@@ -186,11 +196,13 @@ export default function FeaturedProducts() {
               </button>
               
               {/* Product Gallery */}
-              <div className="w-full md:w-1/2 bg-[#e5e2db]">
-                <img
+              <div className="w-full md:w-1/2 bg-[#e5e2db] relative aspect-square md:aspect-[4/5]">
+                <Image
                   src={selectedProduct.images[0]}
                   alt={selectedProduct.name}
-                  className="w-full h-full object-cover aspect-square md:aspect-[4/5]"
+                  fill
+                  sizes="(max-width: 768px) 100vw, 50vw"
+                  className="object-cover"
                 />
               </div>
 
