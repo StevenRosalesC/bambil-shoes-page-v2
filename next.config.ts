@@ -10,6 +10,20 @@ const nextConfig: NextConfig = {
         protocol: "https",
         hostname: "lh3.googleusercontent.com",
       },
+      {
+        protocol: "http",
+        hostname: "localhost",
+        port: "9000",
+
+      },
+      {
+        protocol: "https",
+        hostname: "images.unsplash.com",
+      },
+      {
+        protocol: "https",
+        hostname: "console-bambil-shoe-minio.52min1.easypanel.host",
+      }
     ],
   },
 };
