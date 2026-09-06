@@ -3,30 +3,29 @@
 import React, { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { useProducts } from "@/hooks/useProducts";
-import { useCategories } from "@/hooks/useCategories";
 import { useCartStore } from "@/store/useCartStore";
 import { useUIStore } from "@/store/useUIStore";
 import { Product } from "@/types";
 
-export default function FeaturedProducts() {
-  const [selectedCategory, setSelectedCategory] = useState<string | undefined>(undefined);
-  const { data: categoriesResponse } = useCategories();
-  const { data: response, isLoading } = useProducts({
-    filterBy: selectedCategory ? "categoryId" : undefined,
-    filterValue: selectedCategory,
-    limit: 20,
-  });
+const DEFAULT_IMAGE =
+  "https://lh3.googleusercontent.com/aida-public/AB6AXuD_dNoiXnJaWGkaO5zFoLW99yActG5gx032RgLySpxypzs3oiMQiOFy4j6EPfnhz-BOp7prPWR3rYM5px5zQuLjxOMP-3ZZ00wQTdlHLSkM83oDo1GQ3YL5sPOtrbOMCSKIgQV0N_I7EIwyYnVlMkURM6f26knM89Yp_h1dIwHpCulSoWVgBFTgEBma9FCwdTsnBylUDsa4UiDtflyhe_kySFb7iIDmoJ6Ca8BWvO4z6jEm8be0JrLhmroyjW0Y5cD_onFUquGih9pm";
+
+interface FeaturedProductsProps {
+  products?: Product[];
+}
+
+export default function FeaturedProducts({ products = [] }: FeaturedProductsProps) {
   const { addItem } = useCartStore();
   const { setCartOpen } = useUIStore();
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [selectedSize, setSelectedSize] = useState<string>("");
 
-  const categories = categoriesResponse?.data || [];
-  const products = response?.data || [];
-  const total = response?.total ?? products.length;
+  // Option B: If there are no products at all in the database/catalog, completely hide the section
+  if (!products || products.length === 0) {
+    return null;
+  }
+
   const displayedProducts = products.slice(0, 6);
-  const hasMore = total > 6 || products.length > 6;
 
   const handleAddToCart = (product: Product, size: string) => {
     if (!size) return;
@@ -39,183 +38,166 @@ export default function FeaturedProducts() {
   return (
     <section className="py-24 px-4 md:px-10 bg-[#fcf9f2]" id="productos">
       <div className="max-w-7xl mx-auto">
-        <div className="flex flex-col md:flex-row justify-between items-center mb-16 gap-6">
+        {/* Section Header */}
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-14 gap-6">
           <div>
-            <h2 className="font-display text-3xl md:text-4xl text-[#26170c] font-semibold">Nuestra Selección Exclusiva</h2>
-            <p className="font-sans text-sm md:text-base text-[#4f453f] mt-2">
-              Calzado diseñado y confeccionado a mano, prestando atención a cada costura.
+            <h2 className="font-display text-3xl md:text-4xl text-[#26170c] font-semibold">
+              Nuestra Selección Exclusiva
+            </h2>
+            <p className="font-sans text-sm md:text-base text-[#4f453f] mt-2 max-w-xl">
+              Calzado diseñado y confeccionado a mano, prestando atención a cada costura y detalle.
             </p>
           </div>
-          
-          {/* Category Tabs */}
-          <div className="flex flex-wrap bg-[#f6f3ec] p-1.5 rounded-lg border border-[#d2c4bc]/40 gap-1">
-            <button
-              onClick={() => setSelectedCategory(undefined)}
-              className={`px-5 py-2 font-sans text-xs md:text-sm font-semibold rounded-md transition-all cursor-pointer ${
-                selectedCategory === undefined
-                  ? "bg-[#26170c] text-white shadow-sm"
-                  : "text-[#4f453f] hover:text-[#26170c]"
-              }`}
-            >
-              Todos
-            </button>
-            {categories.map((category) => (
-              <button
-                key={category.id}
-                onClick={() => setSelectedCategory(category.id)}
-                className={`px-5 py-2 font-sans text-xs md:text-sm font-semibold rounded-md transition-all cursor-pointer ${
-                  selectedCategory === category.id
-                    ? "bg-[#26170c] text-white shadow-sm"
-                    : "text-[#4f453f] hover:text-[#26170c]"
-                }`}
-              >
-                {category.name.trim()}
-              </button>
-            ))}
-          </div>
+
+          <Link
+            href="/catalog"
+            className="hidden md:inline-flex items-center gap-2 text-[#26170c] hover:text-[#725a39] font-sans text-sm font-semibold transition-colors group cursor-pointer"
+          >
+            <span>Ver Todo el Catálogo</span>
+            <span className="material-symbols-outlined text-base transition-transform group-hover:translate-x-1">
+              arrow_forward
+            </span>
+          </Link>
         </div>
 
-        {/* Loading Skeletons */}
-        {isLoading ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-            {[1, 2, 3, 4, 5, 6].map((i) => (
+        {/* Products Grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+          {displayedProducts.map((product) => {
+            const defaultSize = product.variants?.[0]?.size || "";
+            const productImage = product.images?.[0] || DEFAULT_IMAGE;
+
+            return (
               <div
-                key={i}
-                className="animate-pulse bg-[#f6f3ec] rounded-lg overflow-hidden h-[420px] flex flex-col justify-between p-4"
+                key={product.id}
+                className="bg-[#f6f3ec] rounded-lg overflow-hidden shadow-[0_8px_30px_rgba(112,90,76,0.04)] hover:shadow-[0_8px_30px_rgba(112,90,76,0.12)] border border-transparent hover:border-[#d2c4bc]/40 transition-all duration-300 flex flex-col group"
               >
-                <div className="h-[250px] bg-[#e5e2db] rounded w-full mb-4 animate-pulse"></div>
-                <div className="space-y-2">
-                  <div className="h-5 bg-[#e5e2db] rounded w-3/4"></div>
-                  <div className="h-4 bg-[#e5e2db] rounded w-1/2"></div>
+                {/* Product Image */}
+                <div
+                  className="relative aspect-[4/5] w-full overflow-hidden bg-[#e5e2db] cursor-pointer"
+                  onClick={() => {
+                    setSelectedProduct(product);
+                    setSelectedSize(defaultSize);
+                  }}
+                >
+                  <Image
+                    src={productImage}
+                    alt={product.name}
+                    fill
+                    sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                    className="object-cover object-center group-hover:scale-105 transition-transform duration-500"
+                  />
+                  
+                  {/* Badges */}
+                  <div className="absolute top-4 left-4 flex flex-col gap-1.5 z-10">
+                    {product.isNew && (
+                      <span className="bg-[#ba1a1a] text-white font-sans text-[10px] tracking-wider font-bold uppercase px-2.5 py-0.5 rounded-sm shadow-sm w-fit">
+                        Nuevo
+                      </span>
+                    )}
+                    {product.material && (
+                      <span className="bg-[#26170c] text-white font-sans text-[10px] tracking-wider font-semibold uppercase px-3 py-1 rounded-sm shadow-sm w-fit">
+                        {product.material}
+                      </span>
+                    )}
+                  </div>
+
+                  {product.featured && (
+                    <span className="absolute top-4 right-4 bg-[#fcf9f2]/95 backdrop-blur-xs text-[#725a39] border border-[#d2c4bc]/60 font-sans text-[10px] font-bold uppercase px-2.5 py-0.5 rounded-sm shadow-xs z-10">
+                      Destacado
+                    </span>
+                  )}
                 </div>
-                <div className="h-10 bg-[#e5e2db] rounded w-full mt-4"></div>
-              </div>
-            ))}
-          </div>
-        ) : displayedProducts.length === 0 ? (
-          <div className="text-center py-12 text-[#4f453f] font-sans text-base">
-            No se encontraron productos en esta categoría.
-          </div>
-        ) : (
-          <>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-              {displayedProducts.map((product) => {
-                const defaultSize = product.variants?.[0]?.size || "";
-                return (
-                  <div
-                    key={product.id}
-                    className="bg-[#f6f3ec] rounded-lg overflow-hidden shadow-[0_8px_30px_rgba(112,90,76,0.04)] hover:shadow-[0_8px_30px_rgba(112,90,76,0.12)] border border-transparent hover:border-[#d2c4bc]/40 transition-all duration-300 flex flex-col group"
-                  >
-                    {/* Product Image */}
-                    <div
-                      className="relative aspect-[4/5] w-full overflow-hidden bg-[#e5e2db] cursor-pointer"
+
+                {/* Details */}
+                <div className="p-5 flex-1 flex flex-col justify-between">
+                  <div>
+                    <div className="flex justify-between items-start mb-2">
+                      <h3
+                        className="font-display text-lg font-semibold text-[#26170c] hover:text-[#725a39] transition-colors cursor-pointer"
+                        onClick={() => {
+                          setSelectedProduct(product);
+                          setSelectedSize(defaultSize);
+                        }}
+                      >
+                        {product.name}
+                      </h3>
+                      <span className="font-sans text-base font-bold text-[#26170c]">
+                        ${product.price.toFixed(2)}
+                      </span>
+                    </div>
+                    <p className="font-sans text-xs text-[#4f453f] line-clamp-2 leading-relaxed mb-4">
+                      {product.description}
+                    </p>
+                  </div>
+
+                  <div>
+                    {/* Add to Cart button */}
+                    <button
+                      onClick={() => {
+                        if (defaultSize) {
+                          handleAddToCart(product, defaultSize);
+                        } else {
+                          setSelectedProduct(product);
+                          setSelectedSize("");
+                        }
+                      }}
+                      className="w-full bg-[#26170c] hover:bg-[#3d2b1f] text-white font-sans text-xs font-semibold py-3 rounded transition-all flex items-center justify-center gap-2 shadow-sm cursor-pointer"
+                    >
+                      <span className="material-symbols-outlined text-base">shopping_cart</span>
+                      {defaultSize ? `Añadir Talla ${defaultSize}` : "Añadir al Carrito"}
+                    </button>
+
+                    <button
                       onClick={() => {
                         setSelectedProduct(product);
                         setSelectedSize(defaultSize);
                       }}
+                      className="w-full text-center text-xs font-sans font-semibold text-[#725a39] mt-3 hover:underline cursor-pointer"
                     >
-                      <Image
-                        src={product.images[0]}
-                        alt={product.name}
-                        fill
-                        sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                        className="object-cover object-center group-hover:scale-105 transition-transform duration-500"
-                      />
-                      <span className="absolute top-4 left-4 bg-[#26170c] text-white font-sans text-[10px] tracking-wider font-semibold uppercase px-3 py-1 rounded-sm shadow-sm z-10">
-                        {product.material}
-                      </span>
-                    </div>
-
-                    {/* Details */}
-                    <div className="p-5 flex-1 flex flex-col justify-between">
-                      <div>
-                        <div className="flex justify-between items-start mb-2">
-                          <h3
-                            className="font-display text-lg font-semibold text-[#26170c] hover:text-[#725a39] transition-colors cursor-pointer"
-                            onClick={() => {
-                              setSelectedProduct(product);
-                              setSelectedSize(defaultSize);
-                            }}
-                          >
-                            {product.name}
-                          </h3>
-                          <span className="font-sans text-base font-bold text-[#26170c]">
-                            ${product.price.toFixed(2)}
-                          </span>
-                        </div>
-                        <p className="font-sans text-xs text-[#4f453f] line-clamp-2 leading-relaxed mb-4">
-                          {product.description}
-                        </p>
-                      </div>
-
-                      <div>
-                        {/* Add to Cart button */}
-                        <button
-                          onClick={() => {
-                            if (defaultSize) {
-                              handleAddToCart(product, defaultSize);
-                            } else {
-                              setSelectedProduct(product);
-                              setSelectedSize("");
-                            }
-                          }}
-                          className="w-full bg-[#26170c] hover:bg-[#3d2b1f] text-white font-sans text-xs font-semibold py-3 rounded transition-all flex items-center justify-center gap-2 shadow-sm"
-                        >
-                          <span className="material-symbols-outlined text-base">shopping_cart</span>
-                          {defaultSize ? `Añadir Talla ${defaultSize}` : "Añadir al Carrito"}
-                        </button>
-                        
-                        <button
-                          onClick={() => {
-                            setSelectedProduct(product);
-                            setSelectedSize(defaultSize);
-                          }}
-                          className="w-full text-center text-xs font-sans font-semibold text-[#725a39] mt-3 hover:underline"
-                        >
-                          Ver Detalles y Tallas
-                        </button>
-                      </div>
-                    </div>
+                      Ver Detalles y Tallas
+                    </button>
                   </div>
-                );
-              })}
-            </div>
-
-            {hasMore && (
-              <div className="mt-14 text-center">
-                <Link
-                  href={selectedCategory ? `/catalog?categories=${selectedCategory}` : "/catalog"}
-                  className="inline-flex items-center justify-center gap-2.5 bg-[#26170c] hover:bg-[#3d2b1f] text-white font-sans text-sm font-semibold px-8 py-4 rounded shadow-md hover:shadow-lg transition-all duration-300 group"
-                >
-                  <span>Ver Toda la Colección</span>
-                  <span className="material-symbols-outlined text-base transition-transform group-hover:translate-x-1">
-                    arrow_forward
-                  </span>
-                </Link>
+                </div>
               </div>
-            )}
-          </>
-        )}
+            );
+          })}
+        </div>
+
+        {/* View full collection button */}
+        <div className="mt-14 text-center">
+          <Link
+            href="/catalog"
+            className="inline-flex items-center justify-center gap-2.5 bg-[#26170c] hover:bg-[#3d2b1f] text-white font-sans text-sm font-semibold px-8 py-4 rounded shadow-md hover:shadow-lg transition-all duration-300 group cursor-pointer"
+          >
+            <span>Ver Toda la Colección</span>
+            <span className="material-symbols-outlined text-base transition-transform group-hover:translate-x-1">
+              arrow_forward
+            </span>
+          </Link>
+        </div>
 
         {/* Product Details Modal */}
         {selectedProduct && (
           <div className="fixed inset-0 z-[150] flex items-center justify-center p-4">
             {/* Backdrop */}
-            <div className="absolute inset-0 bg-[#26170c]/50 backdrop-blur-xs" onClick={() => setSelectedProduct(null)} />
-            
+            <div
+              className="absolute inset-0 bg-[#26170c]/50 backdrop-blur-xs"
+              onClick={() => setSelectedProduct(null)}
+            />
+
             {/* Modal Content */}
             <div className="relative bg-[#fcf9f2] w-full max-w-2xl rounded-lg overflow-hidden shadow-2xl border border-[#d2c4bc]/50 z-10 flex flex-col md:flex-row max-h-[90vh] overflow-y-auto">
               <button
                 onClick={() => setSelectedProduct(null)}
-                className="absolute top-4 right-4 z-20 bg-white/80 p-2 rounded-full hover:bg-white shadow-md transition-all flex items-center justify-center"
+                className="absolute top-4 right-4 z-20 bg-white/80 p-2 rounded-full hover:bg-white shadow-md transition-all flex items-center justify-center cursor-pointer"
               >
                 <span className="material-symbols-outlined text-[#26170c]">close</span>
               </button>
-              
+
               {/* Product Gallery */}
               <div className="w-full md:w-1/2 bg-[#e5e2db] relative aspect-square md:aspect-[4/5]">
                 <Image
-                  src={selectedProduct.images[0]}
+                  src={selectedProduct.images?.[0] || DEFAULT_IMAGE}
                   alt={selectedProduct.name}
                   fill
                   sizes="(max-width: 768px) 100vw, 50vw"
@@ -226,9 +208,19 @@ export default function FeaturedProducts() {
               {/* Details & Size Picker */}
               <div className="w-full md:w-1/2 p-6 flex flex-col justify-between">
                 <div>
-                  <span className="inline-block bg-[#fbdbb0] text-[#765f3d] font-sans text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-sm mb-4">
-                    {selectedProduct.material}
-                  </span>
+                  <div className="flex flex-wrap items-center gap-2 mb-4">
+                    {selectedProduct.isNew && (
+                      <span className="bg-[#ba1a1a] text-white font-sans text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-sm">
+                        Nuevo
+                      </span>
+                    )}
+                    {selectedProduct.material && (
+                      <span className="bg-[#fbdbb0] text-[#765f3d] font-sans text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-sm">
+                        {selectedProduct.material}
+                      </span>
+                    )}
+                  </div>
+
                   <h3 className="font-display text-2xl font-bold text-[#26170c] mb-2">
                     {selectedProduct.name}
                   </h3>
@@ -240,35 +232,37 @@ export default function FeaturedProducts() {
                   </p>
 
                   {/* Size Selector */}
-                  <div className="mb-6">
-                    <span className="block font-sans text-xs font-semibold text-[#26170c] mb-3">
-                      Seleccionar Talla:
-                    </span>
-                    <div className="flex flex-wrap gap-2">
-                      {selectedProduct.variants?.map((v) => (
-                        <button
-                          key={v.id}
-                          disabled={v.stock === 0}
-                          onClick={() => setSelectedSize(v.size)}
-                          className={`min-w-[40px] h-10 px-2 flex items-center justify-center rounded font-sans text-xs font-semibold transition-all border relative ${
-                            v.stock === 0
-                              ? "border-transparent bg-gray-100 text-gray-400 cursor-not-allowed"
-                              : selectedSize === v.size
-                              ? "bg-[#26170c] border-[#26170c] text-white shadow-sm"
-                              : "bg-white border-[#d2c4bc] text-[#26170c] hover:border-[#26170c]"
-                          }`}
-                        >
-                          {v.size}
-                          {v.stock > 0 && v.stock < 5 && (
-                            <span className="absolute -top-1 -right-1 flex h-2 w-2">
-                              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#ba1a1a] opacity-75"></span>
-                              <span className="relative inline-flex rounded-full h-2 w-2 bg-[#ba1a1a]"></span>
-                            </span>
-                          )}
-                        </button>
-                      ))}
+                  {selectedProduct.variants && selectedProduct.variants.length > 0 && (
+                    <div className="mb-6">
+                      <span className="block font-sans text-xs font-semibold text-[#26170c] mb-3">
+                        Seleccionar Talla:
+                      </span>
+                      <div className="flex flex-wrap gap-2">
+                        {selectedProduct.variants.map((v) => (
+                          <button
+                            key={v.id || v.size}
+                            disabled={v.stock === 0}
+                            onClick={() => setSelectedSize(v.size)}
+                            className={`min-w-[40px] h-10 px-2 flex items-center justify-center rounded font-sans text-xs font-semibold transition-all border relative cursor-pointer ${
+                              v.stock === 0
+                                ? "border-transparent bg-gray-100 text-gray-400 cursor-not-allowed"
+                                : selectedSize === v.size
+                                ? "bg-[#26170c] border-[#26170c] text-white shadow-sm"
+                                : "bg-white border-[#d2c4bc] text-[#26170c] hover:border-[#26170c]"
+                            }`}
+                          >
+                            {v.size}
+                            {v.stock > 0 && v.stock < 5 && (
+                              <span className="absolute -top-1 -right-1 flex h-2 w-2">
+                                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#ba1a1a] opacity-75"></span>
+                                <span className="relative inline-flex rounded-full h-2 w-2 bg-[#ba1a1a]"></span>
+                              </span>
+                            )}
+                          </button>
+                        ))}
+                      </div>
                     </div>
-                  </div>
+                  )}
                 </div>
 
                 <div>

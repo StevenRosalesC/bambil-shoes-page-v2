@@ -223,7 +223,12 @@ export default function CatalogGrid() {
 
     // Category filter
     if (selectedCategories.length > 0) {
-      result = result.filter((p) => selectedCategories.includes(p.categoryId));
+      result = result.filter(
+        (p) =>
+          (p.categoryId && selectedCategories.includes(p.categoryId)) ||
+          (p.category?.id && selectedCategories.includes(p.category.id)) ||
+          (p.category?.slug && selectedCategories.includes(p.category.slug))
+      );
     }
 
     // Material filter
