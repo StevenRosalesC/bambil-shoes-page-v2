@@ -1,8 +1,108 @@
 import React from "react";
 import Image from "next/image";
 import Link from "next/link";
+import type { HomePageData } from "@/types/HomePage";
 
-export default function Hero() {
+export interface HeroProps {
+  data?: HomePageData | null;
+  heroBadge?: string;
+  heroTitle?: string;
+  heroDescription?: string;
+  heroImage?: HomePageData["heroImage"] | string | null;
+  heroImageUrl?: string;
+  heroImageAlt?: string;
+  heroCaptionTitle?: string;
+  heroCaptionSubtitle?: string;
+}
+
+const resolveImageUrl = (url?: string | null): string => {
+  if (!url) return "/images/hero.jpeg";
+  if (url.startsWith("http://") || url.startsWith("https://")) {
+    return url;
+  }
+  if (url.startsWith("/uploads")) {
+    const strapiBase =
+      process.env.NEXT_PUBLIC_STRAPI_URL || "http://localhost:1337";
+    return `${strapiBase}${url}`;
+  }
+  return url;
+};
+
+const renderTitle = (text: string) => {
+  const trimmed = text.trim();
+  const words = trimmed.split(/\s+/);
+
+  if (words.length <= 2) {
+    return (
+      <span className="italic font-normal text-[#725a39]">
+        {trimmed}
+      </span>
+    );
+  }
+
+  const mainPart = words.slice(0, -2).join(" ");
+  const lastTwoWords = words.slice(-2).join(" ");
+
+  return (
+    <>
+      {mainPart}{" "}
+      <span className="italic font-normal text-[#725a39]">
+        {lastTwoWords}
+      </span>
+    </>
+  );
+};
+
+export default function Hero({
+  data,
+  heroBadge,
+  heroTitle,
+  heroDescription,
+  heroImage,
+  heroImageUrl,
+  heroImageAlt,
+  heroCaptionTitle,
+  heroCaptionSubtitle,
+}: HeroProps = {}) {
+  const badge =
+    heroBadge ??
+    data?.heroBadge ??
+    "Calzado Hecho a Mano • Santa Elena • Colonche";
+
+  const title =
+    heroTitle ??
+    data?.heroTitle ??
+    "Artesanía que se siente en cada paso";
+
+  const description =
+    heroDescription ??
+    data?.heroDescription ??
+    "Descubre la fusión perfecta entre la robustez del cuero natural y la elegancia del diseño a medida. Cada par cuenta una historia de dedicación, confort y maestría ecuatoriana.";
+
+  const rawImageUrl =
+    heroImageUrl ??
+    (typeof heroImage === "string" ? heroImage : heroImage?.url) ??
+    data?.heroImage?.url;
+
+  const imageUrl = resolveImageUrl(rawImageUrl);
+
+  const imageAlt =
+    heroImageAlt ??
+    (typeof heroImage === "object" ? heroImage?.alternativeText : undefined) ??
+    data?.heroImageAlt ??
+    data?.heroImage?.alternativeText ??
+    "Maestro artesano Darío Catuto confeccionando calzado en su taller";
+
+  const captionTitle =
+    heroCaptionTitle ??
+    data?.heroCaptionTitle ??
+    "Darío Catuto en el Taller";
+
+  const captionSubtitle =
+    heroCaptionSubtitle ??
+    data?.heroCaptionSubtitle ??
+    "Confección manual de cada par en Santa Elena";
+
   return (
     <section className="relative w-full bg-[#fcf9f2] overflow-hidden border-b border-[#d2c4bc]/30">
       {/* Subtle decorative background pattern */}
@@ -10,28 +110,26 @@ export default function Hero() {
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-10 py-12 md:py-16 lg:py-24 relative z-10">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 xl:gap-16 items-center">
-
           {/* Left Column: Brand Story & CTA */}
           <div className="lg:col-span-6 xl:col-span-6 flex flex-col justify-center items-center lg:items-start text-center lg:text-left">
             {/* Handcrafted Badge */}
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#f0eee7] border border-[#d2c4bc]/60 mb-6 shadow-xs w-fit">
-              <span className="w-2 h-2 rounded-full bg-[#725a39] animate-pulse"></span>
-              <span className="font-sans text-xs font-semibold text-[#725a39] uppercase tracking-widest">
-                Calzado Hecho a Mano • Santa Elena • Colonche
-              </span>
-            </div>
+            {badge && (
+              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#f0eee7] border border-[#d2c4bc]/60 mb-6 shadow-xs w-fit">
+                <span className="w-2 h-2 rounded-full bg-[#725a39] animate-pulse"></span>
+                <span className="font-sans text-xs font-semibold text-[#725a39] uppercase tracking-widest">
+                  {badge}
+                </span>
+              </div>
+            )}
 
             {/* Headline */}
             <h1 className="font-display text-3xl sm:text-4xl md:text-5xl xl:text-6xl font-bold text-[#26170c] leading-[1.12] mb-6 tracking-tight">
-              Artesanía que se siente en{" "}
-              <span className="italic font-normal text-[#725a39]">cada paso</span>
+              {renderTitle(title)}
             </h1>
 
             {/* Description */}
             <p className="font-sans text-base sm:text-lg text-[#4f453f] leading-relaxed mb-8 max-w-xl">
-              Descubre la fusión perfecta entre la robustez del cuero natural y la
-              elegancia del diseño a medida. Cada par cuenta una historia de
-              dedicación, confort y maestría ecuatoriana.
+              {description}
             </p>
 
             {/* CTA Buttons */}
@@ -41,7 +139,9 @@ export default function Hero() {
                 className="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-[#26170c] hover:bg-[#3d2b1f] text-white font-sans text-sm font-semibold px-8 py-4 rounded shadow-md hover:shadow-lg transition-all duration-300 active:scale-[0.98] text-center"
               >
                 <span>Explorar Colecciones</span>
-                <span className="material-symbols-outlined text-base">arrow_forward</span>
+                <span className="material-symbols-outlined text-base">
+                  arrow_forward
+                </span>
               </a>
               <Link
                 href="/about"
@@ -54,16 +154,28 @@ export default function Hero() {
             {/* Trust Highlights */}
             <div className="pt-6 border-t border-[#d2c4bc]/40 grid grid-cols-3 gap-4 max-w-lg w-full text-center lg:text-left">
               <div>
-                <p className="font-display text-xl sm:text-2xl font-bold text-[#26170c]">100%</p>
-                <p className="font-sans text-xs text-[#705a4c] uppercase tracking-wider mt-0.5">Artesanal</p>
+                <p className="font-display text-xl sm:text-2xl font-bold text-[#26170c]">
+                  100%
+                </p>
+                <p className="font-sans text-xs text-[#705a4c] uppercase tracking-wider mt-0.5">
+                  Artesanal
+                </p>
               </div>
               <div>
-                <p className="font-display text-xl sm:text-2xl font-bold text-[#26170c]">Cuero</p>
-                <p className="font-sans text-xs text-[#705a4c] uppercase tracking-wider mt-0.5">Seleccionado</p>
+                <p className="font-display text-xl sm:text-2xl font-bold text-[#26170c]">
+                  Cuero
+                </p>
+                <p className="font-sans text-xs text-[#705a4c] uppercase tracking-wider mt-0.5">
+                  Seleccionado
+                </p>
               </div>
               <div>
-                <p className="font-display text-xl sm:text-2xl font-bold text-[#26170c]">A Medida</p>
-                <p className="font-sans text-xs text-[#705a4c] uppercase tracking-wider mt-0.5">Confort Total</p>
+                <p className="font-display text-xl sm:text-2xl font-bold text-[#26170c]">
+                  A Medida
+                </p>
+                <p className="font-sans text-xs text-[#705a4c] uppercase tracking-wider mt-0.5">
+                  Confort Total
+                </p>
               </div>
             </div>
           </div>
@@ -75,8 +187,8 @@ export default function Hero() {
 
             <div className="relative rounded-2xl overflow-hidden shadow-2xl border border-[#d2c4bc]/40 aspect-[4/3] sm:aspect-[1280/1173] bg-[#ebe8e1] group">
               <Image
-                src="/images/hero.jpeg"
-                alt="Maestro artesano Darío Catuto confeccionando calzado en su taller"
+                src={imageUrl}
+                alt={imageAlt}
                 fill
                 priority
                 sizes="(max-width: 1024px) 100vw, 50vw"
@@ -84,24 +196,32 @@ export default function Hero() {
               />
 
               {/* Floating artisan caption badge */}
-              <div className="absolute bottom-3 left-3 right-3 sm:bottom-4 sm:left-4 sm:right-4 bg-white/95 backdrop-blur-md px-4 py-3 rounded-lg shadow-md border border-[#d2c4bc]/40 flex items-center gap-3">
-                <div className="w-10 h-10 rounded-lg bg-[#f6f3ec] flex items-center justify-center text-[#725a39] shrink-0">
-                  <span className="material-symbols-outlined text-xl">handyman</span>
+              {(captionTitle || captionSubtitle) && (
+                <div className="absolute bottom-3 left-3 right-3 sm:bottom-4 sm:left-4 sm:right-4 bg-white/95 backdrop-blur-md px-4 py-3 rounded-lg shadow-md border border-[#d2c4bc]/40 flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-lg bg-[#f6f3ec] flex items-center justify-center text-[#725a39] shrink-0">
+                    <span className="material-symbols-outlined text-xl">
+                      handyman
+                    </span>
+                  </div>
+                  <div>
+                    {captionTitle && (
+                      <p className="font-display text-sm font-bold text-[#26170c] leading-tight">
+                        {captionTitle}
+                      </p>
+                    )}
+                    {captionSubtitle && (
+                      <p className="font-sans text-xs text-[#4f453f]">
+                        {captionSubtitle}
+                      </p>
+                    )}
+                  </div>
                 </div>
-                <div>
-                  <p className="font-display text-sm font-bold text-[#26170c] leading-tight">
-                    Darío Catuto en el Taller
-                  </p>
-                  <p className="font-sans text-xs text-[#4f453f]">
-                    Confección manual de cada par en Santa Elena
-                  </p>
-                </div>
-              </div>
+              )}
             </div>
           </div>
-
         </div>
       </div>
     </section>
   );
 }
+
