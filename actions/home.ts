@@ -31,7 +31,6 @@ export async function getHomePageAction(): Promise<HomePageData | null> {
 
     if (response?.data) {
       const data = response.data as unknown as HomePageData;
-      console.log({data})
       return {
         ...MOCK_HOME_PAGE,
         ...data,
