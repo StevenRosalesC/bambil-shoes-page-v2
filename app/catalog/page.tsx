@@ -1,8 +1,5 @@
 import { Suspense } from "react";
 import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
-import WhatsAppFAB from "@/components/WhatsAppFAB";
-import CartDrawer from "@/components/CartDrawer";
 import CatalogGrid from "@/components/CatalogGrid";
 
 function CatalogSkeleton() {
@@ -56,13 +53,6 @@ export default function CatalogPage() {
           <CatalogGrid />
         </Suspense>
       </main>
-
-      {/* Footer */}
-      <Footer />
-
-      {/* Global Floating Action Modules */}
-      <WhatsAppFAB />
-      <CartDrawer />
     </div>
   );
 }

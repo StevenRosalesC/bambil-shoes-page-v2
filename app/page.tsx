@@ -4,11 +4,9 @@ import Materials from "@/components/Materials";
 import CategoriesList from "@/components/CategoriesList";
 import FeaturedProducts from "@/components/FeaturedProducts";
 import InstagramFeed from "@/components/InstagramFeed";
-import Footer from "@/components/Footer";
-import WhatsAppFAB from "@/components/WhatsAppFAB";
-import CartDrawer from "@/components/CartDrawer";
 
-export default function Home() {
+
+export default async function Home() {
   return (
     <div className="flex flex-col min-h-screen bg-[#fcf9f2] antialiased">
       {/* Navigation Bar */}
@@ -32,12 +30,6 @@ export default function Home() {
         <InstagramFeed />
       </main>
 
-      {/* Footer */}
-      <Footer />
-
-      {/* Global Interactive Layers */}
-      <WhatsAppFAB />
-      <CartDrawer />
     </div>
   );
 }

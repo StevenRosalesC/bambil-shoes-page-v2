@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useEffect, useState, useSyncExternalStore } from "react";
+import { useGlobalInfo } from "@/providers/global-info-provider";
 import Image from "next/image";
 import Link from "next/link";
 import { useCartStore } from "@/store/useCartStore";
@@ -9,6 +10,8 @@ import { useUIStore } from "@/store/useUIStore";
 export default function Navbar() {
   const { setCartOpen, isMenuOpen, setMenuOpen } = useUIStore();
   const { getTotalItems } = useCartStore();
+  const { globalInfo } = useGlobalInfo();
+  const storeName = globalInfo?.storeName || "Bambil Shoes By Dario";
   const [scrolled, setScrolled] = useState(false);
   const mounted = useSyncExternalStore(
     () => () => {},
@@ -89,7 +92,7 @@ export default function Navbar() {
             />
           </div>
           <span className="group-hover:text-[#5a4030] transition-colors whitespace-nowrap">
-            Bambil Shoes By Dario
+            {storeName}
           </span>
         </Link>
 

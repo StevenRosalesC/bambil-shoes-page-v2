@@ -1,7 +1,4 @@
 import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
-import WhatsAppFAB from "@/components/WhatsAppFAB";
-import CartDrawer from "@/components/CartDrawer";
 import ContactGrid from "@/components/ContactGrid";
 
 export default function ContactPage() {
@@ -25,13 +22,6 @@ export default function ContactPage() {
         {/* Contact info, form and map */}
         <ContactGrid />
       </main>
-
-      {/* Footer */}
-      <Footer />
-
-      {/* Persistent global modules */}
-      <WhatsAppFAB />
-      <CartDrawer />
     </div>
   );
 }

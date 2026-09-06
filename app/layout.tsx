@@ -1,7 +1,12 @@
 import type { Metadata } from "next";
 import { Playfair_Display, Montserrat } from "next/font/google";
 import QueryProvider from "@/providers/query-provider";
+import { GlobalInfoProvider } from "@/providers/global-info-provider";
+import { getGlobalInfoAction } from "@/actions/global";
 import "./globals.css";
+import Footer from "@/components/Footer";
+import WhatsAppFAB from "@/components/WhatsAppFAB";
+import CartDrawer from "@/components/CartDrawer";
 
 const playfair = Playfair_Display({
   variable: "--font-playfair",
@@ -17,7 +22,7 @@ const montserrat = Montserrat({
 
 export const metadata: Metadata = {
   metadataBase: new URL(
-    process.env.NEXT_PUBLIC_SITE_URL || "https://bambilshoes.com"
+    process.env.NEXT_PUBLIC_SITE_URL || "https://bambilshoes.com",
   ),
   title: {
     default: "Bambil Shoes By Dario - Calzado Artesanal",
@@ -35,10 +40,7 @@ export const metadata: Metadata = {
     "calzado para mujer",
   ],
   icons: {
-    icon: [
-      { url: "/Logo.png" },
-      { url: "/favicon.ico", sizes: "any" },
-    ],
+    icon: [{ url: "/Logo.png" }, { url: "/favicon.ico", sizes: "any" }],
     shortcut: "/Logo.png",
     apple: "/Logo.png",
   },
@@ -67,11 +69,13 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const globalInfo = await getGlobalInfoAction();
+
   return (
     <html
       lang="es"
@@ -91,7 +95,25 @@ export default function RootLayout({
         />
       </head>
       <body className="min-h-full flex flex-col bg-[#fcf9f2] text-[#1c1c18] font-sans antialiased">
-        <QueryProvider>{children}</QueryProvider>
+        <QueryProvider>
+          <GlobalInfoProvider initialData={globalInfo}>
+            {children}
+          </GlobalInfoProvider>
+        </QueryProvider>
+        {/* Footer */}
+        <Footer
+          storeAddress={globalInfo?.address}
+          storeHours={globalInfo?.workingHours}
+          facebookUrl={globalInfo?.facebookUrl}
+          instagramUrl={globalInfo?.instagramUrl}
+          storeName={globalInfo?.storeName}
+          storeLogoUrl={globalInfo?.favicon.url}
+          mapUrl={globalInfo?.googleMapsUrl}
+          />
+
+        {/* Global Interactive Layers */}
+        <WhatsAppFAB />
+        <CartDrawer />
       </body>
     </html>
   );

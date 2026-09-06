@@ -1,7 +1,4 @@
 import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
-import WhatsAppFAB from "@/components/WhatsAppFAB";
-import CartDrawer from "@/components/CartDrawer";
 import Image from "next/image";
 
 export default function AboutPage() {
@@ -345,13 +342,6 @@ export default function AboutPage() {
           </div>
         </section>
       </main>
-
-      {/* Footer */}
-      <Footer />
-
-      {/* Global Interactive Layers */}
-      <WhatsAppFAB />
-      <CartDrawer />
     </div>
   );
 }

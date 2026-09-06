@@ -2,7 +2,25 @@ import React from "react";
 import Image from "next/image";
 import Link from "next/link";
 
-export default function Footer() {
+interface FooterProps {
+  storeName?: string;
+  storeLogoUrl?: string;
+  storeAddress?: string;
+  storeHours?: string;
+  facebookUrl?: string;
+  instagramUrl?: string;
+  mapUrl?: string;
+}
+
+export default function Footer({
+  storeName = "Bambil Shoes By Dario",
+  storeLogoUrl = "/Logo.png",
+  storeAddress = "Santa Elena, Parroquia Colonche - Comuna Bambil Collao",
+  storeHours = "Lunes a Sábado: 9am - 7pm",
+  facebookUrl = "#",
+  instagramUrl = "#",
+  mapUrl = "#",
+}: FooterProps) {
   return (
     <footer className="bg-[#3d2b1f] text-white w-full">
       <div className="grid grid-cols-1 md:grid-cols-4 gap-8 px-6 md:px-10 py-16 max-w-7xl mx-auto">
@@ -11,35 +29,41 @@ export default function Footer() {
           <div className="flex items-center gap-3 mb-4">
             <div className="relative w-11 h-11 shrink-0 bg-white/10 rounded-xl p-1 backdrop-blur-xs flex items-center justify-center border border-white/10">
               <Image
-                src="/Logo.png"
+                src={storeLogoUrl}
                 alt="Logo Bambil Shoes"
                 width={44}
                 height={44}
                 className="object-contain w-full h-full"
+                priority
               />
             </div>
             <h4 className="font-display text-2xl font-bold text-white">
-              Bambil Shoes By Dario
+              {storeName}
             </h4>
           </div>
           <p className="font-sans text-sm text-[#e5e2db] opacity-80 mb-6 max-w-md leading-relaxed">
-            © 2026 Bambil Shoes By Dario. Handmade Excellence. Elevando la artesanía tradicional a través de diseños contemporáneos.
+            © 2026 Bambil Shoes By Dario. Handmade Excellence. Elevando la
+            artesanía tradicional a través de diseños contemporáneos.
           </p>
         </div>
 
         {/* Contact Links */}
         <div className="col-span-1">
-          <h5 className="font-sans text-xs font-bold text-[#ac9181] mb-4 uppercase tracking-widest">Contacto</h5>
+          <h5 className="font-sans text-xs font-bold text-[#ac9181] mb-4 uppercase tracking-widest">
+            Contacto
+          </h5>
           <ul className="space-y-3 font-sans text-sm text-[#e5e2db]/90">
-            <li>Santa Elena, Parroquia Colonche - Comuna Bambil Collao</li>
-            <li>Lunes a Sábado: 9am - 7pm</li>
+            <li>{storeAddress}</li>
+            <li>{storeHours }</li>
             <li>
               <Link
-                href="https://maps.app.goo.gl/euKWMGExSx19FbjD6"
+                href={mapUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="hover:text-white transition-opacity flex items-center gap-1.5 underline">
-                <span className="material-symbols-outlined text-sm">map</span> Ver Mapa
+                className="hover:text-white transition-opacity flex items-center gap-1.5 underline"
+              >
+                <span className="material-symbols-outlined text-sm">map</span>{" "}
+                Ver Mapa
               </Link>
             </li>
           </ul>
@@ -47,23 +71,27 @@ export default function Footer() {
 
         {/* Social Links */}
         <div className="col-span-1">
-          <h5 className="font-sans text-xs font-bold text-[#ac9181] mb-4 uppercase tracking-widest">Social</h5>
+          <h5 className="font-sans text-xs font-bold text-[#ac9181] mb-4 uppercase tracking-widest">
+            Social
+          </h5>
           <ul className="space-y-3 font-sans text-sm text-[#e5e2db]/90">
             <li>
               <Link
-                href={process.env.NEXT_PUBLIC_ENTERPRISE_FACEBOOK || "#"}
+                href={facebookUrl|| "#"}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="hover:text-white hover:underline transition-opacity">
+                className="hover:text-white hover:underline transition-opacity"
+              >
                 Facebook
               </Link>
             </li>
             <li>
               <Link
-                href={process.env.NEXT_PUBLIC_ENTERPRISE_INSTAGRAM || "#"}
+                href={instagramUrl|| "#"}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="hover:text-white hover:underline transition-opacity">
+                className="hover:text-white hover:underline transition-opacity"
+              >
                 Instagram
               </Link>
             </li>
