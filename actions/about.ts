@@ -11,7 +11,7 @@ const MOCK_ABOUT_PAGE: AboutPageData = {
   heroTitle: "Artesanía & Tradición",
   heroSubtitle: "Desde Bambil Collao para todo el Ecuador",
   heroBanner: {
-    url: "/images/hero.jpeg",
+    url: "/images/hero-about1.jpeg",
     alternativeText: "Taller artesanal Bambil Shoes",
   },
   mission:
@@ -96,9 +96,32 @@ export async function getAboutPageAction(): Promise<AboutPageData | null> {
 
     if (response?.data) {
       const data = response.data as unknown as AboutPageData;
+
+      // Preserve fallback step images if Strapi step image is not attached yet
+      const mergedManufacturingSteps = (data.manufacturingSteps || []).map(
+        (step, idx) => {
+          const mockStep = MOCK_ABOUT_PAGE.manufacturingSteps?.[idx];
+          return {
+            ...mockStep,
+            ...step,
+            image: step.image?.url ? step.image : mockStep?.image,
+          };
+        }
+      );
+
       return {
         ...MOCK_ABOUT_PAGE,
         ...data,
+        heroBanner: data.heroBanner?.url
+          ? data.heroBanner
+          : MOCK_ABOUT_PAGE.heroBanner,
+        founderPhoto: data.founderPhoto?.url
+          ? data.founderPhoto
+          : MOCK_ABOUT_PAGE.founderPhoto,
+        manufacturingSteps:
+          mergedManufacturingSteps.length > 0
+            ? mergedManufacturingSteps
+            : MOCK_ABOUT_PAGE.manufacturingSteps,
       };
     }
 

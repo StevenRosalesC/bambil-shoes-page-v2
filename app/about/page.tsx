@@ -1,64 +1,139 @@
-import Navbar from "@/components/Navbar";
+import type { Metadata } from "next";
 import Image from "next/image";
+import Navbar from "@/components/Navbar";
+import { getAboutPageAction } from "@/actions/about";
+import { getMaterialsAction } from "@/actions/materials";
+import type { CorporateValue, ManufacturingStep } from "@/types/AboutPage";
+import type { MaterialData } from "@/types/Material";
 
-export default function AboutPage() {
-  const steps = [
-    {
-      title: "1. Corte Preciso",
-      description:
-        "Seleccionamos las mejores partes de cada piel, asegurando que la flor del material sea impecable antes de realizar el primer corte manual.",
-      image:
-        "https://lh3.googleusercontent.com/aida-public/AB6AXuCmMCSqNiGaJello7QedMQ74f8guO8HMVhPj0XQEUQ1rbFKWRfFqfGXdQSuaX3b_BWNYgo-oAoInmTqdbI70gWZFy11aj7KbYqycqc9CdJoh0P45GTqu5Vui8yIAdFEZYfLIUlRRvuDtGTRokIaQmUHzFS_fVGP4hGiAPlssjotJrnwA6wpIDvnUoIg2rNHwI0RXav0yKbKRlNXQ-ZT1LMBSgcxiJnbKSVenWp0iH2QBe6DiWG7tNyEntAuY46tcR45q_aUKWGOWeWF",
-      translate: false,
-    },
-    {
-      title: "2. Ensamblaje",
-      description:
-        "Unimos las piezas con hilos de alta resistencia, empleando técnicas de costura tradicionales que garantizan la durabilidad de por vida.",
-      image:
-        "https://lh3.googleusercontent.com/aida-public/AB6AXuAFyBlki9sLXWr-aa-gBDKrn_5WHBF4si9YeShOvkoEkg2BsdT-g08aPaxwoiP3EtFE99xAwerejHhMafK024H5vgnGUzIp6NwzHin05bQyIcOiihFa7tr4I5jP7xOJPkLh2_xQfoEWDBhIjpPzeWV3nJMWG8UGgYrVGggE8_FTz3gbZ5zfnnH8zmSq1sX88lkX7c9WBEeCwbR8tSWe7gfymngeHGFMs94K8xzlqsbMcEJj8nEforwqbAbfIH3PxlcfMzaTinw09agK",
-      translate: true,
-    },
-    {
-      title: "3. Acabado Final",
-      description:
-        "El pulido manual con ceras naturales resalta la pátina única de cada zapato, otorgándole ese carácter distintivo y elegante de Bambil.",
-      image:
-        "https://lh3.googleusercontent.com/aida-public/AB6AXuCkZTCfoMYFYHnJNLtSaD1U_X5rYM6TQlsjay-y5tiQ5ZslI5V6R8MxutJ5PuKhQ21F8kM2l662srAUF3t92wpMCYLFL2WABDoyKUttPboSM45YB89EPAqdCV6vp_S9B9bfRxGYhAU9yMKzW1QPE54NQxzrIUkf01m0he-mNb3EOaDOWrsuODK01WgPfBc7hAaODZPrNj89fRnp_I3vikY6iDfWDatEQDQvlB42uPN-t8Hq6t3nB43bAtrqi-CAiKcz8lZ1XRZStwM3",
-      translate: false,
-    },
-  ];
+export const metadata: Metadata = {
+  title: "Sobre Nosotros",
+  description:
+    "Conoce la historia, valores y el proceso de manufactura artesanal detrás de cada par de calzado en Bambil Shoes.",
+};
 
-  const corporateValues = [
-    {
-      title: "Honestidad",
-      description: "Ser recto y veraz en todo acto.",
-      icon: "verified",
+const resolveImageUrl = (url?: string | null, fallback = ""): string => {
+  if (!url) return fallback;
+  if (url.startsWith("http://") || url.startsWith("https://")) {
+    return url;
+  }
+  if (url.startsWith("/uploads")) {
+    const strapiBase =
+      process.env.NEXT_PUBLIC_STRAPI_URL || "http://localhost:1337";
+    return `${strapiBase}${url}`;
+  }
+  return url;
+};
+
+const DEFAULT_CORPORATE_VALUES: CorporateValue[] = [
+  {
+    title: "Honestidad",
+    description: "Ser recto y veraz en todo acto.",
+    icon: "verified",
+  },
+  {
+    title: "Compromiso asociativo y empresarial",
+    description:
+      "Sincronizar objetivos personales con las metas organizacionales.",
+    icon: "handshake",
+  },
+  {
+    title: "Lealtad",
+    description:
+      "Actitud de profundo compromiso de una persona a una organización.",
+    icon: "loyalty",
+  },
+  {
+    title: "Responsabilidad social y empresarial",
+    description: "Asumir y aceptar las consecuencias.",
+    icon: "volunteer_activism",
+  },
+  {
+    title: "Trabajo en equipo",
+    description:
+      "Mantener los objetivos comunes, tareas definidas, procesos claros y una buena relación que lleven a un alto grado de cooperación y buenos resultados a la organización.",
+    icon: "groups",
+  },
+];
+
+const DEFAULT_MANUFACTURING_STEPS: ManufacturingStep[] = [
+  {
+    stepNumber: 1,
+    title: "1. Corte Preciso",
+    description:
+      "Seleccionamos las mejores partes de cada piel, asegurando que la flor del material sea impecable antes de realizar el primer corte manual.",
+    image: {
+      url: "https://lh3.googleusercontent.com/aida-public/AB6AXuCmMCSqNiGaJello7QedMQ74f8guO8HMVhPj0XQEUQ1rbFKWRfFqfGXdQSuaX3b_BWNYgo-oAoInmTqdbI70gWZFy11aj7KbYqycqc9CdJoh0P45GTqu5Vui8yIAdFEZYfLIUlRRvuDtGTRokIaQmUHzFS_fVGP4hGiAPlssjotJrnwA6wpIDvnUoIg2rNHwI0RXav0yKbKRlNXQ-ZT1LMBSgcxiJnbKSVenWp0iH2QBe6DiWG7tNyEntAuY46tcR45q_aUKWGOWeWF",
     },
-    {
-      title: "Compromiso asociativo y empresarial",
-      description:
-        "Sincronizar objetivos personales con las metas organizacionales.",
-      icon: "handshake",
+  },
+  {
+    stepNumber: 2,
+    title: "2. Ensamblaje",
+    description:
+      "Unimos las piezas con hilos de alta resistencia, empleando técnicas de costura tradicionales que garantizan la durabilidad de por vida.",
+    image: {
+      url: "https://lh3.googleusercontent.com/aida-public/AB6AXuAFyBlki9sLXWr-aa-gBDKrn_5WHBF4si9YeShOvkoEkg2BsdT-g08aPaxwoiP3EtFE99xAwerejHhMafK024H5vgnGUzIp6NwzHin05bQyIcOiihFa7tr4I5jP7xOJPkLh2_xQfoEWDBhIjpPzeWV3nJMWG8UGgYrVGggE8_FTz3gbZ5zfnnH8zmSq1sX88lkX7c9WBEeCwbR8tSWe7gfymngeHGFMs94K8xzlqsbMcEJj8nEforwqbAbfIH3PxlcfMzaTinw09agK",
     },
-    {
-      title: "Lealtad",
-      description:
-        "Actitud de profundo compromiso de una persona a una organización.",
-      icon: "loyalty",
+  },
+  {
+    stepNumber: 3,
+    title: "3. Acabado Final",
+    description:
+      "El pulido manual con ceras naturales resalta la pátina única de cada zapato, otorgándole ese carácter distintivo y elegante de Bambil.",
+    image: {
+      url: "https://lh3.googleusercontent.com/aida-public/AB6AXuCkZTCfoMYFYHnJNLtSaD1U_X5rYM6TQlsjay-y5tiQ5ZslI5V6R8MxutJ5PuKhQ21F8kM2l662srAUF3t92wpMCYLFL2WABDoyKUttPboSM45YB89EPAqdCV6vp_S9B9bfRxGYhAU9yMKzW1QPE54NQxzrIUkf01m0he-mNb3EOaDOWrsuODK01WgPfBc7hAaODZPrNj89fRnp_I3vikY6iDfWDatEQDQvlB42uPN-t8Hq6t3nB43bAtrqi-CAiKcz8lZ1XRZStwM3",
     },
-    {
-      title: "Responsabilidad social y empresarial",
-      description: "Asumir y aceptar las consecuencias.",
-      icon: "volunteer_activism",
-    },
-    {
-      title: "Trabajo en equipo",
-      description:
-        "Mantener los objetivos comunes, tareas definidas, procesos claros y una buena relación que lleven a un alto grado de cooperación y buenos resultados a la organización.",
-      icon: "groups",
-    },
-  ];
+  },
+];
+
+const DEFAULT_MATERIALS: Partial<MaterialData>[] = [
+  {
+    name: "Cueros Naturales",
+    description:
+      "Mantenemos la transpirabilidad y flexibilidad, logrando una pátina que mejora y cuenta tu historia con el tiempo.",
+  },
+  {
+    name: "Materiales Sintéticos Premium",
+    description:
+      "Opciones innovadoras de alta resistencia que ofrecen acabados impecables y consistencia superior sin comprometer la elegancia.",
+  },
+];
+
+export default async function AboutPage() {
+  const [aboutData, materialsData] = await Promise.all([
+    getAboutPageAction(),
+    getMaterialsAction(),
+  ]);
+
+  const heroBannerUrl = resolveImageUrl(
+    aboutData?.heroBanner?.url,
+    "/images/hero-about1.jpeg"
+  );
+  const heroBannerAlt =
+    aboutData?.heroBanner?.alternativeText || "Lienzo de cueros en el taller";
+
+  const founderPhotoUrl = resolveImageUrl(
+    aboutData?.founderPhoto?.url,
+    "/images/owner.jpg"
+  );
+  const founderPhotoAlt =
+    aboutData?.founderPhoto?.alternativeText ||
+    "Darío Catuto, fundador y maestro artesano de Bambil Shoes";
+
+  const corporateValues =
+    aboutData?.corporateValues && aboutData.corporateValues.length > 0
+      ? aboutData.corporateValues
+      : DEFAULT_CORPORATE_VALUES;
+
+  const steps =
+    aboutData?.manufacturingSteps && aboutData.manufacturingSteps.length > 0
+      ? aboutData.manufacturingSteps
+      : DEFAULT_MANUFACTURING_STEPS;
+
+  const materials =
+    materialsData && materialsData.length > 0
+      ? materialsData
+      : DEFAULT_MATERIALS;
 
   return (
     <div className="flex flex-col min-h-screen bg-[#fcf9f2] antialiased">
@@ -72,18 +147,20 @@ export default function AboutPage() {
           <Image
             fill
             className="absolute inset-0 w-full h-full object-cover brightness-50 mix-blend-multiply"
-            alt="Lienzo de cueros en el taller"
-            src="/images/hero-about1.jpeg"
+            alt={heroBannerAlt}
+            src={heroBannerUrl}
+            priority
           />
           <div className="relative z-10 text-center px-4">
             <span className="inline-block bg-[#D2B48C] text-[#26170c] font-sans text-xs font-bold px-4 py-1.5 rounded mb-4 tracking-widest uppercase shadow-sm">
               Nuestra Esencia
             </span>
             <h1 className="font-display text-4xl md:text-5xl font-bold text-white mb-4">
-              El Arte del Calzado
+              {aboutData?.heroTitle || "El Arte del Calzado"}
             </h1>
-            <p className="font-sans text-sm md:text-base text-gray-400 max-w-2xl mx-auto leading-relaxed">
-              Donde la tradición se encuentra con la elegancia contemporánea.
+            <p className="font-sans text-sm md:text-base text-gray-200 max-w-2xl mx-auto leading-relaxed">
+              {aboutData?.heroSubtitle ||
+                "Donde la tradición se encuentra con la elegancia contemporánea."}
             </p>
           </div>
         </section>
@@ -111,8 +188,8 @@ export default function AboutPage() {
               <div className="absolute -inset-3 sm:-inset-4 bg-[#ebe8e1] rounded-2xl -z-10 shadow-[0_10px_30px_-5px_rgba(61,43,31,0.06)] translate-x-3 translate-y-3 sm:translate-x-4 sm:translate-y-4"></div>
               <div className="relative rounded-xl overflow-hidden shadow-[0_10px_30px_rgba(61,43,31,0.12)] border border-[#d2c4bc]/40 aspect-[3/4] bg-[#ebe8e1]">
                 <Image
-                  src="/images/owner.jpg"
-                  alt="Darío Catuto, fundador y maestro artesano de Bambil Shoes"
+                  src={founderPhotoUrl}
+                  alt={founderPhotoAlt}
                   fill
                   sizes="(max-width: 768px) 90vw, (max-width: 1024px) 42vw, 480px"
                   className="object-cover object-center"
@@ -156,7 +233,8 @@ export default function AboutPage() {
                   </div>
                 </div>
                 <p className="font-sans text-xs sm:text-sm md:text-base text-[#4f453f] leading-relaxed">
-                  Comercializar calzado para mujeres de excelente calidad, sus artesanos realizan los productos con responsabilidad, compromiso, trabajo en equipo, honestidad y respeto generando así oportunidades para su entorno.
+                  {aboutData?.mission ||
+                    "Comercializar calzado para mujeres de excelente calidad, sus artesanos realizan los productos con responsabilidad, compromiso, trabajo en equipo, honestidad y respeto generando así oportunidades para su entorno."}
                 </p>
               </div>
 
@@ -182,7 +260,8 @@ export default function AboutPage() {
                   </div>
                 </div>
                 <p className="font-sans text-xs sm:text-sm md:text-base text-[#4f453f] leading-relaxed">
-                  Ser una de las organizaciones asociativas con mayor volumen de comercialización de calzado para mujeres en la provincia de Santa Elena, y mejorar sus condiciones de vida.
+                  {aboutData?.vision ||
+                    "Ser una de las organizaciones asociativas con mayor volumen de comercialización de calzado para mujeres en la provincia de Santa Elena, y mejorar sus condiciones de vida."}
                 </p>
               </div>
             </div>
@@ -202,7 +281,7 @@ export default function AboutPage() {
             <div className="flex flex-wrap justify-center gap-6">
               {corporateValues.map((val, idx) => (
                 <div
-                  key={idx}
+                  key={val.id ?? `val-${idx}`}
                   className="w-full md:w-[calc(50%-12px)] lg:w-[calc(33.333%-16px)] bg-white p-7 rounded-xl border border-[#d2c4bc]/30 shadow-[0_10px_30px_-5px_rgba(61,43,31,0.04)] hover:shadow-md transition-all duration-300 flex flex-col justify-between"
                 >
                   <div>
@@ -242,32 +321,38 @@ export default function AboutPage() {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              {steps.map((step, idx) => (
-                <div
-                  key={idx}
-                  className={`bg-white rounded-xl overflow-hidden shadow-[0_10px_30px_-5px_rgba(61,43,31,0.06)] border border-[#d2c4bc]/30 group transition-all duration-500 ${
-                    step.translate ? "translate-y-0 md:translate-y-8" : ""
-                  }`}
-                >
-                  <div className="h-60 md:h-64 overflow-hidden relative">
-                    <Image
-                      src={step.image}
-                      alt={step.title}
-                      fill
-                      sizes="(max-width: 768px) 100vw, 33vw"
-                      className="object-cover transition-transform duration-700 group-hover:scale-105"
-                    />
+              {steps.map((step, idx) => {
+                const stepImageUrl = resolveImageUrl(
+                  step.image?.url,
+                  DEFAULT_MANUFACTURING_STEPS[idx % DEFAULT_MANUFACTURING_STEPS.length]?.image?.url
+                );
+                return (
+                  <div
+                    key={step.id ?? `step-${idx}`}
+                    className={`bg-white rounded-xl overflow-hidden shadow-[0_10px_30px_-5px_rgba(61,43,31,0.06)] border border-[#d2c4bc]/30 group transition-all duration-500 ${
+                      idx % 2 === 1 ? "translate-y-0 md:translate-y-8" : ""
+                    }`}
+                  >
+                    <div className="h-60 md:h-64 overflow-hidden relative">
+                      <Image
+                        src={stepImageUrl}
+                        alt={step.title}
+                        fill
+                        sizes="(max-width: 768px) 100vw, 33vw"
+                        className="object-cover transition-transform duration-700 group-hover:scale-105"
+                      />
+                    </div>
+                    <div className="p-6 md:p-8">
+                      <h3 className="font-display text-xl text-[#26170c] mb-3 font-semibold">
+                        {step.title}
+                      </h3>
+                      <p className="font-sans text-xs md:text-sm text-[#4f453f] leading-relaxed">
+                        {step.description}
+                      </p>
+                    </div>
                   </div>
-                  <div className="p-6 md:p-8">
-                    <h3 className="font-display text-xl text-[#26170c] mb-3 font-semibold">
-                      {step.title}
-                    </h3>
-                    <p className="font-sans text-xs md:text-sm text-[#4f453f] leading-relaxed">
-                      {step.description}
-                    </p>
-                  </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
           </div>
         </section>
@@ -287,41 +372,24 @@ export default function AboutPage() {
               </p>
 
               <ul className="space-y-6">
-                <li className="flex items-start">
-                  <span
-                    className="material-symbols-outlined text-[#D2B48C] mr-4 mt-1"
-                    style={{ fontVariationSettings: "'FILL' 1" }}
-                  >
-                    check_circle
-                  </span>
-                  <div>
-                    <h4 className="font-sans text-sm font-bold text-[#26170c] mb-1">
-                      Cueros Naturales
-                    </h4>
-                    <p className="font-sans text-xs md:text-sm text-[#4f453f] leading-relaxed">
-                      Mantenemos la transpirabilidad y flexibilidad, logrando
-                      una pátina que mejora y cuenta tu historia con el tiempo.
-                    </p>
-                  </div>
-                </li>
-                <li className="flex items-start">
-                  <span
-                    className="material-symbols-outlined text-[#D2B48C] mr-4 mt-1"
-                    style={{ fontVariationSettings: "'FILL' 1" }}
-                  >
-                    check_circle
-                  </span>
-                  <div>
-                    <h4 className="font-sans text-sm font-bold text-[#26170c] mb-1">
-                      Materiales Sintéticos Premium
-                    </h4>
-                    <p className="font-sans text-xs md:text-sm text-[#4f453f] leading-relaxed">
-                      Opciones innovadoras de alta resistencia que ofrecen
-                      acabados impecables y consistencia superior sin
-                      comprometer la elegancia.
-                    </p>
-                  </div>
-                </li>
+                {materials.map((mat, idx) => (
+                  <li key={mat.id ?? `mat-${idx}`} className="flex items-start">
+                    <span
+                      className="material-symbols-outlined text-[#D2B48C] mr-4 mt-1"
+                      style={{ fontVariationSettings: "'FILL' 1" }}
+                    >
+                      check_circle
+                    </span>
+                    <div>
+                      <h4 className="font-sans text-sm font-bold text-[#26170c] mb-1">
+                        {mat.name}
+                      </h4>
+                      <p className="font-sans text-xs md:text-sm text-[#4f453f] leading-relaxed">
+                        {mat.description}
+                      </p>
+                    </div>
+                  </li>
+                ))}
               </ul>
             </div>
 
@@ -332,7 +400,11 @@ export default function AboutPage() {
                   <Image
                     className="object-cover"
                     alt="Muestrario de materiales premium"
-                    src="https://lh3.googleusercontent.com/aida-public/AB6AXuAFL-3rE2zyLi_S3v4pIBlOZhWe3lFiA2LSlqCzQaBPwHSdGStaOpb72AIn2vWYtKT2X5qa7hyN8idMurHrsVubMKn49bYFIiH6l2L6rPB0al26XrfxEOXjKABAKqeRiPwSCvxPV84Wz89uDToI9jY9_itdhVuyfhNcl5A5A_yMXRDXSVU5QKFSTqeLO51DxkgVQU_3KRXRGmvdt3Tw_s31uxhWy22aKnX8kiqw8QfvZgcqhRRe7RVDy8lCUL3ZkFG0jApakj7aoExx"
+                    src={
+                      materialsData?.[0]?.textureImage?.url
+                        ? resolveImageUrl(materialsData[0].textureImage.url)
+                        : "https://lh3.googleusercontent.com/aida-public/AB6AXuAFL-3rE2zyLi_S3v4pIBlOZhWe3lFiA2LSlqCzQaBPwHSdGStaOpb72AIn2vWYtKT2X5qa7hyN8idMurHrsVubMKn49bYFIiH6l2L6rPB0al26XrfxEOXjKABAKqeRiPwSCvxPV84Wz89uDToI9jY9_itdhVuyfhNcl5A5A_yMXRDXSVU5QKFSTqeLO51DxkgVQU_3KRXRGmvdt3Tw_s31uxhWy22aKnX8kiqw8QfvZgcqhRRe7RVDy8lCUL3ZkFG0jApakj7aoExx"
+                    }
                     fill
                     sizes="(max-width: 1024px) 100vw, 50vw"
                   />
