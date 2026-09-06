@@ -74,18 +74,18 @@ export default function AboutPage() {
         <section className="relative w-full h-[55vh] min-h-[400px] flex items-center justify-center overflow-hidden bg-[#e5e2db]">
           <Image
             fill
-            className="absolute inset-0 w-full h-full object-cover opacity-70 mix-blend-multiply"
+            className="absolute inset-0 w-full h-full object-cover brightness-50 mix-blend-multiply"
             alt="Lienzo de cueros en el taller"
-            src="https://lh3.googleusercontent.com/aida-public/AB6AXuCzMAVDQmJPemQqY276x5UcZdkLL8QR5kUIf3aAYbgesoV1y2x1p1YQU9krRiDTiy1ewj7-2Q-7ILJct2xzKW-v2CUZFBEgTDoMLoI2SOIhopyBcRpP_ZKSYtreYH4-QoAa1_tDICYhtlWzFfZZA_PEH-bbIckoI2bbZjf3FUIJ_ZCh-y4GHpRE1lWPKph68NZonAx9Q5CSWJPV9RUdvEUwo5qM1vtP63fYOjAv0IYASHkana8K9bj2HacQ2zw65z3ltG8FUHpXcQdG"
+            src="/images/hero-about1.jpeg"
           />
           <div className="relative z-10 text-center px-4">
             <span className="inline-block bg-[#D2B48C] text-[#26170c] font-sans text-xs font-bold px-4 py-1.5 rounded mb-4 tracking-widest uppercase shadow-sm">
               Nuestra Esencia
             </span>
-            <h1 className="font-display text-4xl md:text-5xl font-bold text-[#26170c] mb-4">
+            <h1 className="font-display text-4xl md:text-5xl font-bold text-white mb-4">
               El Arte del Calzado
             </h1>
-            <p className="font-sans text-sm md:text-base text-[#4f453f] max-w-2xl mx-auto leading-relaxed">
+            <p className="font-sans text-sm md:text-base text-gray-400 max-w-2xl mx-auto leading-relaxed">
               Donde la tradición se encuentra con la elegancia contemporánea.
             </p>
           </div>
