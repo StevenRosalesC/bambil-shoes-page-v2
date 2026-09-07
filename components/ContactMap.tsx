@@ -3,22 +3,25 @@
 import React, { useEffect, useRef } from "react";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
-
-// Workshop coordinates for Bambil Shoes By Dario
-const LATITUDE = -1.9599131;
-const LONGITUDE = -80.6548942;
-const MAPS_URL = "https://maps.app.goo.gl/BCUBi3XebM3DN3nz5";
+import { useGlobalInfo } from "@/providers/global-info-provider";
 
 export default function ContactMap() {
+  const { globalInfo } = useGlobalInfo();
   const mapContainerRef = useRef<HTMLDivElement | null>(null);
   const mapInstanceRef = useRef<L.Map | null>(null);
+
+  const latitude = globalInfo?.latitude || -1.9599131;
+  const longitude = globalInfo?.longitude || -80.6548942;
+  const mapsUrl = globalInfo?.googleMapsUrl || "https://maps.app.goo.gl/BCUBi3XebM3DN3nz5";
+  const address = globalInfo?.address || "Santa Elena, Parroquia Colonche — Comuna Bambil Collao";
+  const storeName = globalInfo?.storeName || "Bambil Shoes By Dario";
 
   useEffect(() => {
     if (!mapContainerRef.current || mapInstanceRef.current) return;
 
     // Initialize Leaflet map
     const map = L.map(mapContainerRef.current, {
-      center: [LATITUDE, LONGITUDE],
+      center: [latitude, longitude],
       zoom: 15,
       scrollWheelZoom: false,
     });
@@ -52,14 +55,13 @@ export default function ContactMap() {
     const popupContent = `
       <div style="font-family: var(--font-montserrat), sans-serif; padding: 4px 2px; min-width: 190px;">
         <div style="display: flex; align-items: center; gap: 6px; margin-bottom: 4px;">
-          <span style="font-weight: 700; font-size: 14px; color: #26170c;">Bambil Shoes By Dario</span>
+          <span style="font-weight: 700; font-size: 14px; color: #26170c;">${storeName}</span>
         </div>
         <p style="font-size: 12px; color: #4f453f; line-height: 1.4; margin: 0 0 10px 0;">
-          Santa Elena, Parroquia Colonche<br/>
-          Comuna Bambil Collao
+          ${address}
         </p>
         <a
-          href="${MAPS_URL}"
+          href="${mapsUrl}"
           target="_blank"
           rel="noopener noreferrer"
           style="display: inline-flex; align-items: center; gap: 5px; font-size: 11px; font-weight: 600; color: #ffffff; background-color: #26170c; padding: 6px 12px; border-radius: 6px; text-decoration: none; transition: background-color 0.2s;"
@@ -70,14 +72,14 @@ export default function ContactMap() {
       </div>
     `;
 
-    const marker = L.marker([LATITUDE, LONGITUDE], { icon: customIcon }).addTo(map);
+    const marker = L.marker([latitude, longitude], { icon: customIcon }).addTo(map);
     marker.bindPopup(popupContent).openPopup();
 
     return () => {
       map.remove();
       mapInstanceRef.current = null;
     };
-  }, []);
+  }, [latitude, longitude, mapsUrl, address, storeName]);
 
   return (
     <div className="bg-white rounded-xl border border-[#d2c4bc]/50 shadow-[0_10px_30px_-5px_rgba(61,43,31,0.06)] overflow-hidden flex flex-col">
@@ -92,13 +94,13 @@ export default function ContactMap() {
               Taller Bambil Shoes
             </h3>
             <p className="font-sans text-xs text-[#4f453f]">
-              Santa Elena, Parroquia Colonche — Comuna Bambil Collao
+              {address}
             </p>
           </div>
         </div>
 
         <a
-          href={MAPS_URL}
+          href={mapsUrl}
           target="_blank"
           rel="noopener noreferrer"
           className="inline-flex items-center justify-center gap-1.5 text-xs font-sans font-semibold bg-[#26170c] hover:bg-[#3d2b1f] text-white px-4 py-2 rounded transition-all shadow-xs shrink-0"

@@ -3,6 +3,8 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import dynamic from "next/dynamic";
+import { useGlobalInfo } from "@/providers/global-info-provider";
+import { sendContactMessageAction } from "@/actions/contact";
 
 const ContactMap = dynamic(() => import("@/components/ContactMap"), {
   ssr: false,
@@ -16,29 +18,70 @@ const ContactMap = dynamic(() => import("@/components/ContactMap"), {
   ),
 });
 
-const phoneNumber = process.env.NEXT_PUBLIC_ENTERPRISE_PHONE || "+593 99 383 3765";
-const enterpriseEmail = process.env.NEXT_PUBLIC_ENTERPRISE_EMAIL || "bambilshoes@gmail.com";
-
 export default function ContactGrid() {
+  const { globalInfo } = useGlobalInfo();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [subject, setSubject] = useState("Consulta sobre producto");
   const [message, setMessage] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [status, setStatus] = useState<"idle" | "success" | "error">("idle");
+  const [feedbackMessage, setFeedbackMessage] = useState("");
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const phoneNumber =
+    globalInfo?.phone ||
+    globalInfo?.whatsappNumber ||
+    "+593 99 383 3765";
+
+  const whatsappNumber =
+    globalInfo?.whatsappNumber ||
+    phoneNumber;
+
+  const enterpriseEmail =
+    globalInfo?.email ||
+    "bambilshoes@gmail.com";
+
+  const address =
+    globalInfo?.address || "Santa Elena, Ecuador";
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!name || !email || !message) {
+    if (!name.trim() || !email.trim() || !message.trim()) {
       setStatus("error");
+      setFeedbackMessage("Por favor completa todos los campos del formulario.");
       return;
     }
 
-    // Simulate sending email/message
-    setStatus("success");
-    setName("");
-    setEmail("");
-    setMessage("");
-    setTimeout(() => setStatus("idle"), 5000);
+    setIsSubmitting(true);
+    try {
+      const res = await sendContactMessageAction({
+        name: name.trim(),
+        email: email.trim(),
+        subject,
+        message: message.trim(),
+      });
+
+      if (res.success) {
+        setStatus("success");
+        setFeedbackMessage(
+          res.message || "¡Mensaje enviado con éxito! Nos pondremos en contacto muy pronto."
+        );
+        setName("");
+        setEmail("");
+        setMessage("");
+        setTimeout(() => setStatus("idle"), 6000);
+      } else {
+        setStatus("error");
+        setFeedbackMessage(
+          res.error || "Ocurrió un error al enviar el mensaje. Intenta nuevamente."
+        );
+      }
+    } catch {
+      setStatus("error");
+      setFeedbackMessage("Ocurrió un error inesperado al enviar el mensaje.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -70,7 +113,7 @@ export default function ContactGrid() {
                 <div>
                   <p className="font-sans text-xs font-bold text-[#4f453f] mb-1">Taller Principal</p>
                   <p className="font-sans text-sm md:text-base text-[#26170c] font-semibold">
-                    Santa Elena, Ecuador<br />
+                    {address}<br />
                     <span className="text-xs text-[#4f453f] font-normal">Atención con cita previa</span>
                   </p>
                 </div>
@@ -81,7 +124,7 @@ export default function ContactGrid() {
           <div className="mt-8 pt-6 border-t border-[#d2c4bc]">
             <Link
               className="w-full bg-[#25D366] hover:bg-[#20bd5c] text-white font-sans text-sm font-semibold py-4 px-6 rounded-lg flex items-center justify-center space-x-2 transition-all shadow-md hover:-translate-y-0.5 hover:shadow-lg"
-              href={`https://wa.me/${phoneNumber.replace(/\D/g, '')}`}
+              href={`https://wa.me/${whatsappNumber.replace(/\D/g, "")}`}
               target="_blank"
               rel="noopener noreferrer"
             >
@@ -102,14 +145,14 @@ export default function ContactGrid() {
           {status === "success" && (
             <div className="mb-6 p-4 bg-secondary-container text-[#765f3d] rounded-lg border border-[#fbdbb0]/50 font-sans text-sm font-semibold flex items-center gap-2">
               <span className="material-symbols-outlined text-lg">check_circle</span>
-              ¡Mensaje enviado con éxito! Nos pondremos en contacto muy pronto.
+              {feedbackMessage || "¡Mensaje enviado con éxito! Nos pondremos en contacto muy pronto."}
             </div>
           )}
 
           {status === "error" && (
             <div className="mb-6 p-4 bg-error-container text-[#ba1a1a] rounded-lg border border-[#ffdad6] font-sans text-sm font-semibold flex items-center gap-2">
               <span className="material-symbols-outlined text-lg">error</span>
-              Por favor completa todos los campos del formulario.
+              {feedbackMessage || "Por favor completa todos los campos del formulario."}
             </div>
           )}
 
@@ -175,9 +218,15 @@ export default function ContactGrid() {
 
             <button
               type="submit"
-              className="w-full md:w-auto bg-[#3d2b1f] hover:bg-[#26170c] text-white font-sans text-sm font-semibold py-3.5 px-8 rounded-lg transition-all shadow-md hover:-translate-y-0.5 hover:shadow-lg cursor-pointer"
+              disabled={isSubmitting}
+              className={`w-full md:w-auto bg-[#3d2b1f] hover:bg-[#26170c] text-white font-sans text-sm font-semibold py-3.5 px-8 rounded-lg transition-all shadow-md hover:-translate-y-0.5 hover:shadow-lg flex items-center justify-center gap-2 ${
+                isSubmitting ? "opacity-75 cursor-not-allowed" : "cursor-pointer"
+              }`}
             >
-              Enviar Mensaje
+              {isSubmitting && (
+                <span className="material-symbols-outlined animate-spin text-base">progress_activity</span>
+              )}
+              <span>{isSubmitting ? "Enviando..." : "Enviar Mensaje"}</span>
             </button>
           </form>
         </div>
