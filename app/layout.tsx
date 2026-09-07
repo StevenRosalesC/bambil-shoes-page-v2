@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
+import { draftMode } from "next/headers";
 import { Playfair_Display, Montserrat } from "next/font/google";
+import ExitPreviewButton from "@/components/ExitPreviewButton";
 import QueryProvider from "@/providers/query-provider";
 import { GlobalInfoProvider } from "@/providers/global-info-provider";
 import { getGlobalInfoAction } from "@/actions/global";
@@ -74,6 +76,14 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  let isDraft = false;
+  try {
+    const draft = await draftMode();
+    isDraft = draft.isEnabled;
+  } catch {
+    isDraft = false;
+  }
+
   const globalInfo = await getGlobalInfoAction();
 
   return (
@@ -95,6 +105,21 @@ export default async function RootLayout({
         />
       </head>
       <body className="min-h-full flex flex-col bg-[#fcf9f2] text-[#1c1c18] font-sans antialiased">
+        {isDraft && (
+          <aside
+            aria-label="Preview banner"
+            className="fixed bottom-6 left-6 z-50 bg-[#26170c] text-white px-4 py-3 rounded-xl shadow-2xl border border-[#D2B48C]/40 flex items-center gap-3 text-xs max-w-sm"
+          >
+            <div className="flex items-center gap-2.5">
+              <span className="w-2.5 h-2.5 rounded-full bg-amber-400 animate-pulse shrink-0" />
+              <div className="flex flex-col">
+                <span className="font-bold text-amber-200">Modo Previsualización</span>
+                <span className="text-[11px] text-[#e5e2db]/80">Viendo cambios en borrador</span>
+              </div>
+            </div>
+            <ExitPreviewButton />
+          </aside>
+        )}
         <QueryProvider>
           <GlobalInfoProvider initialData={globalInfo}>
             {children}

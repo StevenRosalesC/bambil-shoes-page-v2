@@ -1,11 +1,7 @@
 "use server";
 
-import { strapi } from "@strapi/client";
+import { strapiClient, getDraftStatus } from "@/lib/strapi";
 import { HomePageData } from "@/types/HomePage";
-
-const client = strapi({
-  baseURL: process.env.STRAPI_API_URL || "http://localhost:1337/api",
-});
 
 const MOCK_HOME_PAGE: HomePageData = {
   heroBadge: "Calzado Hecho a Mano • Santa Elena • Colonche",
@@ -25,7 +21,9 @@ const MOCK_HOME_PAGE: HomePageData = {
 
 export async function getHomePageAction(): Promise<HomePageData | null> {
   try {
-    const response = await client.single("home-page").find({
+    const status = await getDraftStatus();
+    const response = await strapiClient.single("home-page").find({
+      status,
       populate: ["heroImage", "seo.metaImage"],
     });
 

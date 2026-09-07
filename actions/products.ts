@@ -1,11 +1,7 @@
 "use server";
 
-import { strapi } from "@strapi/client";
+import { strapiClient, getDraftStatus } from "@/lib/strapi";
 import { Product, ProductVariant, PaginatedResponse, QueryParams } from "@/types";
-
-const client = strapi({
-  baseURL: process.env.STRAPI_API_URL || "http://localhost:1337/api",
-});
 
 const DEFAULT_PRODUCT_IMAGE =
   "https://lh3.googleusercontent.com/aida-public/AB6AXuD_dNoiXnJaWGkaO5zFoLW99yActG5gx032RgLySpxypzs3oiMQiOFy4j6EPfnhz-BOp7prPWR3rYM5px5zQuLjxOMP-3ZZ00wQTdlHLSkM83oDo1GQ3YL5sPOtrbOMCSKIgQV0N_I7EIwyYnVlMkURM6f26knM89Yp_h1dIwHpCulSoWVgBFTgEBma9FCwdTsnBylUDsa4UiDtflyhe_kySFb7iIDmoJ6Ca8BWvO4z6jEm8be0JrLhmroyjW0Y5cD_onFUquGih9pm";
@@ -224,8 +220,11 @@ export async function getFeaturedProductsAction(
   limit: number = 6
 ): Promise<Product[]> {
   try {
+    const status = await getDraftStatus();
+
     // Step 1: Featured products
-    const featuredRes = await client.collection("products").find({
+    const featuredRes = await strapiClient.collection("products").find({
+      status,
       populate: ["images", "category", "variants"],
       filters: { featured: { $eq: true } },
       sort: ["createdAt:desc"],
@@ -244,7 +243,8 @@ export async function getFeaturedProductsAction(
     }
 
     // Step 2: Fallback to most recent products
-    const fallbackRes = await client.collection("products").find({
+    const fallbackRes = await strapiClient.collection("products").find({
+      status,
       populate: ["images", "category", "variants"],
       sort: ["createdAt:desc"],
       pagination: {
@@ -308,8 +308,10 @@ export async function getProductsAction(
 
     const page = params.page || 1;
     const pageSize = params.limit || 25;
+    const status = await getDraftStatus();
 
-    const response = await client.collection("products").find({
+    const response = await strapiClient.collection("products").find({
+      status,
       populate: ["images", "category", "variants"],
       filters,
       sort,
@@ -385,7 +387,9 @@ export async function getProductsAction(
 
 export async function getProductByIdAction(id: string): Promise<Product> {
   try {
-    const response = await client.collection("products").find({
+    const status = await getDraftStatus();
+    const response = await strapiClient.collection("products").find({
+      status,
       populate: ["images", "category", "variants"],
       filters: {
         $or: [{ documentId: { $eq: id } }, { slug: { $eq: id } }],

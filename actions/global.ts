@@ -1,11 +1,7 @@
 "use server";
 
-import { strapi } from "@strapi/client";
+import { strapiClient, getDraftStatus } from "@/lib/strapi";
 import { GlobalDataData } from "@/types/GlobalInfo";
-
-const client = strapi({
-  baseURL: process.env.STRAPI_API_URL || "http://localhost:1337/api",
-});
 
 const MOCK_GLOBAL_INFO: Partial<GlobalDataData> = {
   storeName: "Bambil Shoes By Dario",
@@ -25,7 +21,9 @@ const MOCK_GLOBAL_INFO: Partial<GlobalDataData> = {
 
 export async function getGlobalInfoAction(): Promise<GlobalDataData | null> {
   try {
-    const response = await client.single("global").find({
+    const status = await getDraftStatus();
+    const response = await strapiClient.single("global").find({
+      status,
       populate: ["logo", "favicon"],
     });
 

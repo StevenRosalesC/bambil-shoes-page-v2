@@ -1,11 +1,7 @@
 "use server";
 
-import { strapi } from "@strapi/client";
+import { strapiClient, getDraftStatus } from "@/lib/strapi";
 import { Category, PaginatedResponse, QueryParams } from "@/types";
-
-const client = strapi({
-  baseURL: process.env.STRAPI_API_URL || "http://localhost:1337/api",
-});
 
 const DEFAULT_CATEGORY_IMAGES: Record<string, string> = {
   caballero:
@@ -110,7 +106,9 @@ export async function getCategoriesAction(
       sort = [`${params.sortBy}:${order}`];
     }
 
-    const response = await client.collection("categories").find({
+    const status = await getDraftStatus();
+    const response = await strapiClient.collection("categories").find({
+      status,
       populate: ["image", "bannerImage"],
       filters,
       sort,

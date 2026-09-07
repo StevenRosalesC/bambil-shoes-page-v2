@@ -1,10 +1,6 @@
 "use server";
 
-import { strapi } from "@strapi/client";
-
-const client = strapi({
-  baseURL: process.env.STRAPI_API_URL || "http://localhost:1337/api",
-});
+import { strapiClient } from "@/lib/strapi";
 
 export interface ContactMessagePayload {
   name: string;
@@ -43,7 +39,7 @@ export async function sendContactMessageAction(
       };
     }
 
-    await client.collection("contact-messages").create({
+    await strapiClient.collection("contact-messages").create({
       name: trimmedName,
       email: trimmedEmail,
       subject: trimmedSubject,

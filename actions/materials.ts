@@ -1,11 +1,7 @@
 "use server";
 
-import { strapi } from "@strapi/client";
+import { strapiClient, getDraftStatus } from "@/lib/strapi";
 import { MaterialData } from "@/types/Material";
-
-const client = strapi({
-  baseURL: process.env.STRAPI_API_URL || "http://localhost:1337/api",
-});
 
 const MOCK_MATERIALS: MaterialData[] = [
   {
@@ -42,7 +38,9 @@ const MOCK_MATERIALS: MaterialData[] = [
 
 export async function getMaterialsAction(): Promise<MaterialData[]> {
   try {
-    const response = await client.collection("materials").find({
+    const status = await getDraftStatus();
+    const response = await strapiClient.collection("materials").find({
+      status,
       populate: ["textureImage", "benefits"],
       sort: ["displayOrder:asc"],
     });

@@ -1,11 +1,7 @@
 "use server";
 
-import { strapi } from "@strapi/client";
+import { strapiClient, getDraftStatus } from "@/lib/strapi";
 import { AboutPageData } from "@/types/AboutPage";
-
-const client = strapi({
-  baseURL: process.env.STRAPI_API_URL || "http://localhost:1337/api",
-});
 
 const MOCK_ABOUT_PAGE: AboutPageData = {
   heroTitle: "Artesanía & Tradición",
@@ -85,7 +81,9 @@ const MOCK_ABOUT_PAGE: AboutPageData = {
 
 export async function getAboutPageAction(): Promise<AboutPageData | null> {
   try {
-    const response = await client.single("about-page").find({
+    const status = await getDraftStatus();
+    const response = await strapiClient.single("about-page").find({
+      status,
       populate: [
         "heroBanner",
         "founderPhoto",

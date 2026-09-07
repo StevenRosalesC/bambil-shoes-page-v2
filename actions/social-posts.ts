@@ -1,11 +1,7 @@
 "use server";
 
-import { strapi } from "@strapi/client";
+import { strapiClient, getDraftStatus } from "@/lib/strapi";
 import { SocialPostData } from "@/types/SocialPost";
-
-const client = strapi({
-  baseURL: process.env.STRAPI_API_URL || "http://localhost:1337/api",
-});
 
 const MOCK_SOCIAL_POSTS: SocialPostData[] = [
   {
@@ -53,7 +49,9 @@ const MOCK_SOCIAL_POSTS: SocialPostData[] = [
 
 export async function getSocialPostsAction(): Promise<SocialPostData[]> {
   try {
-    const response = await client.collection("social-posts").find({
+    const status = await getDraftStatus();
+    const response = await strapiClient.collection("social-posts").find({
+      status,
       populate: ["image"],
       filters: {
         isActive: {
