@@ -44,6 +44,16 @@ export default function ContactGrid() {
   const address =
     globalInfo?.address || "Santa Elena, Ecuador";
 
+  const workingHours =
+    globalInfo?.workingHours || "Lunes a Sábado: 9am - 7pm";
+
+  const whatsappMessage =
+    globalInfo?.whatsappDefaultMessage ||
+    "¡Hola! Quisiera realizar una consulta sobre sus calzados.";
+
+  const instagramUrl = globalInfo?.instagramUrl;
+  const facebookUrl = globalInfo?.facebookUrl;
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!name.trim() || !email.trim() || !message.trim()) {
@@ -118,13 +128,53 @@ export default function ContactGrid() {
                   </p>
                 </div>
               </div>
+              {workingHours && (
+                <div className="flex items-start space-x-4">
+                  <span className="material-symbols-outlined text-[#725a39] mt-1">schedule</span>
+                  <div>
+                    <p className="font-sans text-xs font-bold text-[#4f453f] mb-1">Horario de Atención</p>
+                    <p className="font-sans text-sm md:text-base text-[#26170c] font-semibold">
+                      {workingHours}
+                    </p>
+                  </div>
+                </div>
+              )}
+              {(instagramUrl || facebookUrl) && (
+                <div className="pt-4 border-t border-[#d2c4bc]/40">
+                  <p className="font-sans text-xs font-bold text-[#4f453f] mb-3">Redes Sociales</p>
+                  <div className="flex flex-wrap items-center gap-3">
+                    {instagramUrl && (
+                      <a
+                        href={instagramUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white hover:bg-[#eae4dc] text-[#26170c] text-xs font-semibold border border-[#d2c4bc] transition-colors shadow-xs"
+                      >
+                        <span className="material-symbols-outlined text-sm">photo_camera</span>
+                        <span>Instagram</span>
+                      </a>
+                    )}
+                    {facebookUrl && (
+                      <a
+                        href={facebookUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white hover:bg-[#eae4dc] text-[#26170c] text-xs font-semibold border border-[#d2c4bc] transition-colors shadow-xs"
+                      >
+                        <span className="material-symbols-outlined text-sm">public</span>
+                        <span>Facebook</span>
+                      </a>
+                    )}
+                  </div>
+                </div>
+              )}
             </div>
           </div>
 
           <div className="mt-8 pt-6 border-t border-[#d2c4bc]">
             <Link
               className="w-full bg-[#25D366] hover:bg-[#20bd5c] text-white font-sans text-sm font-semibold py-4 px-6 rounded-lg flex items-center justify-center space-x-2 transition-all shadow-md hover:-translate-y-0.5 hover:shadow-lg"
-              href={`https://wa.me/${whatsappNumber.replace(/\D/g, "")}`}
+              href={`https://wa.me/${whatsappNumber.replace(/\D/g, "")}?text=${encodeURIComponent(whatsappMessage)}`}
               target="_blank"
               rel="noopener noreferrer"
             >
@@ -165,10 +215,11 @@ export default function ContactGrid() {
                 <input
                   type="text"
                   required
+                  disabled={isSubmitting}
                   placeholder="Tu nombre"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  className="w-full bg-[#FCF9F2] border border-[#d2c4bc] rounded-lg px-4 py-3 text-sm text-[#1c1c18] focus:border-[#26170c] focus:outline-none transition-colors"
+                  className="w-full bg-[#FCF9F2] border border-[#d2c4bc] rounded-lg px-4 py-3 text-sm text-[#1c1c18] focus:border-[#26170c] focus:outline-none transition-colors disabled:opacity-60 disabled:cursor-not-allowed"
                 />
               </div>
               <div>
@@ -178,10 +229,11 @@ export default function ContactGrid() {
                 <input
                   type="email"
                   required
+                  disabled={isSubmitting}
                   placeholder="tu@email.com"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="w-full bg-[#FCF9F2] border border-[#d2c4bc] rounded-lg px-4 py-3 text-sm text-[#1c1c18] focus:border-[#26170c] focus:outline-none transition-colors"
+                  className="w-full bg-[#FCF9F2] border border-[#d2c4bc] rounded-lg px-4 py-3 text-sm text-[#1c1c18] focus:border-[#26170c] focus:outline-none transition-colors disabled:opacity-60 disabled:cursor-not-allowed"
                 />
               </div>
             </div>
@@ -192,8 +244,9 @@ export default function ContactGrid() {
               </label>
               <select
                 value={subject}
+                disabled={isSubmitting}
                 onChange={(e) => setSubject(e.target.value)}
-                className="w-full bg-[#FCF9F2] border border-[#d2c4bc] rounded-lg px-4 py-3 text-sm text-[#1c1c18] focus:border-[#26170c] focus:outline-none transition-colors cursor-pointer"
+                className="w-full bg-[#FCF9F2] border border-[#d2c4bc] rounded-lg px-4 py-3 text-sm text-[#1c1c18] focus:border-[#26170c] focus:outline-none transition-colors cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed"
               >
                 <option value="Consulta sobre producto">Consulta sobre producto</option>
                 <option value="Pedido personalizado">Pedido personalizado</option>
@@ -208,11 +261,12 @@ export default function ContactGrid() {
               </label>
               <textarea
                 required
+                disabled={isSubmitting}
                 placeholder="¿En qué te podemos ayudar?"
                 rows={4}
                 value={message}
                 onChange={(e) => setMessage(e.target.value)}
-                className="w-full bg-[#FCF9F2] border border-[#d2c4bc] rounded-lg px-4 py-3 text-sm text-[#1c1c18] focus:border-[#26170c] focus:outline-none transition-colors resize-none"
+                className="w-full bg-[#FCF9F2] border border-[#d2c4bc] rounded-lg px-4 py-3 text-sm text-[#1c1c18] focus:border-[#26170c] focus:outline-none transition-colors resize-none disabled:opacity-60 disabled:cursor-not-allowed"
               />
             </div>
 

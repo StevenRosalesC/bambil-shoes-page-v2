@@ -30,8 +30,16 @@ export async function getGlobalInfoAction(): Promise<GlobalDataData | null> {
     });
 
     if (response?.data) {
-      const data = response.data as unknown as GlobalDataData;
-      return data;
+      const raw = response.data as unknown as Record<string, unknown>;
+      const nonNullData = Object.fromEntries(
+        Object.entries(raw).filter(
+          ([, v]) => v !== null && v !== undefined && v !== ""
+        )
+      );
+      return {
+        ...MOCK_GLOBAL_INFO,
+        ...nonNullData,
+      } as GlobalDataData;
     }
 
     return MOCK_GLOBAL_INFO as GlobalDataData;
