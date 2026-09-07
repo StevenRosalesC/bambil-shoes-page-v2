@@ -1,18 +1,28 @@
+import type { Metadata } from "next";
 import { Suspense } from "react";
 import Navbar from "@/components/Navbar";
 import CatalogGrid from "@/components/CatalogGrid";
+import { getProductsAction } from "@/actions/products";
+import { getCategoriesAction } from "@/actions/categories";
+
+export const metadata: Metadata = {
+  title: "Catálogo de Calzado Artesanal",
+  description:
+    "Descubre la colección completa de calzado artesanal para dama y caballero de Bambil Shoes. Diseños exclusivos hechos a mano en Colonche, Santa Elena.",
+};
 
 function CatalogSkeleton() {
   return (
-    <div className="flex flex-col lg:flex-row gap-8 lg:gap-12 animate-pulse">
-      <div className="hidden lg:block w-64 shrink-0 space-y-8">
-        <div className="h-10 bg-[#f6f3ec] rounded w-full"></div>
-        <div className="h-32 bg-[#f6f3ec] rounded w-full"></div>
-        <div className="h-32 bg-[#f6f3ec] rounded w-full"></div>
-        <div className="h-20 bg-[#f6f3ec] rounded w-full"></div>
+    <div className="space-y-8 animate-pulse mt-8">
+      {/* Top Bar Skeleton */}
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 pb-4 border-b border-[#d2c4bc]/20">
+        <div className="h-10 bg-[#e5e2db] rounded-lg w-32"></div>
+        <div className="h-10 bg-[#e5e2db] rounded-lg w-48"></div>
       </div>
-      <div className="flex-grow grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-        {[1, 2, 3, 4, 5, 6].map((i) => (
+
+      {/* Grid Skeleton */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+        {[1, 2, 3, 4, 5, 6, 7, 8].map((i) => (
           <div
             key={i}
             className="bg-[#f6f3ec] rounded-lg overflow-hidden h-[420px] flex flex-col justify-between p-4"
@@ -30,7 +40,12 @@ function CatalogSkeleton() {
   );
 }
 
-export default function CatalogPage() {
+export default async function CatalogPage() {
+  const [productsRes, categoriesRes] = await Promise.all([
+    getProductsAction({ limit: 100 }),
+    getCategoriesAction(),
+  ]);
+
   return (
     <div className="flex flex-col min-h-screen bg-[#fcf9f2] antialiased">
       {/* Navigation Bar */}
@@ -50,7 +65,10 @@ export default function CatalogPage() {
 
         {/* Catalog Filtering Grid */}
         <Suspense fallback={<CatalogSkeleton />}>
-          <CatalogGrid />
+          <CatalogGrid
+            initialProducts={productsRes?.data || []}
+            initialCategories={categoriesRes?.data || []}
+          />
         </Suspense>
       </main>
     </div>

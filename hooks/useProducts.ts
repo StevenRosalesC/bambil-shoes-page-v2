@@ -1,11 +1,15 @@
 import { useQuery } from "@tanstack/react-query";
 import { productsService } from "@/services/products";
-import { QueryParams } from "@/types";
+import { QueryParams, PaginatedResponse, Product } from "@/types";
 
-export function useProducts(params: QueryParams = {}) {
+export function useProducts(
+  params: QueryParams = {},
+  options?: { initialData?: PaginatedResponse<Product> }
+) {
   return useQuery({
     queryKey: ["products", params],
     queryFn: () => productsService.getAll(params),
+    ...options,
   });
 }
 

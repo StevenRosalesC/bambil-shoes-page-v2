@@ -88,24 +88,30 @@ export default function FeaturedProducts({ products = [] }: FeaturedProductsProp
                   />
                   
                   {/* Badges */}
-                  <div className="absolute top-4 left-4 flex flex-col gap-1.5 z-10">
-                    {product.isNew && (
-                      <span className="bg-[#ba1a1a] text-white font-sans text-[10px] tracking-wider font-bold uppercase px-2.5 py-0.5 rounded-sm shadow-sm w-fit">
-                        Nuevo
-                      </span>
+                  <div className="absolute top-3 left-3 flex flex-col items-start gap-1.5 z-10 max-w-[calc(100%-24px)] pointer-events-none">
+                    {/* Status Badges */}
+                    {(product.isNew || product.featured) && (
+                      <div className="flex flex-wrap items-center gap-1.5">
+                        {product.isNew && (
+                          <span className="bg-[#ba1a1a] text-white font-sans text-[10px] tracking-wider font-bold uppercase px-2.5 py-0.5 rounded-sm shadow-sm w-fit">
+                            Nuevo
+                          </span>
+                        )}
+                        {product.featured && (
+                          <span className="bg-[#fcf9f2]/95 backdrop-blur-xs text-[#725a39] border border-[#d2c4bc]/60 font-sans text-[10px] font-bold uppercase px-2.5 py-0.5 rounded-sm shadow-xs w-fit">
+                            Destacado
+                          </span>
+                        )}
+                      </div>
                     )}
+
+                    {/* Material Tag */}
                     {product.material && (
-                      <span className="bg-[#26170c] text-white font-sans text-[10px] tracking-wider font-semibold uppercase px-3 py-1 rounded-sm shadow-sm w-fit">
+                      <span className="bg-[#26170c]/90 text-white font-sans text-[10px] tracking-wider font-semibold uppercase px-2.5 py-0.5 rounded-sm shadow-sm w-fit line-clamp-1 max-w-full">
                         {product.material}
                       </span>
                     )}
                   </div>
-
-                  {product.featured && (
-                    <span className="absolute top-4 right-4 bg-[#fcf9f2]/95 backdrop-blur-xs text-[#725a39] border border-[#d2c4bc]/60 font-sans text-[10px] font-bold uppercase px-2.5 py-0.5 rounded-sm shadow-xs z-10">
-                      Destacado
-                    </span>
-                  )}
                 </div>
 
                 {/* Details */}
