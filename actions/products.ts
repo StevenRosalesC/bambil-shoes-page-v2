@@ -134,6 +134,8 @@ const MOCK_PRODUCTS: Product[] = [
     description:
       "Sandalia artesanal elaborada en cuero natural de grano completo. Cuenta con hebillas regulables de latón y una suela duradera de caucho vulcanizado, uniendo ligereza y sofisticación.",
     material: "Cuero Natural",
+    careInstructions:
+      "Limpiar con paño seco. Aplicar periódicamente crema humectante o cera neutra especial para cuero natural para preservar su elasticidad.",
     price: 45.99,
     categoryId: "cat-dama",
     featured: true,
@@ -154,6 +156,8 @@ const MOCK_PRODUCTS: Product[] = [
     description:
       "Zapato estilo mocasín clásico confeccionado con el cuero más suave seleccionado a mano. Presenta costuras visibles de gran calibre hechas a mano que rinden homenaje a la zapatería tradicional.",
     material: "Cuero de Grano Completo",
+    careInstructions:
+      "Limpiar suavemente con paño de microfibra seco. No aplicar alcohol ni solventes abrasivos. Guardar en funda para evitar marcas y rayaduras.",
     price: 65.0,
     categoryId: "cat-dama",
     featured: true,
@@ -174,6 +178,8 @@ const MOCK_PRODUCTS: Product[] = [
     description:
       "Bota de cuero vacuno rústico de alta resistencia, tratada con aceites naturales para una protección óptima contra la intemperie. Perfecta para caminatas exigentes o un estilo urbano aventurero.",
     material: "Cuero Vacuno Rústico",
+    careInstructions:
+      "Limpiar con un paño suave ligeramente húmedo. Evitar la exposición directa y prolongada al sol o calor. Guardar en lugar seco y ventilado.",
     price: 89.99,
     categoryId: "cat-caballeros",
     featured: false,
@@ -194,6 +200,8 @@ const MOCK_PRODUCTS: Product[] = [
     description:
       "Calzado de vestir formal en cuero genuino lustrado con acabado espejo. Su horma clásica y forro interno de piel suave garantizan comodidad excepcional y una elegancia insuperable.",
     material: "Cuero Genuino Lustrado",
+    careInstructions:
+      "Limpiar con paño seco. Aplicar periódicamente crema humectante o cera neutra especial para cuero natural para preservar su elasticidad.",
     price: 110.0,
     categoryId: "cat-caballeros",
     featured: true,
