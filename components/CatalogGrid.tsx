@@ -2,6 +2,7 @@
 
 import React, { useState, useMemo, useEffect, useRef, useCallback } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { useSearchParams, usePathname } from "next/navigation";
 import { useProducts } from "@/hooks/useProducts";
 import { useCategories } from "@/hooks/useCategories";
@@ -363,8 +364,12 @@ export default function CatalogGrid({
 
   const handleAddToCart = (product: Product, size: string) => {
     if (!size) return;
-    const variant = product.variants?.find((v) => v.size === size);
-    if (!variant) return;
+    const variant = product.variants?.find((v) => v.size === size) || {
+      id: `${product.id}-${size}`,
+      size,
+      stock: 0,
+      productId: product.id,
+    };
     addItem(product, variant, 1);
     setCartOpen(true);
   };
@@ -551,12 +556,9 @@ export default function CatalogGrid({
                 className="bg-[#f6f3ec] rounded-lg overflow-hidden border border-transparent hover:border-[#d2c4bc]/40 transition-all duration-300 flex flex-col group shadow-[0_8px_30px_rgba(112,90,76,0.02)] hover:shadow-[0_8px_30px_rgba(112,90,76,0.1)]"
               >
                 {/* Product Image */}
-                <div
-                  className="relative aspect-[4/5] w-full overflow-hidden bg-[#e5e2db] cursor-pointer"
-                  onClick={() => {
-                    setSelectedProduct(product);
-                    setSelectedSize(defaultSize);
-                  }}
+                <Link
+                  href={`/product/${product.slug || product.documentId || product.id}`}
+                  className="relative aspect-[4/5] w-full overflow-hidden bg-[#e5e2db] block"
                 >
                   <Image
                     src={product.images[0]}
@@ -591,21 +593,18 @@ export default function CatalogGrid({
                       </span>
                     )}
                   </div>
-                </div>
+                </Link>
 
                 {/* Product Details */}
                 <div className="p-5 flex-grow flex flex-col justify-between">
                   <div>
                     <div className="flex justify-between items-start mb-2 gap-2">
-                      <h2
-                        className="font-display text-base font-semibold text-[#26170c] hover:text-[#725a39] transition-colors cursor-pointer line-clamp-1"
-                        onClick={() => {
-                          setSelectedProduct(product);
-                          setSelectedSize(defaultSize);
-                        }}
+                      <Link
+                        href={`/product/${product.slug || product.documentId || product.id}`}
+                        className="font-display text-base font-semibold text-[#26170c] hover:text-[#725a39] transition-colors line-clamp-1"
                       >
                         {product.name}
-                      </h2>
+                      </Link>
                       <span className="font-sans text-sm font-bold text-[#26170c] shrink-0">
                         ${product.price.toFixed(2)}
                       </span>
@@ -940,12 +939,9 @@ export default function CatalogGrid({
                     {selectedProduct.variants?.map((v) => (
                       <button
                         key={v.id}
-                        disabled={v.stock === 0}
                         onClick={() => setSelectedSize(v.size)}
-                        className={`min-w-[40px] h-10 px-2 flex items-center justify-center rounded font-sans text-xs font-semibold transition-all border relative ${
-                          v.stock === 0
-                            ? "border-transparent bg-gray-100 text-gray-400 cursor-not-allowed"
-                            : selectedSize === v.size
+                        className={`min-w-[40px] h-10 px-2 flex items-center justify-center rounded font-sans text-xs font-semibold transition-all border relative cursor-pointer ${
+                          selectedSize === v.size
                             ? "bg-[#26170c] border-[#26170c] text-white shadow-sm"
                             : "bg-white border-[#d2c4bc] text-[#26170c] hover:border-[#26170c]"
                         }`}

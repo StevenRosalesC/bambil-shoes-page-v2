@@ -29,8 +29,12 @@ export default function FeaturedProducts({ products = [] }: FeaturedProductsProp
 
   const handleAddToCart = (product: Product, size: string) => {
     if (!size) return;
-    const variant = product.variants?.find((v) => v.size === size);
-    if (!variant) return;
+    const variant = product.variants?.find((v) => v.size === size) || {
+      id: `${product.id}-${size}`,
+      size,
+      stock: 0,
+      productId: product.id,
+    };
     addItem(product, variant, 1);
     setCartOpen(true);
   };
@@ -72,12 +76,9 @@ export default function FeaturedProducts({ products = [] }: FeaturedProductsProp
                 className="bg-[#f6f3ec] rounded-lg overflow-hidden shadow-[0_8px_30px_rgba(112,90,76,0.04)] hover:shadow-[0_8px_30px_rgba(112,90,76,0.12)] border border-transparent hover:border-[#d2c4bc]/40 transition-all duration-300 flex flex-col group"
               >
                 {/* Product Image */}
-                <div
-                  className="relative aspect-[4/5] w-full overflow-hidden bg-[#e5e2db] cursor-pointer"
-                  onClick={() => {
-                    setSelectedProduct(product);
-                    setSelectedSize(defaultSize);
-                  }}
+                <Link
+                  href={`/product/${product.slug || product.documentId || product.id}`}
+                  className="relative aspect-[4/5] w-full overflow-hidden bg-[#e5e2db] block"
                 >
                   <Image
                     src={productImage}
@@ -112,21 +113,18 @@ export default function FeaturedProducts({ products = [] }: FeaturedProductsProp
                       </span>
                     )}
                   </div>
-                </div>
+                </Link>
 
                 {/* Details */}
                 <div className="p-5 flex-1 flex flex-col justify-between">
                   <div>
                     <div className="flex justify-between items-start mb-2">
-                      <h3
-                        className="font-display text-lg font-semibold text-[#26170c] hover:text-[#725a39] transition-colors cursor-pointer"
-                        onClick={() => {
-                          setSelectedProduct(product);
-                          setSelectedSize(defaultSize);
-                        }}
+                      <Link
+                        href={`/product/${product.slug || product.documentId || product.id}`}
+                        className="font-display text-lg font-semibold text-[#26170c] hover:text-[#725a39] transition-colors"
                       >
                         {product.name}
-                      </h3>
+                      </Link>
                       <span className="font-sans text-base font-bold text-[#26170c]">
                         ${product.price.toFixed(2)}
                       </span>
@@ -247,12 +245,9 @@ export default function FeaturedProducts({ products = [] }: FeaturedProductsProp
                         {selectedProduct.variants.map((v) => (
                           <button
                             key={v.id || v.size}
-                            disabled={v.stock === 0}
                             onClick={() => setSelectedSize(v.size)}
                             className={`min-w-[40px] h-10 px-2 flex items-center justify-center rounded font-sans text-xs font-semibold transition-all border relative cursor-pointer ${
-                              v.stock === 0
-                                ? "border-transparent bg-gray-100 text-gray-400 cursor-not-allowed"
-                                : selectedSize === v.size
+                              selectedSize === v.size
                                 ? "bg-[#26170c] border-[#26170c] text-white shadow-sm"
                                 : "bg-white border-[#d2c4bc] text-[#26170c] hover:border-[#26170c]"
                             }`}
