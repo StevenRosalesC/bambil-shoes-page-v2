@@ -1,10 +1,14 @@
+"use client";
+
 import React from "react";
 import Image from "next/image";
 import Link from "next/link";
 import type { SocialPostData } from "@/types/SocialPost";
+import { useGlobalInfo } from "@/providers/global-info-provider";
 
 export interface InstagramFeedProps {
   items?: SocialPostData[];
+  instagramUrl?: string;
 }
 
 const resolveImageUrl = (url?: string | null): string => {
@@ -64,8 +68,13 @@ const DEFAULT_POSTS: SocialPostData[] = [
   },
 ];
 
-export default function InstagramFeed({ items }: InstagramFeedProps = {}) {
+export default function InstagramFeed({ items, instagramUrl }: InstagramFeedProps = {}) {
+  const { globalInfo } = useGlobalInfo();
   const feedItems = items && items.length > 0 ? items : DEFAULT_POSTS;
+  const targetInstagramUrl =
+    instagramUrl ||
+    globalInfo?.instagramUrl ||
+    "https://www.instagram.com/bambil_shoes_oficial";
 
   return (
     <section className="py-24 px-4 md:px-10 bg-[#f6f3ec]" id="instagram">
@@ -121,7 +130,7 @@ export default function InstagramFeed({ items }: InstagramFeedProps = {}) {
         <div className="text-center mt-12">
           <Link
             className="inline-flex items-center gap-2 font-sans text-xs md:text-sm font-semibold text-[#26170c] border-b border-[#26170c] pb-1 hover:text-[#725a39] hover:border-[#725a39] transition-colors"
-            href={process.env.NEXT_PUBLIC_ENTERPRISE_INSTAGRAM || "#"}
+            href={targetInstagramUrl}
             target="_blank"
           >
             Síguenos en @BambilShoes{" "}

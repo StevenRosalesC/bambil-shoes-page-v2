@@ -98,22 +98,22 @@ export default async function RootLayout({
         <QueryProvider>
           <GlobalInfoProvider initialData={globalInfo}>
             {children}
+            {/* Footer */}
+            <Footer
+              storeAddress={globalInfo?.address}
+              storeHours={globalInfo?.workingHours}
+              facebookUrl={globalInfo?.facebookUrl}
+              instagramUrl={globalInfo?.instagramUrl}
+              storeName={globalInfo?.storeName}
+              storeLogoUrl={globalInfo?.favicon?.url || globalInfo?.logo?.url}
+              mapUrl={globalInfo?.googleMapsUrl}
+            />
+
+            {/* Global Interactive Layers */}
+            <WhatsAppFAB />
+            <CartDrawer />
           </GlobalInfoProvider>
         </QueryProvider>
-        {/* Footer */}
-        <Footer
-          storeAddress={globalInfo?.address}
-          storeHours={globalInfo?.workingHours}
-          facebookUrl={globalInfo?.facebookUrl}
-          instagramUrl={globalInfo?.instagramUrl}
-          storeName={globalInfo?.storeName}
-          storeLogoUrl={globalInfo?.favicon.url}
-          mapUrl={globalInfo?.googleMapsUrl}
-          />
-
-        {/* Global Interactive Layers */}
-        <WhatsAppFAB />
-        <CartDrawer />
       </body>
     </html>
   );

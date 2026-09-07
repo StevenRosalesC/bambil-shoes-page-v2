@@ -4,10 +4,12 @@ import React, { useSyncExternalStore } from "react";
 import Image from "next/image";
 import { useCartStore } from "@/store/useCartStore";
 import { useUIStore } from "@/store/useUIStore";
+import { useGlobalInfo } from "@/providers/global-info-provider";
 
 export default function CartDrawer() {
   const { isCartOpen, setCartOpen } = useUIStore();
   const { items, removeItem, updateQuantity, getTotalPrice, clearCart } = useCartStore();
+  const { globalInfo } = useGlobalInfo();
   const mounted = useSyncExternalStore(
     () => () => {},
     () => true,
@@ -157,12 +159,17 @@ export default function CartDrawer() {
                           ).toFixed(2)}`
                       )
                       .join("\n");
+                    const storeName = globalInfo?.storeName || "Bambil Shoes";
                     const text = encodeURIComponent(
-                      `¡Hola Bambil Shoes! Quisiera realizar un pedido:\n\n${orderSummary}\n\n*Total: $${getTotalPrice().toFixed(
+                      `¡Hola ${storeName}! Quisiera realizar un pedido:\n\n${orderSummary}\n\n*Total: $${getTotalPrice().toFixed(
                         2
                       )}*`
                     );
-                    window.open(`https://wa.me/573009998877?text=${text}`, "_blank");
+                    const rawPhoneNumber =
+                      globalInfo?.whatsappNumber ||
+                      "593993833765";
+                    const phoneNumber = rawPhoneNumber.replace(/\D/g, "");
+                    window.open(`https://wa.me/${phoneNumber}?text=${text}`, "_blank");
                   }}
                   className="w-full bg-[#26170c] text-white font-sans text-sm font-semibold py-4 rounded hover:bg-[#3d2b1f] transition-all duration-300 shadow-md flex justify-center items-center gap-2"
                 >
