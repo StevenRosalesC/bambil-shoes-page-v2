@@ -547,7 +547,7 @@ export default function CatalogGrid({
           </button>
         </div>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-6">
           {filteredProducts.map((product) => {
             const defaultSize = product.variants?.[0]?.size || "";
             return (
@@ -558,28 +558,28 @@ export default function CatalogGrid({
                 {/* Product Image */}
                 <Link
                   href={`/product/${product.slug || product.documentId || product.id}`}
-                  className="relative aspect-[4/5] w-full overflow-hidden bg-[#e5e2db] block"
+                  className="relative aspect-[3/4] sm:aspect-[4/5] w-full overflow-hidden bg-[#e5e2db] block"
                 >
                   <Image
                     src={product.images[0]}
                     alt={product.name}
                     fill
-                    sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
+                    sizes="(max-width: 640px) 50vw, (max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
                     className="object-cover object-center group-hover:scale-105 transition-transform duration-700"
                   />
 
                   {/* Badges */}
-                  <div className="absolute top-3 left-3 flex flex-col items-start gap-1.5 z-10 max-w-[calc(100%-24px)] pointer-events-none">
+                  <div className="absolute top-2 left-2 sm:top-3 sm:left-3 flex flex-col items-start gap-1 z-10 max-w-[calc(100%-16px)] pointer-events-none">
                     {/* Status Badges */}
                     {(product.isNew || product.featured) && (
-                      <div className="flex flex-wrap items-center gap-1.5">
+                      <div className="flex flex-wrap items-center gap-1">
                         {product.isNew && (
-                          <span className="bg-[#ba1a1a] text-white font-sans text-[10px] tracking-wider font-bold uppercase px-2.5 py-0.5 rounded-sm shadow-sm w-fit">
+                          <span className="bg-[#ba1a1a] text-white font-sans text-[9px] sm:text-[10px] tracking-wider font-bold uppercase px-1.5 sm:px-2.5 py-0.5 rounded-sm shadow-sm w-fit">
                             Nuevo
                           </span>
                         )}
                         {product.featured && (
-                          <span className="bg-[#fcf9f2]/95 backdrop-blur-xs text-[#725a39] border border-[#d2c4bc]/60 font-sans text-[10px] font-bold uppercase px-2.5 py-0.5 rounded-sm shadow-xs w-fit">
+                          <span className="bg-[#fcf9f2]/95 backdrop-blur-xs text-[#725a39] border border-[#d2c4bc]/60 font-sans text-[9px] sm:text-[10px] font-bold uppercase px-1.5 sm:px-2.5 py-0.5 rounded-sm shadow-xs w-fit">
                             Destacado
                           </span>
                         )}
@@ -588,7 +588,7 @@ export default function CatalogGrid({
 
                     {/* Material Tag */}
                     {product.material && (
-                      <span className="bg-[#26170c]/90 text-white font-sans text-[10px] tracking-wider font-semibold uppercase px-2.5 py-0.5 rounded-sm shadow-sm w-fit line-clamp-1 max-w-full">
+                      <span className="bg-[#26170c]/90 text-white font-sans text-[9px] sm:text-[10px] tracking-wider font-semibold uppercase px-1.5 sm:px-2.5 py-0.5 rounded-sm shadow-sm w-fit line-clamp-1 max-w-full hidden xs:inline-block sm:inline-block">
                         {product.material}
                       </span>
                     )}
@@ -596,25 +596,25 @@ export default function CatalogGrid({
                 </Link>
 
                 {/* Product Details */}
-                <div className="p-5 flex-grow flex flex-col justify-between">
+                <div className="p-3 sm:p-5 flex-grow flex flex-col justify-between">
                   <div>
-                    <div className="flex justify-between items-start mb-2 gap-2">
+                    <div className="flex flex-col sm:flex-row justify-between items-start mb-1 sm:mb-2 gap-0.5 sm:gap-2">
                       <Link
                         href={`/product/${product.slug || product.documentId || product.id}`}
-                        className="font-display text-base font-semibold text-[#26170c] hover:text-[#725a39] transition-colors line-clamp-1"
+                        className="font-display text-sm sm:text-base font-semibold text-[#26170c] hover:text-[#725a39] transition-colors line-clamp-1"
                       >
                         {product.name}
                       </Link>
-                      <span className="font-sans text-sm font-bold text-[#26170c] shrink-0">
+                      <span className="font-sans text-xs sm:text-sm font-bold text-[#26170c] shrink-0">
                         ${product.price.toFixed(2)}
                       </span>
                     </div>
-                    <p className="font-sans text-xs text-[#4f453f] line-clamp-2 leading-relaxed mb-4">
+                    <p className="font-sans text-xs text-[#4f453f] line-clamp-2 leading-relaxed mb-3 sm:mb-4 hidden sm:block">
                       {product.description}
                     </p>
                   </div>
 
-                  <div>
+                  <div className="mt-1 sm:mt-0">
                     <button
                       type="button"
                       onClick={() => {
@@ -625,10 +625,13 @@ export default function CatalogGrid({
                           setSelectedSize("");
                         }
                       }}
-                      className="w-full bg-[#26170c] hover:bg-[#3d2b1f] text-white font-sans text-xs font-semibold py-2.5 rounded transition-all flex items-center justify-center gap-2 shadow-sm cursor-pointer"
+                      className="w-full bg-[#26170c] hover:bg-[#3d2b1f] active:scale-[0.98] text-white font-sans text-[11px] sm:text-xs font-semibold py-2 sm:py-2.5 px-2 rounded transition-all flex items-center justify-center gap-1.5 shadow-sm cursor-pointer"
                     >
-                      <span className="material-symbols-outlined text-base">shopping_cart</span>
-                      {defaultSize ? `Añadir Talla ${defaultSize}` : "Añadir al Carrito"}
+                      <span className="material-symbols-outlined text-sm sm:text-base">shopping_cart</span>
+                      <span className="truncate">
+                        <span className="inline sm:hidden">{defaultSize ? `Talla ${defaultSize}` : "Añadir"}</span>
+                        <span className="hidden sm:inline">{defaultSize ? `Añadir Talla ${defaultSize}` : "Añadir al Carrito"}</span>
+                      </span>
                     </button>
                     
                     <button
@@ -637,9 +640,10 @@ export default function CatalogGrid({
                         setSelectedProduct(product);
                         setSelectedSize(defaultSize);
                       }}
-                      className="w-full text-center text-xs font-sans font-semibold text-[#725a39] mt-2.5 hover:underline cursor-pointer"
+                      className="w-full text-center text-[11px] sm:text-xs font-sans font-semibold text-[#725a39] mt-1.5 sm:mt-2.5 hover:underline cursor-pointer truncate py-0.5 sm:py-0"
                     >
-                      Ver Detalles y Tallas
+                      <span className="inline sm:hidden">Detalles</span>
+                      <span className="hidden sm:inline">Ver Detalles y Tallas</span>
                     </button>
                   </div>
                 </div>

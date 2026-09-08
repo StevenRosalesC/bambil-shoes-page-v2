@@ -21,18 +21,18 @@ function CatalogSkeleton() {
       </div>
 
       {/* Grid Skeleton */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-6">
         {[1, 2, 3, 4, 5, 6, 7, 8].map((i) => (
           <div
             key={i}
-            className="bg-[#f6f3ec] rounded-lg overflow-hidden h-[420px] flex flex-col justify-between p-4"
+            className="bg-[#f6f3ec] rounded-lg overflow-hidden h-[340px] sm:h-[420px] flex flex-col justify-between p-3 sm:p-4"
           >
-            <div className="h-[250px] bg-[#e5e2db] rounded w-full mb-4"></div>
+            <div className="aspect-[3/4] sm:aspect-[4/5] bg-[#e5e2db] rounded w-full mb-3 sm:mb-4"></div>
             <div className="space-y-2">
-              <div className="h-5 bg-[#e5e2db] rounded w-3/4"></div>
-              <div className="h-4 bg-[#e5e2db] rounded w-1/2"></div>
+              <div className="h-4 sm:h-5 bg-[#e5e2db] rounded w-3/4"></div>
+              <div className="h-3 sm:h-4 bg-[#e5e2db] rounded w-1/2"></div>
             </div>
-            <div className="h-10 bg-[#e5e2db] rounded w-full mt-4"></div>
+            <div className="h-8 sm:h-10 bg-[#e5e2db] rounded w-full mt-3 sm:mt-4"></div>
           </div>
         ))}
       </div>

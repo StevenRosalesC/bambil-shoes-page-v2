@@ -577,7 +577,7 @@ export default function ProductDetail({
             </Link>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6">
             {relatedProducts.slice(0, 4).map((rel) => {
               const relImage = rel.images && rel.images.length > 0 ? rel.images[0] : "/images/hero-about1.jpeg";
               return (
@@ -587,42 +587,42 @@ export default function ProductDetail({
                 >
                   <Link
                     href={`/product/${rel.slug || rel.documentId || rel.id}`}
-                    className="relative aspect-[4/5] w-full overflow-hidden bg-[#e5e2db]"
+                    className="relative aspect-[3/4] sm:aspect-[4/5] w-full overflow-hidden bg-[#e5e2db]"
                   >
                     <Image
                       src={relImage}
                       alt={rel.name}
                       fill
-                      sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+                      sizes="(max-width: 640px) 50vw, (max-width: 1024px) 50vw, 25vw"
                       className="object-cover object-center group-hover:scale-105 transition-transform duration-500"
                     />
                     {rel.featured && (
-                      <span className="absolute top-3 left-3 bg-[#26170c]/90 text-[#D2B48C] font-sans text-[10px] font-bold uppercase px-2 py-0.5 rounded-sm shadow-xs">
+                      <span className="absolute top-2 left-2 sm:top-3 sm:left-3 bg-[#26170c]/90 text-[#D2B48C] font-sans text-[9px] sm:text-[10px] font-bold uppercase px-1.5 sm:px-2 py-0.5 rounded-sm shadow-xs">
                         Destacado
                       </span>
                     )}
                   </Link>
 
-                  <div className="p-4 flex-1 flex flex-col justify-between">
+                  <div className="p-3 sm:p-4 flex-1 flex flex-col justify-between">
                     <div>
                       <Link
                         href={`/product/${rel.slug || rel.documentId || rel.id}`}
-                        className="font-display text-base font-semibold text-[#26170c] hover:text-[#725a39] transition-colors line-clamp-1"
+                        className="font-display text-sm sm:text-base font-semibold text-[#26170c] hover:text-[#725a39] transition-colors line-clamp-1"
                       >
                         {rel.name}
                       </Link>
-                      <p className="font-sans text-xs text-[#705a4c] line-clamp-1 mt-0.5">
+                      <p className="font-sans text-[11px] sm:text-xs text-[#705a4c] line-clamp-1 mt-0.5">
                         {rel.material || "Cuero Genuino"}
                       </p>
                     </div>
 
-                    <div className="mt-4 pt-3 border-t border-[#d2c4bc]/30 flex items-center justify-between">
-                      <span className="font-sans text-base font-bold text-[#26170c]">
+                    <div className="mt-3 sm:mt-4 pt-2.5 sm:pt-3 border-t border-[#d2c4bc]/30 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                      <span className="font-sans text-xs sm:text-base font-bold text-[#26170c]">
                         ${rel.price.toFixed(2)}
                       </span>
                       <Link
                         href={`/product/${rel.slug || rel.documentId || rel.id}`}
-                        className="bg-white hover:bg-[#26170c] hover:text-white text-[#26170c] border border-[#d2c4bc] text-xs font-sans font-bold px-3 py-1.5 rounded-lg transition-colors shadow-xs"
+                        className="bg-white hover:bg-[#26170c] hover:text-white text-[#26170c] border border-[#d2c4bc] text-[11px] sm:text-xs font-sans font-bold px-2 sm:px-3 py-1 sm:py-1.5 rounded-lg transition-colors shadow-xs text-center"
                       >
                         Ver modelo
                       </Link>
