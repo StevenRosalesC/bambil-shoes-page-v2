@@ -115,9 +115,6 @@ export default function Hero({
             <span className="w-2 h-2 rounded-full bg-[#725a39]" aria-hidden="true" />
             <span>{badge}</span>
           </div>
-          <span className="text-[#26170c] font-display text-sm tracking-normal normal-case font-bold hidden sm:inline">
-            Bambil Shoes By Dario
-          </span>
           <span className="flex items-center gap-1.5 text-[#705a4c] font-medium tracking-wider">
             <span className="w-1.5 h-1.5 rounded-full bg-emerald-600 animate-pulse" aria-hidden="true" />
             Taller Activo en Colonche
@@ -261,4 +258,3 @@ export default function Hero({
     </section>
   );
 }
-
