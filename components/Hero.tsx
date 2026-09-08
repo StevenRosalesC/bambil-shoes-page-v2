@@ -104,120 +104,157 @@ export default function Hero({
     "Confección manual de cada par en Santa Elena";
 
   return (
-    <section className="relative w-full bg-[#fcf9f2] overflow-hidden border-b border-[#d2c4bc]/30">
-      {/* Subtle decorative background pattern */}
-      <div className="absolute inset-0 bg-[radial-gradient(#d2c4bc_1px,transparent_1px)] [background-size:24px_24px] opacity-25 pointer-events-none"></div>
+    <section className="relative w-full bg-[#fcf9f2] overflow-hidden border-b border-[#d2c4bc]/40 pt-6 pb-20 md:pb-28">
+      {/* Subtle fine atelier dot grid texture */}
+      <div className="absolute inset-0 bg-[radial-gradient(#d2c4bc_1px,transparent_1px)] [background-size:32px_32px] opacity-25 pointer-events-none" />
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-10 py-12 md:py-16 lg:py-24 relative z-10">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 xl:gap-16 items-center">
-          {/* Left Column: Brand Story & CTA */}
-          <div className="lg:col-span-6 xl:col-span-6 flex flex-col justify-center items-center lg:items-start text-center lg:text-left">
-            {/* Handcrafted Badge */}
-            {badge && (
-              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#f0eee7] border border-[#d2c4bc]/60 mb-6 shadow-xs w-fit">
-                <span className="w-2 h-2 rounded-full bg-[#725a39] animate-pulse"></span>
-                <span className="font-sans text-xs font-semibold text-[#725a39] uppercase tracking-widest">
-                  {badge}
-                </span>
-              </div>
-            )}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-10 relative z-10">
+        {/* 1. Atelier Masthead Index Ribbon */}
+        <div className="flex items-center justify-between gap-4 text-[11px] font-sans font-semibold text-[#725a39] uppercase tracking-[0.22em] pb-5 mb-10 md:mb-14 border-b border-[#d2c4bc]/50 flex-wrap">
+          <div className="flex items-center gap-2">
+            <span className="w-2 h-2 rounded-full bg-[#725a39]" aria-hidden="true" />
+            <span>{badge}</span>
+          </div>
+          <span className="text-[#26170c] font-display text-sm tracking-normal normal-case font-bold hidden sm:inline">
+            Bambil Shoes By Dario
+          </span>
+          <span className="flex items-center gap-1.5 text-[#705a4c] font-medium tracking-wider">
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-600 animate-pulse" aria-hidden="true" />
+            Taller Activo en Colonche
+          </span>
+        </div>
 
-            {/* Headline */}
-            <h1 className="font-display text-3xl sm:text-4xl md:text-5xl xl:text-6xl font-bold text-[#26170c] leading-[1.12] mb-6 tracking-tight">
-              {renderTitle(title)}
-            </h1>
+        {/* 2. Grand Magazine Display Headline */}
+        <div className="max-w-4xl mx-auto text-center mb-12 md:mb-16">
+          <h1 className="font-display text-4xl sm:text-6xl md:text-7xl lg:text-[4.8rem] font-bold text-[#26170c] leading-[1.05] tracking-tight mb-6 text-balance">
+            {renderTitle(title)}
+          </h1>
+          <p className="font-sans text-base sm:text-lg md:text-xl text-[#4f453f] leading-relaxed max-w-2xl mx-auto text-pretty font-normal">
+            {description}
+          </p>
+        </div>
 
-            {/* Description */}
-            <p className="font-sans text-base sm:text-lg text-[#4f453f] leading-relaxed mb-8 max-w-xl">
-              {description}
-            </p>
+        {/* 3. Immersive Cinematic Atelier Canvas */}
+        <div className="relative w-full rounded-2xl md:rounded-3xl overflow-hidden border border-[#d2c4bc]/70 shadow-[0_24px_60px_-15px_rgba(38,23,12,0.18)] mb-14 md:mb-18 bg-[#ebe8e1]">
+          {/* Main Visual Window (Expansive Aspect) */}
+          <div className="relative aspect-[4/3] sm:aspect-[16/9] lg:aspect-[21/9] w-full">
+            <Image
+              src={imageUrl}
+              alt={imageAlt}
+              fill
+              priority
+              sizes="(max-width: 1280px) 100vw, 1280px"
+              className="object-cover object-[center_35%]"
+            />
 
-            {/* CTA Buttons */}
-            <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 mb-10 w-full sm:w-auto">
-              <a
-                href="#colecciones"
-                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-[#26170c] hover:bg-[#3d2b1f] text-white font-sans text-sm font-semibold px-8 py-4 rounded shadow-md hover:shadow-lg transition-all duration-300 active:scale-[0.98] text-center"
-              >
-                <span>Explorar Colecciones</span>
-                <span className="material-symbols-outlined text-base">
-                  arrow_forward
-                </span>
-              </a>
-              <Link
-                href="/about"
-                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-transparent hover:bg-[#f6f3ec] border border-[#81756e] text-[#26170c] font-sans text-sm font-semibold px-8 py-4 rounded transition-all duration-300 text-center"
-              >
-                <span>Nuestra Empresa</span>
-              </Link>
+            {/* Subtle atmospheric vignette gradient overlay */}
+            <div className="absolute inset-0 bg-gradient-to-t from-[#26170c]/90 via-[#26170c]/25 to-transparent pointer-events-none" />
+
+            {/* Top overlay stamps */}
+            <div className="absolute top-4 left-4 sm:top-6 sm:left-6 flex items-center gap-2 z-20 pointer-events-none">
+              <span className="px-3.5 py-1.5 rounded-full bg-[#fcf9f2]/90 backdrop-blur-md text-[#26170c] text-[10px] font-sans font-semibold uppercase tracking-widest border border-[#d2c4bc]/60 shadow-md">
+                Pieza a Medida • Hecho a Mano
+              </span>
             </div>
 
-            {/* Trust Highlights */}
-            <div className="pt-6 border-t border-[#d2c4bc]/40 grid grid-cols-3 gap-4 max-w-lg w-full text-center lg:text-left">
-              <div>
-                <p className="font-display text-xl sm:text-2xl font-bold text-[#26170c]">
-                  100%
-                </p>
-                <p className="font-sans text-xs text-[#705a4c] uppercase tracking-wider mt-0.5">
-                  Artesanal
+            <div className="absolute top-4 right-4 sm:top-6 sm:right-6 hidden sm:flex items-center gap-2 z-20 pointer-events-none">
+              <span className="px-3.5 py-1.5 rounded-full bg-[#26170c]/85 text-[#feddb3] backdrop-blur-md text-[10px] font-sans font-semibold uppercase tracking-widest border border-[#feddb3]/30 shadow-md flex items-center gap-1.5">
+                <span className="material-symbols-outlined text-xs text-[#feddb3]" aria-hidden="true">verified</span>
+                Santa Elena • Taller N° 1
+              </span>
+            </div>
+
+            {/* Bottom floating atelier badge inside the canvas */}
+            <div className="absolute bottom-4 left-4 right-4 sm:bottom-8 sm:left-8 sm:right-8 flex flex-col sm:flex-row items-start sm:items-end justify-between gap-4 z-20">
+              <div className="max-w-md bg-[#fcf9f2]/95 backdrop-blur-md p-4 sm:p-5 rounded-xl border border-[#d2c4bc]/70 shadow-lg">
+                <div className="flex items-center gap-3 mb-1.5">
+                  <div className="w-9 h-9 rounded-lg bg-[#26170c] flex items-center justify-center text-[#feddb3] shrink-0 shadow-inner">
+                    <span className="material-symbols-outlined text-lg" aria-hidden="true">handyman</span>
+                  </div>
+                  <div>
+                    <p className="font-display text-base font-bold text-[#26170c] leading-tight">
+                      {captionTitle}
+                    </p>
+                    <p className="font-sans text-xs text-[#705a4c]">
+                      {captionSubtitle}
+                    </p>
+                  </div>
+                </div>
+                <p className="font-sans text-xs text-[#4f453f] leading-relaxed pt-2 border-t border-[#d2c4bc]/40 mt-2 text-pretty">
+                  Darío Catuto confecciona cada molde artesanalmente, garantizando equilibrio, confort y la nobleza del cuero genuino.
                 </p>
               </div>
-              <div>
-                <p className="font-display text-xl sm:text-2xl font-bold text-[#26170c]">
-                  Cuero
-                </p>
-                <p className="font-sans text-xs text-[#705a4c] uppercase tracking-wider mt-0.5">
-                  Seleccionado
-                </p>
-              </div>
-              <div>
-                <p className="font-display text-xl sm:text-2xl font-bold text-[#26170c]">
-                  A Medida
-                </p>
-                <p className="font-sans text-xs text-[#705a4c] uppercase tracking-wider mt-0.5">
-                  Confort Total
-                </p>
+
+              {/* Direct Quick Action inside Canvas for High Visual Impact */}
+              <div className="flex items-center gap-3">
+                <a
+                  href="#colecciones"
+                  className="inline-flex items-center justify-center gap-2.5 bg-[#feddb3] hover:bg-white text-[#26170c] font-sans text-xs sm:text-sm font-bold px-6 sm:px-8 py-3.5 sm:py-4 rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 active:scale-[0.98] cursor-pointer group focus:outline-none focus-visible:ring-2 focus-visible:ring-white"
+                >
+                  <span>Explorar Colecciones 2026</span>
+                  <span className="material-symbols-outlined text-sm sm:text-base transition-transform group-hover:translate-x-1" aria-hidden="true">
+                    arrow_forward
+                  </span>
+                </a>
               </div>
             </div>
           </div>
+        </div>
 
-          {/* Right Column: Workshop Photography Card */}
-          <div className="lg:col-span-6 xl:col-span-6 relative w-full max-w-xl sm:max-w-2xl lg:max-w-none mx-auto">
-            {/* Background layered accent card */}
-            <div className="absolute -inset-3 sm:-inset-4 bg-[#ebe8e1] rounded-2xl -z-10 shadow-[0_20px_40px_-15px_rgba(61,43,31,0.12)] translate-x-3 translate-y-3 sm:translate-x-4 sm:translate-y-4"></div>
-
-            <div className="relative rounded-2xl overflow-hidden shadow-2xl border border-[#d2c4bc]/40 aspect-[4/3] sm:aspect-[1280/1173] bg-[#ebe8e1] group">
-              <Image
-                src={imageUrl}
-                alt={imageAlt}
-                fill
-                priority
-                sizes="(max-width: 1024px) 100vw, 50vw"
-                className="object-cover object-center group-hover:scale-103 transition-transform duration-700"
-              />
-
-              {/* Floating artisan caption badge */}
-              {(captionTitle || captionSubtitle) && (
-                <div className="absolute bottom-3 left-3 right-3 sm:bottom-4 sm:left-4 sm:right-4 bg-white/95 backdrop-blur-md px-4 py-3 rounded-lg shadow-md border border-[#d2c4bc]/40 flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-lg bg-[#f6f3ec] flex items-center justify-center text-[#725a39] shrink-0">
-                    <span className="material-symbols-outlined text-xl">
-                      handyman
-                    </span>
-                  </div>
-                  <div>
-                    {captionTitle && (
-                      <p className="font-display text-sm font-bold text-[#26170c] leading-tight">
-                        {captionTitle}
-                      </p>
-                    )}
-                    {captionSubtitle && (
-                      <p className="font-sans text-xs text-[#4f453f]">
-                        {captionSubtitle}
-                      </p>
-                    )}
-                  </div>
-                </div>
-              )}
+        {/* 4. Atelier Ground Curation Rail (3 Narrative Columns) */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8 pt-6 border-t border-[#d2c4bc]/50 text-left">
+          {/* Column 1: Origin */}
+          <div className="bg-[#f6f3ec] p-5 sm:p-6 rounded-xl border border-[#d2c4bc]/50 shadow-xs flex flex-col justify-between">
+            <div>
+              <span className="text-[10px] font-sans font-semibold text-[#725a39] uppercase tracking-widest block mb-2">
+                01 • Origen & Oficio
+              </span>
+              <h3 className="font-display text-lg font-bold text-[#26170c] mb-2 text-balance">
+                Artesanía de Santa Elena
+              </h3>
+              <p className="font-sans text-xs sm:text-sm text-[#4f453f] leading-relaxed text-pretty">
+                Sin líneas industriales de ensamblaje. Cada zapato nace en el taller de Colonche con técnicas tradicionales de corte y costura.
+              </p>
             </div>
+          </div>
+
+          {/* Column 2: Materials */}
+          <div className="bg-[#f6f3ec] p-5 sm:p-6 rounded-xl border border-[#d2c4bc]/50 shadow-xs flex flex-col justify-between">
+            <div>
+              <span className="text-[10px] font-sans font-semibold text-[#725a39] uppercase tracking-widest block mb-2">
+                02 • Nobleza de Materiales
+              </span>
+              <h3 className="font-display text-lg font-bold text-[#26170c] mb-2 text-balance">
+                Cuero Natural & Pátina
+              </h3>
+              <p className="font-sans text-xs sm:text-sm text-[#4f453f] leading-relaxed text-pretty">
+                Seleccionamos cueros de grano completo que respiran y se adaptan a tu silueta, envejeciendo con elegancia y carácter único.
+              </p>
+            </div>
+          </div>
+
+          {/* Column 3: Customization & CTA */}
+          <div className="bg-[#26170c] text-white p-5 sm:p-6 rounded-xl border border-[#3d2b1f] shadow-md flex flex-col justify-between">
+            <div>
+              <span className="text-[10px] font-sans font-semibold text-[#feddb3] uppercase tracking-widest block mb-2">
+                03 • Confección Exclusiva
+              </span>
+              <h3 className="font-display text-lg font-bold text-[#fcf9f2] mb-2 text-balance">
+                Calzado Bajo Pedido
+              </h3>
+              <p className="font-sans text-xs sm:text-sm text-[#e5e2db]/90 leading-relaxed text-pretty mb-4">
+                ¿Buscas una talla especial o diseño a medida? Conversa directamente con el maestro artesano.
+              </p>
+            </div>
+            <Link
+              href="/about"
+              className="inline-flex items-center gap-2 text-xs font-sans font-bold text-[#feddb3] hover:text-white transition-colors group focus:outline-none focus-visible:ring-2 focus-visible:ring-[#feddb3] rounded w-fit"
+            >
+              <span>Conocer la historia de Darío</span>
+              <span className="material-symbols-outlined text-sm transition-transform group-hover:translate-x-1" aria-hidden="true">
+                arrow_forward
+              </span>
+            </Link>
           </div>
         </div>
       </div>
