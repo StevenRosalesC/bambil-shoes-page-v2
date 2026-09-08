@@ -141,9 +141,9 @@ export default async function AboutPage() {
       <Navbar />
 
       {/* Main Content */}
-      <main className="flex-grow pt-[72px]">
+      <main className="grow pt-18">
         {/* Hero Banner Section */}
-        <section className="relative w-full h-[55vh] min-h-[400px] flex items-center justify-center overflow-hidden bg-[#e5e2db]">
+        <section className="relative w-full h-[55vh] min-h-100 flex items-center justify-center overflow-hidden bg-[#e5e2db]">
           <Image
             fill
             className="absolute inset-0 w-full h-full object-cover brightness-50 mix-blend-multiply"
@@ -152,7 +152,7 @@ export default async function AboutPage() {
             priority
           />
           <div className="relative z-10 text-center px-4">
-            <span className="inline-block bg-[#D2B48C] text-[#26170c] font-sans text-xs font-bold px-4 py-1.5 rounded mb-4 tracking-widest uppercase shadow-sm">
+            <span className="inline-block bg-[#D2B48C] text-primary font-sans text-xs font-bold px-4 py-1.5 rounded mb-4 tracking-widest uppercase shadow-sm">
               Nuestra Esencia
             </span>
             <h1 className="font-display text-4xl md:text-5xl font-bold text-white mb-4">
@@ -172,10 +172,10 @@ export default async function AboutPage() {
         >
           {/* Section Header */}
           <div className="text-center max-w-3xl mx-auto mb-16">
-            <span className="inline-block bg-[#D2B48C]/30 text-[#26170c] font-sans text-xs font-bold px-4 py-1.5 rounded mb-4 tracking-widest uppercase shadow-xs">
+            <span className="inline-block bg-[#D2B48C]/30 text-primary font-sans text-xs font-bold px-4 py-1.5 rounded mb-4 tracking-widest uppercase shadow-xs">
               Nuestra Identidad
             </span>
-            <h2 className="font-display text-3xl md:text-5xl font-bold text-[#26170c] mb-4">
+            <h2 className="font-display text-3xl md:text-5xl font-bold text-primary mb-4">
               Misión, Visión y Valores
             </h2>
             <div className="w-16 h-[2px] bg-[#D2B48C] mx-auto mt-4"></div>
@@ -185,8 +185,8 @@ export default async function AboutPage() {
           <div className="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-8 lg:gap-12 items-center mb-16 md:mb-24">
             {/* Owner Image */}
             <div className="md:col-span-5 relative w-full max-w-sm md:max-w-none mx-auto">
-              <div className="absolute -inset-3 sm:-inset-4 bg-[#ebe8e1] rounded-2xl -z-10 shadow-[0_10px_30px_-5px_rgba(61,43,31,0.06)] translate-x-3 translate-y-3 sm:translate-x-4 sm:translate-y-4"></div>
-              <div className="relative rounded-xl overflow-hidden shadow-[0_10px_30px_rgba(61,43,31,0.12)] border border-[#d2c4bc]/40 aspect-[3/4] bg-[#ebe8e1]">
+              <div className="absolute -inset-3 sm:-inset-4 bg-surface-container-high rounded-2xl -z-10 shadow-[0_10px_30px_-5px_rgba(61,43,31,0.06)] translate-x-3 translate-y-3 sm:translate-x-4 sm:translate-y-4"></div>
+              <div className="relative rounded-xl overflow-hidden shadow-[0_10px_30px_rgba(61,43,31,0.12)] border border-outline-variant/40 aspect-3/4 bg-surface-container-high">
                 <Image
                   src={founderPhotoUrl}
                   alt={founderPhotoAlt}
@@ -195,7 +195,7 @@ export default async function AboutPage() {
                   className="object-cover object-center"
                   priority
                 />
-                <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-[#26170c]/85 via-[#26170c]/40 to-transparent p-4 sm:p-6 pt-10 text-white">
+                <div className="absolute inset-x-0 bottom-0 bg-linear-to-t from-primary/85 via-primary/40 to-transparent p-4 sm:p-6 pt-10 text-white">
                   <span className="inline-block bg-[#D2B48C] text-primary font-sans text-[10px] font-bold px-2.5 py-0.5 rounded tracking-wider uppercase mb-1 shadow-xs">
                     Hecho en Ecuador
                   </span>
@@ -227,7 +227,7 @@ export default async function AboutPage() {
                     <span className="text-xs font-sans font-bold text-[#D2B48C] uppercase tracking-widest block">
                       Nuestro Propósito
                     </span>
-                    <h3 className="font-display text-xl md:text-2xl lg:text-3xl text-[#26170c] font-semibold">
+                    <h3 className="font-display text-xl md:text-2xl lg:text-3xl text-primary font-semibold">
                       Misión
                     </h3>
                   </div>
@@ -254,7 +254,7 @@ export default async function AboutPage() {
                     <span className="text-xs font-sans font-bold text-[#D2B48C] uppercase tracking-widest block">
                       Nuestra Meta
                     </span>
-                    <h3 className="font-display text-xl md:text-2xl lg:text-3xl text-[#26170c] font-semibold">
+                    <h3 className="font-display text-xl md:text-2xl lg:text-3xl text-primary font-semibold">
                       Visión
                     </h3>
                   </div>
@@ -270,10 +270,10 @@ export default async function AboutPage() {
           {/* Corporate Values */}
           <div>
             <div className="text-center mb-12">
-              <span className="inline-block bg-[#D2B48C]/30 text-[#26170c] font-sans text-xs font-bold px-4 py-1.5 rounded mb-3 tracking-widest uppercase">
+              <span className="inline-block bg-[#D2B48C]/30 text-primary font-sans text-xs font-bold px-4 py-1.5 rounded mb-3 tracking-widest uppercase">
                 Pilares Fundamentales
               </span>
-              <h3 className="font-display text-2xl md:text-4xl font-semibold text-[#26170c]">
+              <h3 className="font-display text-2xl md:text-4xl font-semibold text-primary">
                 Valores Corporativos
               </h3>
             </div>
@@ -293,7 +293,7 @@ export default async function AboutPage() {
                         {val.icon}
                       </span>
                     </div>
-                    <h4 className="font-display text-lg font-semibold text-[#26170c] mb-2">
+                    <h4 className="font-display text-lg font-semibold text-primary mb-2">
                       {val.title}
                     </h4>
                     <p className="font-sans text-xs md:text-sm text-[#4f453f] leading-relaxed">
@@ -310,7 +310,7 @@ export default async function AboutPage() {
         <section className="bg-[#f6f3ec] py-24">
           <div className="max-w-7xl mx-auto px-4 md:px-10">
             <div className="text-center mb-16">
-              <h2 className="font-display text-3xl md:text-4xl text-[#26170c] mb-4 font-semibold">
+              <h2 className="font-display text-3xl md:text-4xl text-primary mb-4 font-semibold">
                 El Proceso de Manufactura
               </h2>
               <p className="font-sans text-sm md:text-base text-[#4f453f] max-w-2xl mx-auto">
@@ -343,7 +343,7 @@ export default async function AboutPage() {
                       />
                     </div>
                     <div className="p-6 md:p-8">
-                      <h3 className="font-display text-xl text-[#26170c] mb-3 font-semibold">
+                      <h3 className="font-display text-xl text-primary mb-3 font-semibold">
                         {step.title}
                       </h3>
                       <p className="font-sans text-xs md:text-sm text-[#4f453f] leading-relaxed">
@@ -361,7 +361,7 @@ export default async function AboutPage() {
         <section className="max-w-7xl mx-auto px-4 md:px-10 py-24 md:py-32">
           <div className="flex flex-col lg:flex-row gap-16 items-center">
             <div className="w-full lg:w-1/2">
-              <h2 className="font-display text-3xl md:text-4xl text-[#26170c] mb-6 font-semibold">
+              <h2 className="font-display text-3xl md:text-4xl text-primary mb-6 font-semibold">
                 Compromiso con la Calidad
               </h2>
               <p className="font-sans text-sm md:text-base text-[#4f453f] mb-8 leading-relaxed">
@@ -381,7 +381,7 @@ export default async function AboutPage() {
                       check_circle
                     </span>
                     <div>
-                      <h4 className="font-sans text-sm font-bold text-[#26170c] mb-1">
+                      <h4 className="font-sans text-sm font-bold text-primary mb-1">
                         {mat.name}
                       </h4>
                       <p className="font-sans text-xs md:text-sm text-[#4f453f] leading-relaxed">
