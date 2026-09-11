@@ -42,27 +42,6 @@
   
   --font-sans: var(--font-montserrat), sans-serif;
   --font-display: var(--font-playfair), serif;
-
-  --animate-bounce-horizontal: bounce-horizontal 1.5s infinite;
-  --animate-subtle-zoom: subtleZoom 20s ease-in-out infinite alternate;
-  
-  @keyframes bounce-horizontal {
-    0%, 100% {
-      transform: translateY(-50%) translateX(0);
-    }
-    50% {
-      transform: translateY(-50%) translateX(-6px);
-    }
-  }
-  
-  @keyframes subtleZoom {
-    0% {
-      transform: scale(1.01);
-    }
-    100% {
-      transform: scale(1.06);
-    }
-  }
 }
 
 /* Custom premium scrollbar */
@@ -80,8 +59,33 @@
   background: #705a4c;
 }
 
+/* Browser surfaces craft: themed selection, caret, focus, and typesetting */
+::selection {
+  background-color: #fbdbb0;
+  color: #26170c;
+}
+
+:focus-visible {
+  outline: 2px solid #725a39;
+  outline-offset: 2px;
+}
+
+/* Editorial typography defaults */
+h1, h2, h3, h4, h5, h6 {
+  text-wrap: balance;
+}
+
+p {
+  text-wrap: pretty;
+}
+
+a, button {
+  text-underline-offset: 3px;
+}
+
 body {
   background-color: #fcf9f2;
   color: #1c1c18;
   font-family: var(--font-montserrat), sans-serif;
+  caret-color: #725a39;
 }

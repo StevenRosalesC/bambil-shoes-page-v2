@@ -4,11 +4,27 @@ import Materials from "@/components/Materials";
 import CategoriesList from "@/components/CategoriesList";
 import FeaturedProducts from "@/components/FeaturedProducts";
 import InstagramFeed from "@/components/InstagramFeed";
-import Footer from "@/components/Footer";
-import WhatsAppFAB from "@/components/WhatsAppFAB";
-import CartDrawer from "@/components/CartDrawer";
+import { getHomePageAction } from "@/actions/home";
+import { getCategoriesAction } from "@/actions/categories";
+import { getMaterialsAction } from "@/actions/materials";
+import { getSocialPostsAction } from "@/actions/social-posts";
+import { getFeaturedProductsAction } from "@/actions/products";
 
-export default function Home() {
+export default async function Home() {
+  const [
+    homeInfo,
+    categoriesRes,
+    materials,
+    socialPosts,
+    featuredProducts,
+  ] = await Promise.all([
+    getHomePageAction(),
+    getCategoriesAction(),
+    getMaterialsAction(),
+    getSocialPostsAction(),
+    getFeaturedProductsAction(6),
+  ]);
+
   return (
     <div className="flex flex-col min-h-screen bg-[#fcf9f2] antialiased">
       {/* Navigation Bar */}
@@ -17,27 +33,20 @@ export default function Home() {
       {/* Main Sections */}
       <main className="grow pt-18">
         {/* Hero Section */}
-        <Hero />
+        <Hero data={homeInfo} />
 
         {/* Categories Vertical Slices */}
-        <CategoriesList />
+        <CategoriesList data={categoriesRes?.data} />
 
         {/* Materials Showcase */}
-        <Materials />
+        <Materials data={materials} />
 
         {/* Featured Products Showcase */}
-        <FeaturedProducts />
+        <FeaturedProducts products={featuredProducts} />
 
         {/* Instagram/Social Proof */}
-        <InstagramFeed />
+        <InstagramFeed items={socialPosts} />
       </main>
-
-      {/* Footer */}
-      <Footer />
-
-      {/* Global Interactive Layers */}
-      <WhatsAppFAB />
-      <CartDrawer />
     </div>
   );
 }

@@ -1,29 +1,46 @@
 export interface Category {
   id: string;
+  documentId?: string;
   name: string;
+  slug?: string;
+  subtitle?: string;
   description: string;
   image?: string;
+  bannerImage?: string;
+  displayOrder?: number;
   createdAt?: string;
   updatedAt?: string;
 }
 
 export interface ProductVariant {
-  id: string;
+  id?: string | number;
   size: string;
   stock: number;
-  productId: string;
+  productId?: string;
   createdAt?: string;
   updatedAt?: string;
 }
 
 export interface Product {
   id: string;
+  documentId?: string;
   name: string;
+  slug?: string;
+  sku?: string;
   description: string;
   material: string;
+  insoleMaterial?: string;
+  heelHeight?: string;
+  closureType?: string;
+  color?: string;
+  gender?: string;
+  careInstructions?: string;
   price: number;
-  categoryId: string;
+  compareAtPrice?: number | null;
+  categoryId?: string;
   images: string[];
+  featured?: boolean;
+  isNew?: boolean;
   category?: Category;
   variants?: ProductVariant[];
   createdAt?: string;

@@ -25,6 +25,7 @@ const nextConfig: NextConfig = {
         hostname: "console-bambil-shoe-minio.52min1.easypanel.host",
       }
     ],
+    unoptimized: process.env.NODE_ENV === "development",
   },
 };
 

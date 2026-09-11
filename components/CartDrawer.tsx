@@ -2,12 +2,15 @@
 
 import React, { useSyncExternalStore } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { useCartStore } from "@/store/useCartStore";
 import { useUIStore } from "@/store/useUIStore";
+import { useGlobalInfo } from "@/providers/global-info-provider";
 
 export default function CartDrawer() {
   const { isCartOpen, setCartOpen } = useUIStore();
   const { items, removeItem, updateQuantity, getTotalPrice, clearCart } = useCartStore();
+  const { globalInfo } = useGlobalInfo();
   const mounted = useSyncExternalStore(
     () => () => {},
     () => true,
@@ -81,7 +84,11 @@ export default function CartDrawer() {
                   key={`${item.product.id}-${item.variant.size}`}
                   className="flex gap-4 p-4 bg-[#f6f3ec] rounded-lg shadow-sm border border-[#d2c4bc]/30"
                 >
-                  <div className="relative w-20 h-20 shrink-0 rounded overflow-hidden bg-[#e5e2db]">
+                  <Link
+                    href={`/product/${item.product.slug || item.product.documentId || item.product.id}`}
+                    onClick={() => setCartOpen(false)}
+                    className="relative w-20 h-20 shrink-0 rounded overflow-hidden bg-[#e5e2db] block hover:opacity-90 transition-opacity"
+                  >
                     <Image
                       src={item.product.images[0]}
                       alt={item.product.name}
@@ -89,12 +96,16 @@ export default function CartDrawer() {
                       sizes="80px"
                       className="object-cover"
                     />
-                  </div>
+                  </Link>
                   <div className="flex-1 flex flex-col justify-between">
                     <div>
-                      <h4 className="font-display text-base font-semibold text-[#26170c]">
+                      <Link
+                        href={`/product/${item.product.slug || item.product.documentId || item.product.id}`}
+                        onClick={() => setCartOpen(false)}
+                        className="font-display text-base font-semibold text-[#26170c] hover:text-[#725a39] transition-colors line-clamp-1 block"
+                      >
                         {item.product.name}
-                      </h4>
+                      </Link>
                       <p className="font-sans text-xs text-[#4f453f] mt-0.5">
                         Talla: {item.variant.size} | {item.product.material}
                       </p>
@@ -157,12 +168,17 @@ export default function CartDrawer() {
                           ).toFixed(2)}`
                       )
                       .join("\n");
+                    const storeName = globalInfo?.storeName || "Bambil Shoes";
                     const text = encodeURIComponent(
-                      `¡Hola Bambil Shoes! Quisiera realizar un pedido:\n\n${orderSummary}\n\n*Total: $${getTotalPrice().toFixed(
+                      `¡Hola ${storeName}! Quisiera realizar un pedido:\n\n${orderSummary}\n\n*Total: $${getTotalPrice().toFixed(
                         2
                       )}*`
                     );
-                    window.open(`https://wa.me/573009998877?text=${text}`, "_blank");
+                    const rawPhoneNumber =
+                      globalInfo?.whatsappNumber ||
+                      "593993833765";
+                    const phoneNumber = rawPhoneNumber.replace(/\D/g, "");
+                    window.open(`https://wa.me/${phoneNumber}?text=${text}`, "_blank");
                   }}
                   className="w-full bg-[#26170c] text-white font-sans text-sm font-semibold py-4 rounded hover:bg-[#3d2b1f] transition-all duration-300 shadow-md flex justify-center items-center gap-2"
                 >
