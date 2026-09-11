@@ -1,36 +1,61 @@
 import type { Metadata } from "next";
 import Navbar from "@/components/Navbar";
 import ContactGrid from "@/components/ContactGrid";
+import { getGlobalInfoAction } from "@/actions/global";
 
 export const metadata: Metadata = {
-  title: "Contacto",
+  title: "Contacto & Atención al Cliente | Bambil Shoes By Dario",
   description:
-    "Ponte en contacto con Bambil Shoes By Dario. Visita nuestro taller artesanal en Santa Elena, comunícate por WhatsApp o envíanos tu consulta personalizada.",
+    "Ponte en contacto directo con nuestro taller artesanal en Bambil Collao, Colonche. Consultas sobre calzado a medida, tallas y pedidos por WhatsApp o formulario.",
 };
 
-export default function ContactPage() {
+const DEFAULT_STORE_NAME = "Bambil Shoes By Dario";
+const DEFAULT_STORE_ADDRESS =
+  "Comuna Bambil Collao, Parroquia Colonche · Santa Elena, Ecuador";
+
+export default async function ContactPage() {
+  const globalInfo = await getGlobalInfoAction();
+
+  const storeName = globalInfo?.storeName || DEFAULT_STORE_NAME;
+  const address = globalInfo?.address || DEFAULT_STORE_ADDRESS;
+
   return (
-    <div className="flex flex-col min-h-screen bg-[#fcf9f2] antialiased">
-      {/* Navigation */}
+    <div className="flex flex-col min-h-screen bg-background text-on-background antialiased selection:bg-[#fbdbb0] selection:text-primary">
+      {/* Navigation Bar */}
       <Navbar />
 
-      {/* Main Container */}
-      <main className="flex-grow w-full max-w-7xl mx-auto px-4 md:px-10 py-12 md:py-24 pt-[100px] md:pt-[120px]">
-        {/* Editorial Header */}
-        <header className="text-center mb-16 md:mb-20">
-          <span className="inline-block bg-[#D2B48C]/30 text-[#26170c] font-sans text-xs font-bold px-4 py-1.5 rounded mb-4 tracking-widest uppercase shadow-xs">
-            Atención Personalizada
-          </span>
-          <h1 className="font-display text-4xl md:text-5xl text-[#26170c] mb-4 font-bold">
-            Hablemos de Arte y Calzado
-          </h1>
-          <p className="font-sans text-sm md:text-base text-[#4f453f] max-w-2xl mx-auto leading-relaxed">
-            Estamos aquí para ayudarte a encontrar el par perfecto o coordinar pedidos a medida. Escríbenos directamente o visítanos en nuestro taller.
-          </p>
-        </header>
+      {/* Main Content */}
+      <main className="grow pt-16 sm:pt-20">
+        {/* Editorial Header Section */}
+        <section className="pt-8 pb-10 sm:pt-12 sm:pb-14 border-b border-outline-variant/40">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-10">
+            {/* Archival Masthead Bar */}
+            <div className="flex items-center justify-between border-b border-outline-variant/50 pb-4 mb-10 sm:mb-14 text-xs font-sans text-secondary font-medium tracking-[0.22em] uppercase">
+              <span>{storeName}</span>
+              <span className="hidden sm:inline">{address}</span>
+            </div>
 
-        {/* Contact info, form and map */}
-        <ContactGrid />
+            {/* Editorial Title & Lead */}
+            <div className="max-w-3xl mx-auto text-center">
+              <span className="inline-block bg-secondary-container/50 text-on-secondary-container font-sans text-xs font-bold px-3.5 py-1.5 rounded-xs mb-5 tracking-[0.18em] uppercase border border-secondary/20">
+                Atención Personalizada &amp; Encargos
+              </span>
+              <h1 className="font-display text-4xl sm:text-5xl lg:text-6xl font-bold text-primary tracking-tight leading-[1.1] mb-6 text-balance">
+                Hablemos de Arte y Calzado
+              </h1>
+              <p className="font-sans text-base sm:text-lg text-on-surface-variant max-w-2xl mx-auto leading-relaxed text-pretty">
+                Estamos a tu entera disposición para asesorarte en la elección de tu calzado, coordinar confecciones personalizadas a medida o recibirte en nuestro taller artesanal en Colonche.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        {/* Contact Grid & Map Container */}
+        <section className="py-12 sm:py-20">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-10">
+            <ContactGrid initialGlobalInfo={globalInfo} />
+          </div>
+        </section>
       </main>
     </div>
   );

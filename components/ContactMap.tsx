@@ -64,10 +64,10 @@ export default function ContactMap() {
           href="${mapsUrl}"
           target="_blank"
           rel="noopener noreferrer"
-          style="display: inline-flex; align-items: center; gap: 5px; font-size: 11px; font-weight: 600; color: #ffffff; background-color: #26170c; padding: 6px 12px; border-radius: 6px; text-decoration: none; transition: background-color 0.2s;"
+          style="display: inline-flex; align-items: center; gap: 5px; font-size: 12px; font-weight: 600; color: #ffffff; background-color: #26170c; padding: 6px 12px; border-radius: 6px; text-decoration: none; transition: background-color 0.2s;"
         >
           <span>Abrir en Google Maps</span>
-          <span class="material-symbols-outlined" style="font-size: 13px;">open_in_new</span>
+          <span class="material-symbols-outlined" style="font-size: 14px;">open_in_new</span>
         </a>
       </div>
     `;
@@ -82,18 +82,23 @@ export default function ContactMap() {
   }, [latitude, longitude, mapsUrl, address, storeName]);
 
   return (
-    <div className="bg-white rounded-xl border border-[#d2c4bc]/50 shadow-[0_10px_30px_-5px_rgba(61,43,31,0.06)] overflow-hidden flex flex-col">
-      {/* Header Bar */}
-      <div className="px-6 py-4 bg-[#f6f3ec] border-b border-[#d2c4bc]/40 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-        <div className="flex items-center gap-2.5">
-          <div className="w-8 h-8 rounded-lg bg-[#26170c] text-[#fcf9f2] flex items-center justify-center shrink-0">
-            <span className="material-symbols-outlined text-base">storefront</span>
+    <div className="bg-surface-container-lowest border border-outline-variant/60 rounded-xs shadow-xs overflow-hidden flex flex-col">
+      {/* Workshop Map Header Bar */}
+      <div className="px-6 sm:px-8 py-5 bg-surface-container-low border-b border-outline-variant/50 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div className="flex items-center gap-3.5">
+          <div className="w-10 h-10 rounded-xs bg-primary text-on-primary flex items-center justify-center shrink-0 shadow-xs">
+            <span className="material-symbols-outlined text-xl">storefront</span>
           </div>
           <div>
-            <h3 className="font-display text-sm font-bold text-[#26170c] leading-tight">
-              Taller Bambil Shoes
-            </h3>
-            <p className="font-sans text-xs text-[#4f453f]">
+            <div className="flex items-center gap-2">
+              <h3 className="font-display text-base font-bold text-primary leading-tight">
+                Taller Artesanal Bambil Shoes
+              </h3>
+              <span className="text-xs font-sans font-bold uppercase tracking-wider px-2 py-0.5 rounded-xs bg-secondary-container text-on-secondary-container">
+                Colonche
+              </span>
+            </div>
+            <p className="font-sans text-xs text-on-surface-variant mt-0.5">
               {address}
             </p>
           </div>
@@ -103,15 +108,15 @@ export default function ContactMap() {
           href={mapsUrl}
           target="_blank"
           rel="noopener noreferrer"
-          className="inline-flex items-center justify-center gap-1.5 text-xs font-sans font-semibold bg-[#26170c] hover:bg-[#3d2b1f] text-white px-4 py-2 rounded transition-all shadow-xs shrink-0"
+          className="inline-flex items-center justify-center gap-2 text-xs font-sans uppercase tracking-wider font-bold bg-primary hover:bg-primary-container text-on-primary px-5 py-3 rounded-xs transition-all shadow-xs shrink-0 self-start sm:self-auto"
         >
-          <span className="material-symbols-outlined text-sm">directions</span>
-          <span>Cómo llegar</span>
+          <span className="material-symbols-outlined text-base">directions</span>
+          <span>Abrir en Google Maps</span>
         </a>
       </div>
 
       {/* Leaflet Interactive Map Container */}
-      <div ref={mapContainerRef} className="w-full h-[360px] z-0" />
+      <div ref={mapContainerRef} className="w-full h-[380px] sm:h-[440px] z-0" />
     </div>
   );
 }
