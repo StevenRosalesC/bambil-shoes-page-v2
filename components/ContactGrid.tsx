@@ -36,7 +36,7 @@ export default function ContactGrid({ initialGlobalInfo }: ContactGridProps) {
 
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
-  const [subject, setSubject] = useState("Pedido a medida / Personalización");
+  const [subject, setSubject] = useState("Pedido personalizado");
   const [message, setMessage] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [status, setStatus] = useState<"idle" | "success" | "error">("idle");
@@ -355,11 +355,10 @@ export default function ContactGrid({ initialGlobalInfo }: ContactGridProps) {
                     onChange={(e) => setSubject(e.target.value)}
                     className="w-full bg-surface border border-outline-variant/80 rounded-xs px-4 py-3 text-sm text-on-surface focus:border-primary focus:outline-none transition-colors cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed"
                   >
-                    <option value="Pedido a medida / Personalización">Pedido a medida / Personalización</option>
-                    <option value="Consulta sobre catálogo y tallas">Consulta sobre catálogo y tallas</option>
-                    <option value="Visita al taller en Colonche">Visita al taller en Colonche</option>
+                    <option value="Pedido personalizado">Pedido a medida / Personalización</option>
+                    <option value="Consulta sobre producto">Consulta sobre catálogo y tallas</option>
                     <option value="Seguimiento de envío">Seguimiento de envío</option>
-                    <option value="Otra consulta">Otra consulta</option>
+                    <option value="Otro">Otra consulta o visita al taller</option>
                   </select>
                 </div>
 

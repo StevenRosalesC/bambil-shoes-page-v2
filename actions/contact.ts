@@ -15,13 +15,40 @@ export interface ContactMessageResult {
   error?: string;
 }
 
+const VALID_SUBJECTS = [
+  "Consulta sobre producto",
+  "Pedido personalizado",
+  "Seguimiento de envío",
+  "Otro",
+] as const;
+
+export type ValidSubject = (typeof VALID_SUBJECTS)[number];
+
+const SUBJECT_MAP: Record<string, ValidSubject> = {
+  "pedido a medida / personalización": "Pedido personalizado",
+  "pedido personalizado": "Pedido personalizado",
+  "consulta sobre catálogo y tallas": "Consulta sobre producto",
+  "consulta sobre producto": "Consulta sobre producto",
+  "seguimiento de envío": "Seguimiento de envío",
+  "seguimiento de envio": "Seguimiento de envío",
+  "visita al taller en colonche": "Otro",
+  "otra consulta": "Otro",
+  "otro": "Otro",
+};
+
+function normalizeSubject(input?: string): ValidSubject {
+  if (!input) return "Consulta sobre producto";
+  const clean = input.trim().toLowerCase();
+  return SUBJECT_MAP[clean] || (VALID_SUBJECTS.includes(input as ValidSubject) ? (input as ValidSubject) : "Otro");
+}
+
 export async function sendContactMessageAction(
   payload: ContactMessagePayload
 ): Promise<ContactMessageResult> {
   try {
     const trimmedName = payload.name?.trim();
     const trimmedEmail = payload.email?.trim();
-    const trimmedSubject = payload.subject?.trim() || "Consulta sobre producto";
+    const validatedSubject = normalizeSubject(payload.subject);
     const trimmedMessage = payload.message?.trim();
 
     if (!trimmedName || !trimmedEmail || !trimmedMessage) {
@@ -42,7 +69,7 @@ export async function sendContactMessageAction(
     await strapiClient.collection("contact-messages").create({
       name: trimmedName,
       email: trimmedEmail,
-      subject: trimmedSubject,
+      subject: validatedSubject,
       message: trimmedMessage,
       statusEmail: "unread",
     });
