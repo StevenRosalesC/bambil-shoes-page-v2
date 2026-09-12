@@ -71,6 +71,9 @@ export const metadata: Metadata = {
   },
 };
 
+// Revalidate global layout info every 10 minutes (600 seconds)
+export const revalidate = 600;
+
 export default async function RootLayout({
   children,
 }: Readonly<{

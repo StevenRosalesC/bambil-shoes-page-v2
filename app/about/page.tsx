@@ -13,6 +13,9 @@ export const metadata: Metadata = {
     "Conoce la historia, misión, visión y el proceso artesanal de calzado de Bambil Shoes By Dario.",
 };
 
+// Revalidate about page every 10 minutes (600 seconds)
+export const revalidate = 600;
+
 const resolveImageUrl = (url?: string | null, fallback = ""): string => {
   if (!url || typeof url !== "string" || url.trim() === "") return fallback;
   if (url.startsWith("http://") || url.startsWith("https://")) {

@@ -10,6 +10,9 @@ import { getMaterialsAction } from "@/actions/materials";
 import { getSocialPostsAction } from "@/actions/social-posts";
 import { getFeaturedProductsAction } from "@/actions/products";
 
+// Revalidate home page every 10 minutes (600 seconds)
+export const revalidate = 600;
+
 export default async function Home() {
   const [
     homeInfo,

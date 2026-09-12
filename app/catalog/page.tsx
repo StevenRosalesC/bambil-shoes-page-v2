@@ -11,6 +11,9 @@ export const metadata: Metadata = {
     "Descubre la colección completa de calzado artesanal para dama y caballero de Bambil Shoes. Diseños exclusivos hechos a mano en Colonche, Santa Elena.",
 };
 
+// Revalidate catalog page every 60 seconds (1 minute)
+export const revalidate = 60;
+
 function CatalogSkeleton() {
   return (
     <div className="space-y-8 animate-pulse mt-6">

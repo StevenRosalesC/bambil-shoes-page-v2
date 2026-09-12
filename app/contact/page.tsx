@@ -9,6 +9,9 @@ export const metadata: Metadata = {
     "Ponte en contacto directo con nuestro taller artesanal en Bambil Collao, Colonche. Consultas sobre calzado a medida, tallas y pedidos por WhatsApp o formulario.",
 };
 
+// Revalidate contact page every 10 minutes (600 seconds)
+export const revalidate = 600;
+
 const DEFAULT_STORE_NAME = "Bambil Shoes By Dario";
 const DEFAULT_STORE_ADDRESS =
   "Comuna Bambil Collao, Parroquia Colonche · Santa Elena, Ecuador";

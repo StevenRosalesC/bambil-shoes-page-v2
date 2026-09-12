@@ -9,6 +9,9 @@ interface ProductPageProps {
   params: Promise<{ id: string }>;
 }
 
+// Revalidate product page every 60 seconds (1 minute)
+export const revalidate = 60;
+
 export async function generateMetadata({
   params,
 }: ProductPageProps): Promise<Metadata> {
