@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Navbar from "@/components/Navbar";
+import Breadcrumbs from "@/components/Breadcrumbs";
 import { getAboutPageAction } from "@/actions/about";
 import { getMaterialsAction } from "@/actions/materials";
 import { getGlobalInfoAction } from "@/actions/global";
@@ -207,6 +208,11 @@ export default async function AboutPage() {
       <Navbar />
 
       <main className="grow pt-16 sm:pt-20">
+        {/* Breadcrumbs Navigation */}
+        <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-10 pt-4 pb-2">
+          <Breadcrumbs />
+        </div>
+
         {/* =========================================================
             HERO: Panoramic Canvas with Master's Open Letter
            ========================================================= */}

@@ -65,3 +65,8 @@ export interface QueryParams {
   sortBy?: string;
   sortOrder?: "ASC" | "DESC" | "";
 }
+
+export interface BreadcrumbItem {
+  label: string;
+  href?: string;
+}

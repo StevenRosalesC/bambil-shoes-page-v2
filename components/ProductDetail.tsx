@@ -3,10 +3,11 @@
 import React, { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { Product, ProductVariant } from "@/types";
+import { Product, ProductVariant, BreadcrumbItem } from "@/types";
 import { useCartStore } from "@/store/useCartStore";
 import { useUIStore } from "@/store/useUIStore";
 import { useGlobalInfo } from "@/providers/global-info-provider";
+import Breadcrumbs from "@/components/Breadcrumbs";
 
 interface ProductDetailProps {
   product: Product;
@@ -98,33 +99,24 @@ export default function ProductDetail({
       ? Math.round(((product.compareAtPrice - product.price) / product.compareAtPrice) * 100)
       : null;
 
+  const breadcrumbItems: BreadcrumbItem[] = [
+    { label: "Inicio", href: "/" },
+    { label: "Catálogo", href: "/catalog" },
+    ...(product.category?.name
+      ? [
+          {
+            label: product.category.name,
+            href: `/catalog?categoryId=${product.category.documentId || product.category.id}`,
+          },
+        ]
+      : []),
+    { label: product.name },
+  ];
+
   return (
     <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12">
       {/* 1. Breadcrumb Navigation */}
-      <nav aria-label="Breadcrumb" className="mb-6 md:mb-8 text-xs font-sans text-[#705a4c] flex items-center flex-wrap gap-2">
-        <Link href="/" className="hover:text-[#26170c] transition-colors">
-          Inicio
-        </Link>
-        <span>/</span>
-        <Link href="/catalog" className="hover:text-[#26170c] transition-colors">
-          Catálogo
-        </Link>
-        {product.category?.name && (
-          <>
-            <span>/</span>
-            <Link
-              href={`/catalog?categoryId=${product.category.documentId || product.category.id}`}
-              className="hover:text-[#26170c] transition-colors"
-            >
-              {product.category.name}
-            </Link>
-          </>
-        )}
-        <span>/</span>
-        <span className="text-[#26170c] font-semibold truncate max-w-[200px] sm:max-w-none">
-          {product.name}
-        </span>
-      </nav>
+      <Breadcrumbs items={breadcrumbItems} className="mb-6 md:mb-8" />
 
       {/* 2. Main Product Section (2 Columns) */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 mb-16 md:mb-20">

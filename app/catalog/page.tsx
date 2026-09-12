@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Suspense } from "react";
 import Navbar from "@/components/Navbar";
 import CatalogGrid from "@/components/CatalogGrid";
+import Breadcrumbs from "@/components/Breadcrumbs";
 import { getProductsAction } from "@/actions/products";
 import { getCategoriesAction } from "@/actions/categories";
 
@@ -67,6 +68,9 @@ export default async function CatalogPage() {
 
       {/* Main Container */}
       <main className="grow w-full max-w-7xl mx-auto px-4 sm:px-6 md:px-10 py-10 md:py-16 pt-24 md:pt-29">
+        {/* Breadcrumbs Navigation */}
+        <Breadcrumbs className="mb-6" />
+
         {/* Atelier Catalog Masthead */}
         <header className="mb-10 md:mb-14 pb-8 border-b border-outline-variant/50">
           {/* Index hallmark ribbon */}

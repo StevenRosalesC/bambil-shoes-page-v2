@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Navbar from "@/components/Navbar";
 import ContactGrid from "@/components/ContactGrid";
+import Breadcrumbs from "@/components/Breadcrumbs";
 import { getGlobalInfoAction } from "@/actions/global";
 
 export const metadata: Metadata = {
@@ -32,6 +33,9 @@ export default async function ContactPage() {
         {/* Editorial Header Section */}
         <section className="pt-8 pb-10 sm:pt-12 sm:pb-14 border-b border-outline-variant/40">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-10">
+            {/* Breadcrumbs Navigation */}
+            <Breadcrumbs className="mb-6" />
+
             {/* Archival Masthead Bar */}
             <div className="flex items-center justify-between border-b border-outline-variant/50 pb-4 mb-10 sm:mb-14 text-xs font-sans text-secondary font-medium tracking-[0.22em] uppercase">
               <span>{storeName}</span>
