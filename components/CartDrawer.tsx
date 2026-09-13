@@ -107,7 +107,7 @@ export default function CartDrawer() {
                         {item.product.name}
                       </Link>
                       <p className="font-sans text-xs text-[#4f453f] mt-0.5">
-                        Talla: {item.variant.size} | {item.product.material}
+                        Talla: {item.variant.size} | {item.product.material?.name || "Cuero Genuino"}
                       </p>
                     </div>
                     <div className="flex justify-between items-center mt-2">

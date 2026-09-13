@@ -125,7 +125,7 @@ export default function FeaturedProducts({ products = [] }: FeaturedProductsProp
                     {/* Material Tag */}
                     {product.material && (
                       <span className="bg-[#26170c]/90 text-white font-sans text-[9px] sm:text-[10px] tracking-wider font-semibold uppercase px-1.5 sm:px-2.5 py-0.5 rounded-sm shadow-sm w-fit line-clamp-1 max-w-full hidden xs:inline-block sm:inline-block">
-                        {product.material}
+                        {product.material.name}
                       </span>
                     )}
                   </div>
@@ -275,7 +275,7 @@ export default function FeaturedProducts({ products = [] }: FeaturedProductsProp
                     )}
                     {selectedProduct.material && (
                       <span className="bg-[#fbdbb0] text-[#765f3d] font-sans text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-sm">
-                        {selectedProduct.material}
+                        {selectedProduct.material.name}
                       </span>
                     )}
                   </div>

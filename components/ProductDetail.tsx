@@ -147,7 +147,7 @@ export default function ProductDetail({
               )}
               {product.material && (
                 <span className="bg-white/95 backdrop-blur-xs text-[#26170c] border border-[#d2c4bc]/60 font-sans text-[11px] font-semibold tracking-wide px-3 py-1 rounded-sm shadow-xs">
-                  {product.material}
+                  {product.material.name}
                 </span>
               )}
             </div>
@@ -424,11 +424,11 @@ export default function ProductDetail({
                   <dl className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-4 text-xs sm:text-sm font-sans">
                     <div>
                       <dt className="text-[#705a4c] font-medium">Material Exterior:</dt>
-                      <dd className="font-semibold text-[#26170c]">{product.material || "Cuero Genuino"}</dd>
+                      <dd className="font-semibold text-[#26170c]">{product.material?.name || "Cuero Genuino"}</dd>
                     </div>
                     <div>
                       <dt className="text-[#705a4c] font-medium">Plantilla Interior:</dt>
-                      <dd className="font-semibold text-[#26170c]">{product.insoleMaterial || "Badana suave con almohadilla de metatarso"}</dd>
+                      <dd className="font-semibold text-[#26170c]">{product.insoleMaterial?.name || "Badana suave con almohadilla de metatarso"}</dd>
                     </div>
                     <div>
                       <dt className="text-[#705a4c] font-medium">Altura de Tacón / Suela:</dt>
@@ -604,7 +604,7 @@ export default function ProductDetail({
                         {rel.name}
                       </Link>
                       <p className="font-sans text-[11px] sm:text-xs text-[#705a4c] line-clamp-1 mt-0.5">
-                        {rel.material || "Cuero Genuino"}
+                        {rel.material?.name || "Cuero Genuino"}
                       </p>
                     </div>
 

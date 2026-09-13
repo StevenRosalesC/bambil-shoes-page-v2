@@ -8,7 +8,7 @@ import { useProducts } from "@/hooks/useProducts";
 import { useCategories } from "@/hooks/useCategories";
 import { useCartStore } from "@/store/useCartStore";
 import { useUIStore } from "@/store/useUIStore";
-import { Category, Product } from "@/types";
+import { Category, Product, ProductMaterial } from "@/types";
 
 export interface CatalogGridProps {
   initialProducts?: Product[];
@@ -248,14 +248,27 @@ export default function CatalogGrid({
 
   // Extract all unique materials from products for checkboxes
   const allMaterials = useMemo(() => {
-    const materialsSet = new Set<string>();
+    const materialsMap = new Map<string, ProductMaterial>();
     rawProducts.forEach((p) => {
-      if (p.material) {
-        materialsSet.add(p.material);
+      if (p.material && p.material.name) {
+        const key = p.material.slug || p.material.documentId || p.material.name;
+        if (!materialsMap.has(key)) {
+          materialsMap.set(key, p.material);
+        }
       }
     });
-    return Array.from(materialsSet);
+    return Array.from(materialsMap.values());
   }, [rawProducts]);
+
+  // Helper to determine if a material is active in the current selection
+  const isMaterialActive = useCallback(
+    (mat: ProductMaterial) => {
+      if (selectedMaterials.length === 0) return false;
+      const keys = [mat.slug, mat.documentId, String(mat.id), mat.name].filter(Boolean) as string[];
+      return keys.some((k) => selectedMaterials.includes(k));
+    },
+    [selectedMaterials]
+  );
 
   // Limit materials to 4 initially with "Ver más" expansion
   const visibleMaterials = useMemo(() => {
@@ -264,10 +277,10 @@ export default function CatalogGrid({
     }
     const firstFour = allMaterials.slice(0, 4);
     const extraSelected = allMaterials.filter(
-      (m, idx) => idx >= 4 && selectedMaterials.includes(m)
+      (m, idx) => idx >= 4 && isMaterialActive(m)
     );
     return Array.from(new Set([...firstFour, ...extraSelected]));
-  }, [allMaterials, showAllMaterials, selectedMaterials]);
+  }, [allMaterials, showAllMaterials, isMaterialActive]);
 
   // Helper to determine if a category is active in the current selection
   const isCategoryActive = useCallback(
@@ -315,12 +328,18 @@ export default function CatalogGrid({
   };
 
   // Handle material checkbox change
-  const handleMaterialChange = (material: string) => {
-    setSelectedMaterials((prev) =>
-      prev.includes(material)
-        ? prev.filter((m) => m !== material)
-        : [...prev, material]
+  const handleMaterialChange = (material: ProductMaterial) => {
+    const primaryKey = material.slug || material.documentId || material.name;
+    const keysToRemove = new Set(
+      [material.slug, material.documentId, String(material.id), material.name].filter(Boolean) as string[]
     );
+    setSelectedMaterials((prev) => {
+      const hasMatch = prev.some((k) => keysToRemove.has(k));
+      if (hasMatch) {
+        return prev.filter((k) => !keysToRemove.has(k));
+      }
+      return [...prev, primaryKey];
+    });
   };
 
   // Clear all filters
@@ -356,8 +375,18 @@ export default function CatalogGrid({
   };
 
   // Remove single material filter chip
-  const handleRemoveMaterialChip = (material: string) => {
-    setSelectedMaterials((prev) => prev.filter((m) => m !== material));
+  const handleRemoveMaterialChip = (identifier: string) => {
+    const mat = allMaterials.find(
+      (m) =>
+        m.slug === identifier ||
+        m.documentId === identifier ||
+        String(m.id) === identifier ||
+        m.name === identifier
+    );
+    const idsToRemove = new Set(
+      [identifier, mat?.slug, mat?.documentId, mat?.id ? String(mat.id) : null, mat?.name].filter(Boolean) as string[]
+    );
+    setSelectedMaterials((prev) => prev.filter((id) => !idsToRemove.has(id)));
   };
 
   // Apply filters and sorting client-side for fluid, instant updates
@@ -371,7 +400,7 @@ export default function CatalogGrid({
         (p) =>
           p.name.toLowerCase().includes(searchLower) ||
           p.description.toLowerCase().includes(searchLower) ||
-          p.material.toLowerCase().includes(searchLower)
+          (p.material?.name || "").toLowerCase().includes(searchLower)
       );
     }
 
@@ -403,7 +432,16 @@ export default function CatalogGrid({
 
     // Material filter
     if (selectedMaterials.length > 0) {
-      result = result.filter((p) => selectedMaterials.includes(p.material));
+      result = result.filter((p) => {
+        if (!p.material) return false;
+        const keys = [
+          p.material.slug,
+          p.material.documentId,
+          String(p.material.id),
+          p.material.name,
+        ].filter(Boolean) as string[];
+        return keys.some((k) => selectedMaterials.includes(k));
+      });
     }
 
     // Price range filter
@@ -465,13 +503,29 @@ export default function CatalogGrid({
   // Product counts per material
   const materialCounts = useMemo(() => {
     const counts: Record<string, number> = {};
-    rawProducts.forEach((p) => {
-      if (p.material) {
-        counts[p.material] = (counts[p.material] || 0) + 1;
-      }
+    allMaterials.forEach((mat) => {
+      const keys = new Set(
+        [mat.slug, mat.documentId, String(mat.id), mat.name].filter(Boolean) as string[]
+      );
+      const count = rawProducts.filter((p) => {
+        if (!p.material) return false;
+        const pKeys = [
+          p.material.slug,
+          p.material.documentId,
+          String(p.material.id),
+          p.material.name,
+        ].filter(Boolean) as string[];
+        return pKeys.some((k) => keys.has(k));
+      }).length;
+
+      const primaryKey = mat.slug || mat.documentId || mat.name;
+      counts[primaryKey] = count;
+      if (mat.name) counts[mat.name] = count;
+      if (mat.slug) counts[mat.slug] = count;
+      if (mat.documentId) counts[mat.documentId] = count;
     });
     return counts;
-  }, [rawProducts]);
+  }, [allMaterials, rawProducts]);
 
   // Progressive scroll loading pagination
   const ITEMS_PER_PAGE = 8;
@@ -725,24 +779,34 @@ export default function CatalogGrid({
           })}
 
           {/* Material chips */}
-          {selectedMaterials.map((material) => (
-            <span
-              key={material}
-              className="inline-flex items-center px-3 py-1 bg-[#f6f3ec] rounded-full border border-[#d2c4bc] font-sans text-xs font-semibold text-[#26170c]"
-            >
-              {material}
-              <button
-                type="button"
-                onClick={() => handleRemoveMaterialChip(material)}
-                className="ml-2 text-[#705a4c] hover:text-[#26170c] flex items-center cursor-pointer"
-                aria-label={`Eliminar filtro ${material}`}
+          {selectedMaterials.map((matIdentifier) => {
+            const mat = allMaterials.find(
+              (m) =>
+                m.slug === matIdentifier ||
+                m.documentId === matIdentifier ||
+                String(m.id) === matIdentifier ||
+                m.name === matIdentifier
+            );
+            const label = mat?.name || matIdentifier;
+            return (
+              <span
+                key={matIdentifier}
+                className="inline-flex items-center px-3 py-1 bg-[#f6f3ec] rounded-full border border-[#d2c4bc] font-sans text-xs font-semibold text-[#26170c]"
               >
-                <span className="material-symbols-outlined text-[14px] font-bold" aria-hidden="true">
-                  close
-                </span>
-              </button>
-            </span>
-          ))}
+                {label}
+                <button
+                  type="button"
+                  onClick={() => handleRemoveMaterialChip(matIdentifier)}
+                  className="ml-2 text-[#705a4c] hover:text-[#26170c] flex items-center cursor-pointer"
+                  aria-label={`Eliminar filtro ${label}`}
+                >
+                  <span className="material-symbols-outlined text-[14px] font-bold" aria-hidden="true">
+                    close
+                  </span>
+                </button>
+              </span>
+            );
+          })}
 
           {/* Price chip */}
           {priceRange < 300 && (
@@ -868,7 +932,7 @@ export default function CatalogGrid({
                       {/* Material Tag */}
                       {product.material && (
                         <span className="bg-[#26170c]/90 text-white font-sans text-[9px] sm:text-[10px] tracking-wider font-semibold uppercase px-1.5 sm:px-2.5 py-0.5 rounded-sm shadow-sm w-fit line-clamp-1 max-w-full hidden xs:inline-block sm:inline-block">
-                          {product.material}
+                          {product.material.name}
                         </span>
                       )}
                     </div>
@@ -1114,11 +1178,11 @@ export default function CatalogGrid({
                 </h3>
                 <ul className="space-y-2">
                   {visibleMaterials.map((material) => {
-                    const isChecked = selectedMaterials.includes(material);
-                    const count = materialCounts[material] || 0;
+                    const isChecked = isMaterialActive(material);
+                    const count = materialCounts[material.slug || material.name] || 0;
 
                     return (
-                      <li key={material}>
+                      <li key={material.slug || material.documentId || material.name}>
                         <label className="flex items-center justify-between py-1.5 px-2 rounded-lg hover:bg-[#f6f3ec] transition-colors cursor-pointer group">
                           <div className="flex items-center gap-3">
                             <input
@@ -1134,7 +1198,7 @@ export default function CatalogGrid({
                                   : "text-[#4f453f] group-hover:text-[#26170c]"
                               }`}
                             >
-                              {material}
+                              {material.name}
                             </span>
                           </div>
                           {count > 0 && (
@@ -1270,7 +1334,7 @@ export default function CatalogGrid({
                   )}
                   {selectedProduct.material && (
                     <span className="bg-[#26170c]/90 text-[#feddb3] font-sans text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-sm">
-                      {selectedProduct.material}
+                      {selectedProduct.material.name}
                     </span>
                   )}
                 </div>
