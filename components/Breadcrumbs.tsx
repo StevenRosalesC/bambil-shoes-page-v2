@@ -26,6 +26,7 @@ const ROUTE_LABELS: Record<string, string> = {
   about: "Sobre Nosotros",
   contact: "Contacto",
   product: "Catálogo",
+  tracking: "Rastreo de Pedidos",
 };
 
 export default function Breadcrumbs({

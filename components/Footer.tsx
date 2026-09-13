@@ -57,6 +57,15 @@ export default function Footer({
             <li>{storeHours }</li>
             <li>
               <Link
+                href="/tracking"
+                className="hover:text-white transition-opacity flex items-center gap-1.5 underline"
+              >
+                <span className="material-symbols-outlined text-sm">local_shipping</span>
+                Rastrear Pedido
+              </Link>
+            </li>
+            <li>
+              <Link
                 href={mapUrl}
                 target="_blank"
                 rel="noopener noreferrer"

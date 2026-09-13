@@ -97,7 +97,19 @@ export default function Navbar() {
         </Link>
 
         {/* Right Links & Icons */}
-        <div className="flex items-center space-x-3 sm:space-x-4">
+        <div className="flex items-center space-x-2 sm:space-x-3">
+          {/* Track Order Button */}
+          <Link
+            href="/tracking"
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-[#d2c4bc]/80 hover:border-[#26170c] bg-white/60 hover:bg-white text-[#4f453f] hover:text-[#26170c] font-sans text-xs font-semibold transition-all shadow-2xs"
+            title="Consultar estado de orden"
+          >
+            <span className="material-symbols-outlined text-base text-[#725a39]">
+              local_shipping
+            </span>
+            <span className="hidden sm:inline">Rastrear Pedido</span>
+          </Link>
+
           <div className="flex items-center space-x-1 sm:space-x-2 text-[#26170c]">
             {/* Cart Button */}
             <button
@@ -164,10 +176,22 @@ export default function Navbar() {
           </Link>
           <Link
             onClick={() => setMenuOpen(false)}
-            className="block font-sans text-base font-semibold text-[#4f453f] hover:text-[#26170c] py-2"
+            className="block font-sans text-base font-semibold text-[#4f453f] hover:text-[#26170c] py-2 border-b border-[#d2c4bc]/30"
             href="/contact"
           >
             Contacto
+          </Link>
+          <Link
+            onClick={() => setMenuOpen(false)}
+            className="block font-sans text-base font-semibold text-[#4f453f] hover:text-[#26170c] py-2"
+            href="/tracking"
+          >
+            <span className="flex items-center gap-2">
+              <span className="material-symbols-outlined text-lg text-[#725a39]">
+                local_shipping
+              </span>
+              Rastrear Pedido
+            </span>
           </Link>
         </div>
       )}
