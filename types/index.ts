@@ -21,6 +21,22 @@ export interface ProductVariant {
   updatedAt?: string;
 }
 
+export interface ProductMaterial {
+  id?: string | number;
+  documentId?: string;
+  name: string;
+  slug?: string;
+  description?: string;
+}
+
+export interface InsoleMaterial {
+  id?: string | number;
+  documentId?: string;
+  name: string;
+  slug?: string;
+  description?: string;
+}
+
 export interface Product {
   id: string;
   documentId?: string;
@@ -28,8 +44,8 @@ export interface Product {
   slug?: string;
   sku?: string;
   description: string;
-  material: string;
-  insoleMaterial?: string;
+  material?: ProductMaterial | null;
+  insoleMaterial?: InsoleMaterial | null;
   heelHeight?: string;
   closureType?: string;
   color?: string;

@@ -1,7 +1,7 @@
 "use server";
 
 import { strapiClient, getDraftStatus } from "@/lib/strapi";
-import { Product, ProductVariant, PaginatedResponse, QueryParams } from "@/types";
+import { Product, ProductVariant, PaginatedResponse, QueryParams, ProductMaterial, InsoleMaterial } from "@/types";
 
 const DEFAULT_PRODUCT_IMAGE =
   "https://lh3.googleusercontent.com/aida-public/AB6AXuD_dNoiXnJaWGkaO5zFoLW99yActG5gx032RgLySpxypzs3oiMQiOFy4j6EPfnhz-BOp7prPWR3rYM5px5zQuLjxOMP-3ZZ00wQTdlHLSkM83oDo1GQ3YL5sPOtrbOMCSKIgQV0N_I7EIwyYnVlMkURM6f26knM89Yp_h1dIwHpCulSoWVgBFTgEBma9FCwdTsnBylUDsa4UiDtflyhe_kySFb7iIDmoJ6Ca8BWvO4z6jEm8be0JrLhmroyjW0Y5cD_onFUquGih9pm";
@@ -23,16 +23,13 @@ function extractTextFromBlocks(blocks: unknown): string {
   if (typeof blocks === "string") return blocks;
   if (!Array.isArray(blocks)) return "";
   return blocks
-    .map((b) => {
-      if (b && Array.isArray(b.children)) {
-        return b.children
-          .map((c: { text?: string }) => c.text || "")
-          .join("");
-      }
-      return "";
-    })
+    .map((b: any) =>
+      Array.isArray(b?.children)
+        ? b.children.map((c: any) => c?.text || "").join("")
+        : ""
+    )
     .filter(Boolean)
-    .join(" ");
+    .join("\n");
 }
 
 interface StrapiProductRaw {
@@ -44,8 +41,20 @@ interface StrapiProductRaw {
   description?: unknown;
   price?: number;
   compareAtPrice?: number | null;
-  material?: string;
-  insoleMaterial?: string;
+  material?: {
+    id?: number | string;
+    documentId?: string;
+    name?: string;
+    slug?: string;
+    description?: unknown;
+  } | string | null;
+  insoleMaterial?: {
+    id?: number | string;
+    documentId?: string;
+    name?: string;
+    slug?: string;
+    description?: unknown;
+  } | string | null;
   heelHeight?: string;
   closureType?: string;
   color?: string;
@@ -100,6 +109,36 @@ function mapStrapiProduct(item: StrapiProductRaw): Product {
       }
     : undefined;
 
+  const material: ProductMaterial | undefined = item.material
+    ? typeof item.material === "object"
+      ? {
+          id: item.material.documentId || String(item.material.id || ""),
+          documentId: item.material.documentId,
+          name: item.material.name || "Material Artesanal",
+          slug: item.material.slug,
+          description: extractTextFromBlocks(item.material.description),
+        }
+      : {
+          name: item.material,
+          slug: item.material.toLowerCase().replace(/\s+/g, "-"),
+        }
+    : undefined;
+
+  const insoleMaterial: InsoleMaterial | undefined = item.insoleMaterial
+    ? typeof item.insoleMaterial === "object"
+      ? {
+          id: item.insoleMaterial.documentId || String(item.insoleMaterial.id || ""),
+          documentId: item.insoleMaterial.documentId,
+          name: item.insoleMaterial.name || "Badana suave con almohadilla de metatarso",
+          slug: item.insoleMaterial.slug,
+          description: extractTextFromBlocks(item.insoleMaterial.description),
+        }
+      : {
+          name: item.insoleMaterial,
+          slug: item.insoleMaterial.toLowerCase().replace(/\s+/g, "-"),
+        }
+    : undefined;
+
   return {
     id: documentId,
     documentId,
@@ -107,8 +146,8 @@ function mapStrapiProduct(item: StrapiProductRaw): Product {
     slug: item.slug,
     sku: item.sku,
     description: extractTextFromBlocks(item.description),
-    material: item.material || "Cuero Genuino",
-    insoleMaterial: item.insoleMaterial,
+    material,
+    insoleMaterial,
     heelHeight: item.heelHeight,
     closureType: item.closureType,
     color: item.color,
@@ -133,7 +172,7 @@ const MOCK_PRODUCTS: Product[] = [
     name: "Sandalia Roma",
     description:
       "Sandalia artesanal elaborada en cuero natural de grano completo. Cuenta con hebillas regulables de latón y una suela duradera de caucho vulcanizado, uniendo ligereza y sofisticación.",
-    material: "Cuero Natural",
+    material: { name: "Cuero Natural", slug: "cuero-natural" },
     careInstructions:
       "Limpiar con paño seco. Aplicar periódicamente crema humectante o cera neutra especial para cuero natural para preservar su elasticidad.",
     price: 45.99,
@@ -155,7 +194,7 @@ const MOCK_PRODUCTS: Product[] = [
     name: "Mocasín Premium",
     description:
       "Zapato estilo mocasín clásico confeccionado con el cuero más suave seleccionado a mano. Presenta costuras visibles de gran calibre hechas a mano que rinden homenaje a la zapatería tradicional.",
-    material: "Cuero de Grano Completo",
+    material: { name: "Cuero de Grano Completo", slug: "cuero-de-grano-completo" },
     careInstructions:
       "Limpiar suavemente con paño de microfibra seco. No aplicar alcohol ni solventes abrasivos. Guardar en funda para evitar marcas y rayaduras.",
     price: 65.0,
@@ -177,7 +216,7 @@ const MOCK_PRODUCTS: Product[] = [
     name: "Bota Gaucho",
     description:
       "Bota de cuero vacuno rústico de alta resistencia, tratada con aceites naturales para una protección óptima contra la intemperie. Perfecta para caminatas exigentes o un estilo urbano aventurero.",
-    material: "Cuero Vacuno Rústico",
+    material: { name: "Cuero Vacuno Rústico", slug: "cuero-vacuno-rustico" },
     careInstructions:
       "Limpiar con un paño suave ligeramente húmedo. Evitar la exposición directa y prolongada al sol o calor. Guardar en lugar seco y ventilado.",
     price: 89.99,
@@ -199,7 +238,7 @@ const MOCK_PRODUCTS: Product[] = [
     name: "Zapato Oxford Imperial",
     description:
       "Calzado de vestir formal en cuero genuino lustrado con acabado espejo. Su horma clásica y forro interno de piel suave garantizan comodidad excepcional y una elegancia insuperable.",
-    material: "Cuero Genuino Lustrado",
+    material: { name: "Cuero Genuino Lustrado", slug: "cuero-genuino-lustrado" },
     careInstructions:
       "Limpiar con paño seco. Aplicar periódicamente crema humectante o cera neutra especial para cuero natural para preservar su elasticidad.",
     price: 110.0,
@@ -233,7 +272,7 @@ export async function getFeaturedProductsAction(
     // Step 1: Featured products
     const featuredRes = await strapiClient.collection("products").find({
       status,
-      populate: ["images", "category", "variants"],
+      populate: ["images", "category", "variants", "material", "insoleMaterial"],
       filters: { featured: { $eq: true } },
       sort: ["createdAt:desc"],
       pagination: {
@@ -253,7 +292,7 @@ export async function getFeaturedProductsAction(
     // Step 2: Fallback to most recent products
     const fallbackRes = await strapiClient.collection("products").find({
       status,
-      populate: ["images", "category", "variants"],
+      populate: ["images", "category", "variants", "material", "insoleMaterial"],
       sort: ["createdAt:desc"],
       pagination: {
         page: 1,
@@ -289,7 +328,7 @@ export async function getProductsAction(
     if (params.search) {
       filters.$or = [
         { name: { $containsi: params.search } },
-        { material: { $containsi: params.search } },
+        { material: { name: { $containsi: params.search } } },
       ];
     }
 
@@ -320,7 +359,7 @@ export async function getProductsAction(
 
     const response = await strapiClient.collection("products").find({
       status,
-      populate: ["images", "category", "variants"],
+      populate: ["images", "category", "variants", "material", "insoleMaterial"],
       filters,
       sort,
       pagination: {
@@ -373,7 +412,7 @@ export async function getProductsAction(
         (p) =>
           p.name.toLowerCase().includes(searchLower) ||
           p.description.toLowerCase().includes(searchLower) ||
-          p.material.toLowerCase().includes(searchLower)
+          (p.material?.name || "").toLowerCase().includes(searchLower)
       );
     }
 
@@ -398,7 +437,7 @@ export async function getProductByIdAction(id: string): Promise<Product> {
     const status = await getDraftStatus();
     const response = await strapiClient.collection("products").find({
       status,
-      populate: ["images", "category", "variants"],
+      populate: ["images", "category", "variants", "material", "insoleMaterial"],
       filters: {
         $or: [{ documentId: { $eq: id } }, { slug: { $eq: id } }],
       },
