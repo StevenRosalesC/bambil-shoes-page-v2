@@ -23,11 +23,12 @@ function extractTextFromBlocks(blocks: unknown): string {
   if (typeof blocks === "string") return blocks;
   if (!Array.isArray(blocks)) return "";
   return blocks
-    .map((b: any) =>
-      Array.isArray(b?.children)
-        ? b.children.map((c: any) => c?.text || "").join("")
-        : ""
-    )
+    .map((b: unknown) => {
+      const block = b as { children?: Array<{ text?: string }> } | null;
+      return Array.isArray(block?.children)
+        ? block.children.map((c) => c?.text || "").join("")
+        : "";
+    })
     .filter(Boolean)
     .join("\n");
 }
